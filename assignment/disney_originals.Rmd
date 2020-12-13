@@ -1,0 +1,18 @@
+---
+title: "disney_originals"
+author: "grevend"
+date: "13 12 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## CSV import
+
+```{r}
+disney_originals <- read_csv("../datasets/disney_originals.csv")
+
+disney_originals
+```
