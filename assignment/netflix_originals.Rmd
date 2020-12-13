@@ -8,36 +8,39 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(readxl)
 ```
 
 ## CSV import
 
 ```{r}
-netflix_originals <- read_csv("../datasets/netflix_originals.csv")
+netflix_originals <- read_excel("../datasets/netflix_originals.xlsx")
 
 netflix_originals
 ```
 
 ```{r}
-select(netflix_originals, Runtime)
-
 netflix_originals <- transmute(netflix_originals, 
                                 Title = Title,
                                 Genre = Genre,
                                 Premiere = Premiere,
                                 Seasons = Seasons,
-                                Min_Time = if(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]))
-                                              str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]
-                                           else
-                                              str_match(Runtime, "([0-9]+)")[,2],
-                                Max_Time = str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                                Min_Time = ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
+                                                  str_match(Runtime, "([0-9]+)")[,2]),
+                                Max_Time = ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                                                  str_match(Runtime, "([0-9]+)")[,2]),
+                                Status = Status
                                )
-
 netflix_originals
 ```
 
 ```{r}
 string <- "23 min."
+
+!is.na(str_match(string, "([0-9]+)-([0-9]+)")[,3])
+str_match(string, "([0-9]+)")[,2]
 
 matcher <- str_match(string, "([0-9]+)")
 matcher
