@@ -1,0 +1,28 @@
+Hulu:
+
+Title|Genre|Premiere|Seasons|Length|Status
+
+Title|Partner/Country|Genre|Premiere|Seasons|Length|Status
+
+Title|Genre|Prev. Network(s)|Premiere|Seasons|Length|Status
+
+Title|Genre|Premiere|Length|Language
+
+Title|Genre|Release|Length
+
+Title|Release|Length
+
+Title|Genre|Seasons|Length|Premiere
+
+Title|Genre|Partner/Country|Seasons|Length|Premiere
+
+Title|Genre|Prev. Network(s)|Seasons|Length|Premiere
+
+Title|Genre
+
+Title|Genre|Original Network|Original Region|Seasons|Run|Language
+
+Title|Partner|Genre|Premiere|Seasons|Length|Status
+
+
+
