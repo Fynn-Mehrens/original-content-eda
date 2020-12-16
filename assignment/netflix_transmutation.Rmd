@@ -11,11 +11,14 @@ library(tidyverse)
 library(readxl)
 ```
 
-## CSV import
+## Importing from other Rmd file
+
+```{r child = 'netflix_originals.Rmd'}
+```
 
 ```{r}
-netflix_originals <- read.csv("../datasets/netflix_originals.csv")
-
+netflix_originals <- netflix_originals
+# netflix_originals <- read.csv("../datasets/netflix_originals.csv")
 netflix_originals
 ```
 
@@ -29,7 +32,7 @@ netflix_originals <- filter(netflix_originals,
                             !grepl("Renewed|renewed", Title),
                             !grepl("due to premiere", Title))
 
-netflix_originals <- transmute(netflix_originals, 
+transmuted <- transmute(netflix_originals, 
                                 Title = Title,
                                 Genre = Genre,
                                 Premiere = Premiere,
@@ -50,7 +53,9 @@ netflix_originals <- transmute(netflix_originals,
 
 unique(select(netflix_originals, Seasons))
 
-netflix_originals
+transmuted
+
+anti_join(transmuted, netflix_originals)
 ```
 
 ```{r}
