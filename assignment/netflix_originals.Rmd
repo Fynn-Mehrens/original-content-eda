@@ -258,7 +258,7 @@ netflix_originals_23 <- transmute(netflix_originals_23,
 netflix_originals_24 <- read_csv("../datasets/netflix/table-24.csv")
 netflix_originals_24 <- transmute(netflix_originals_24,
                                   Title = Title,
-                                  Genre = Genre,
+                                  Genre = paste(Genre, " Drama"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
