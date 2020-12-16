@@ -8,44 +8,89 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(readxl)
+library(forcats)
+```
+
+```{r}
+only_keep <- function(row, regex) {
+  return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
+}
+
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release")
 ```
 
 ## CSV import
 
 ```{r}
-netflix_originals <- read_excel("../datasets/netflix_originals.xlsx")
+#Title, Genre, Premiere, Seasons, Runtime, Status
 
-netflix_originals
+netflix_originals_1 <- read_csv("../datasets/netflix/table-1.csv")
+netflix_originals_2 <- read_csv("../datasets/netflix/table-2.csv")
+
+netflix_originals_3 <- read_csv("../datasets/netflix/table-3.csv")
+netflix_originals_3 <- transmute(netflix_originals_3,
+                                 Title = Title,
+                                 Genre = paste(Genre, " Animation"),
+                                 Premiere = Premiere,
+                                 Seasons = Seasons,
+                                 Runtime = Runtime,
+                                 Status = Status)
+
+netflix_originals_4 <- read_csv("../datasets/netflix/table-4.csv")
+netflix_originals_4 <- transmute(netflix_originals_4,
+                                 Title = Title,
+                                 Genre = paste(Genre, " Anime"),
+                                 Premiere = Premiere,
+                                 Seasons = Seasons,
+                                 Runtime = Runtime,
+                                 Status = Status)
+
+netflix_originals_5 <- read_csv("../datasets/netflix/table-5.csv")
+netflix_originals_5 <- transmute(netflix_originals_5,
+                                 Title = Title,
+                                 Genre = "Children",
+                                 Premiere = Premiere,
+                                 Seasons = Seasons,
+                                 Runtime = Runtime,
+                                 Status = Status)
+
+netflix_originals_1
+netflix_originals_2
+netflix_originals_3
+netflix_originals_4
+netflix_originals_5
 ```
 
 ```{r}
-netflix_originals <- transmute(netflix_originals, 
+netflix_originals_1 <- read_csv("../datasets/netflix/table-1.csv")
+
+netflix_originals_1 <- transmute(netflix_originals_1, 
                                 Title = Title,
                                 Genre = Genre,
                                 Premiere = Premiere,
                                 Seasons = Seasons,
-                                Min_Time = ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2]),
-                                Max_Time = ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2]),
-                                Status = Status
-                               )
-netflix_originals
+                                Runtime = Runtime,
+                                Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release)"), levels = statuses))
 
-unique(select(netflix_originals, Status))
+netflix_originals_1
 ```
 
 ```{r}
-string <- "23 min."
+netflix_originals_1 <- read_csv("../datasets/netflix/table-1.csv")
 
-!is.na(str_match(string, "([0-9]+)-([0-9]+)")[,3])
-str_match(string, "([0-9]+)")[,2]
+netflix_originals_1
 
-matcher <- str_match(string, "([0-9]+)")
-matcher
+unique(select(netflix_originals_1, Genre))
+
+netflix_originals_1 <- transmute(netflix_originals_1, 
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release)"), levels = statuses))
+
+netflix_originals_1
+
+unique(select(netflix_originals_1, Genre))
 ```
-
-
