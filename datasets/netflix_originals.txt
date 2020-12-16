@@ -1,5 +1,7 @@
 Netflix:
 
+Shows:
+
 Title|Genre|Premiere|Seasons|Runtime|Status
 
 Title|Genre|Premiere|Seasons|Runtime|Language|Status
@@ -23,3 +25,9 @@ Title|Partner/Country|Genre|Premiere
 Title|Genre|Prev. Channel|Premiere|Seasons|Runtime|Netflix Exclusive Regions
 
 Title|Genre
+
+Films:
+
+Title|Genre|Premiere|Runtime|Language
+
+Title|Premiere|Runtime|Language
