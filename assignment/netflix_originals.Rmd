@@ -213,38 +213,16 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_16)
 netflix_originals <- rbind(netflix_originals, netflix_originals_17)
 
 netflix_originals
-```
 
-```{r}
-netflix_originals_1 <- read_csv("../datasets/netflix/table-1.csv")
+unique(select(netflix_originals, Status))
 
-netflix_originals_1 <- transmute(netflix_originals_1, 
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release)"), levels = statuses))
+netflix_originals <- transmute(netflix_originals, 
+                               Title = Title,
+                               Genre = Genre,
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release)"), levels = statuses))
 
-netflix_originals_1
-```
-
-```{r}
-netflix_originals_1 <- read_csv("../datasets/netflix/table-1.csv")
-
-netflix_originals_1
-
-unique(select(netflix_originals_1, Genre))
-
-netflix_originals_1 <- transmute(netflix_originals_1, 
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release)"), levels = statuses))
-
-netflix_originals_1
-
-unique(select(netflix_originals_1, Genre))
+netflix_originals
 ```
