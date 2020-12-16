@@ -54,11 +54,17 @@ netflix_originals_5 <- transmute(netflix_originals_5,
                                  Runtime = Runtime,
                                  Status = Status)
 
+netflix_originals_6 <- read_csv("../datasets/netflix/table-6.csv")
+netflix_originals_7 <- read_csv("../datasets/netflix/table-7.csv")
+
+
 netflix_originals_1
 netflix_originals_2
 netflix_originals_3
 netflix_originals_4
 netflix_originals_5
+netflix_originals_6
+netflix_originals_7
 ```
 
 ```{r}
