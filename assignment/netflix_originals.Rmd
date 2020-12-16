@@ -263,7 +263,7 @@ netflix_originals_24 <- transmute(netflix_originals_24,
                                   Seasons = NA,
                                   Runtime = NA,
                                   Language = NA,
-                                  Status = "Event")
+                                  Status = "Development")
 
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
@@ -286,6 +286,8 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_19)
 netflix_originals <- rbind(netflix_originals, netflix_originals_20)
 netflix_originals <- rbind(netflix_originals, netflix_originals_21)
 netflix_originals <- rbind(netflix_originals, netflix_originals_22)
+netflix_originals <- rbind(netflix_originals, netflix_originals_23)
+netflix_originals <- rbind(netflix_originals, netflix_originals_24)
 
 netflix_originals
 
