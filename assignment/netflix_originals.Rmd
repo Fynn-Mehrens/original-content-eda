@@ -222,6 +222,7 @@ netflix_originals <- transmute(netflix_originals,
                                Premiere = Premiere,
                                Seasons = Seasons,
                                Runtime = Runtime,
+                               Language = Language,
                                Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release)"), levels = statuses))
 
 netflix_originals
