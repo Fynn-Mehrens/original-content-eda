@@ -124,16 +124,17 @@ netflix_originals_10 <- transmute(netflix_originals_10,
                                   Language = "Japanese",
                                   Status = Status)
 
-netflix_originals_1
-netflix_originals_2
-netflix_originals_3
-netflix_originals_4
-netflix_originals_5
-netflix_originals_6
-netflix_originals_7
-netflix_originals_8
-netflix_originals_9
-netflix_originals_10
+netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
+netflix_originals <- rbind(netflix_originals, netflix_originals_3)
+netflix_originals <- rbind(netflix_originals, netflix_originals_4)
+netflix_originals <- rbind(netflix_originals, netflix_originals_5)
+netflix_originals <- rbind(netflix_originals, netflix_originals_6)
+netflix_originals <- rbind(netflix_originals, netflix_originals_7)
+netflix_originals <- rbind(netflix_originals, netflix_originals_8)
+netflix_originals <- rbind(netflix_originals, netflix_originals_9)
+netflix_originals <- rbind(netflix_originals, netflix_originals_10)
+
+netflix_originals
 ```
 
 ```{r}
