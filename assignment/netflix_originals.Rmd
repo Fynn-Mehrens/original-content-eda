@@ -16,7 +16,7 @@ only_keep <- function(row, regex) {
   return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
 }
 
-statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event")
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development")
 ```
 
 ## CSV import
@@ -255,6 +255,16 @@ netflix_originals_23 <- transmute(netflix_originals_23,
                                   Language = NA,
                                   Status = "Event")
 
+netflix_originals_24 <- read_csv("../datasets/netflix/table-24.csv")
+netflix_originals_24 <- transmute(netflix_originals_24,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = Premiere,
+                                  Seasons = NA,
+                                  Runtime = NA,
+                                  Language = NA,
+                                  Status = "Event")
+
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
 netflix_originals <- rbind(netflix_originals, netflix_originals_4)
@@ -288,7 +298,7 @@ netflix_originals <- transmute(netflix_originals,
                                Seasons = Seasons,
                                Runtime = Runtime,
                                Language = Language,
-                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event)"), levels = statuses))
+                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development)"), levels = statuses))
 
 netflix_originals
 ```
