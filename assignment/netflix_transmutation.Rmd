@@ -22,8 +22,6 @@ netflix_originals
 ## Transmutation of the given Netflix series and movie table
 
 ```{r}
-unique(select(netflix_originals, Seasons))
-
 netflix_originals <- filter(netflix_originals,
                             !grepl("Pending|pending", Title),
                             Title != "Awaiting release",
@@ -35,20 +33,22 @@ netflix_originals <- transmute(netflix_originals,
                                 Title = Title,
                                 Genre = Genre,
                                 Premiere = Premiere,
-                                Episodes = ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
+                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
                                                   str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA),
-                                Seasons = ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
+                                                  NA)),
+                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
                                                   str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA),
-                                Min_Time = ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                                                  NA)),
+                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
                                                   str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2]),
-                                Max_Time = ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
                                                   str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2]),
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
                                 Status = Status
                                )
+
+unique(select(netflix_originals, Seasons))
 
 netflix_originals
 ```
