@@ -16,7 +16,7 @@ only_keep <- function(row, regex) {
   return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
 }
 
-statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development")
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended")
 ```
 
 ## CSV import
@@ -24,7 +24,7 @@ statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "
 ```{r}
 #Title, Genre, Premiere, Seasons, Runtime, Status
 
-netflix_originals_1 <- read_csv("../datasets/netflix/table-1.csv")
+netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv")
 netflix_originals_1 <- transmute(netflix_originals_1,
                                  Title = Title,
                                  Genre = Genre,
@@ -34,7 +34,7 @@ netflix_originals_1 <- transmute(netflix_originals_1,
                                  Language = NA,
                                  Status = Status)
 
-netflix_originals_2 <- read_csv("../datasets/netflix/table-2.csv")
+netflix_originals_2 <- read_csv("../datasets/netflix/shows/table-2.csv")
 netflix_originals_2 <- transmute(netflix_originals_2,
                                  Title = Title,
                                  Genre = Genre,
@@ -44,7 +44,7 @@ netflix_originals_2 <- transmute(netflix_originals_2,
                                  Language = NA,
                                  Status = Status)
 
-netflix_originals_3 <- read_csv("../datasets/netflix/table-3.csv")
+netflix_originals_3 <- read_csv("../datasets/netflix/shows/table-3.csv")
 netflix_originals_3 <- transmute(netflix_originals_3,
                                  Title = Title,
                                  Genre = paste(Genre, " Adult Animation"),
@@ -54,7 +54,7 @@ netflix_originals_3 <- transmute(netflix_originals_3,
                                  Language = Language,
                                  Status = Status)
 
-netflix_originals_4 <- read_csv("../datasets/netflix/table-4.csv")
+netflix_originals_4 <- read_csv("../datasets/netflix/shows/table-4.csv")
 netflix_originals_4 <- transmute(netflix_originals_4,
                                  Title = Title,
                                  Genre = paste(Genre, " Anime"),
@@ -64,7 +64,7 @@ netflix_originals_4 <- transmute(netflix_originals_4,
                                  Language = Language,
                                  Status = Status)
 
-netflix_originals_5 <- read_csv("../datasets/netflix/table-5.csv")
+netflix_originals_5 <- read_csv("../datasets/netflix/shows/table-5.csv")
 netflix_originals_5 <- transmute(netflix_originals_5,
                                  Title = Title,
                                  Genre = "Children",
@@ -74,7 +74,7 @@ netflix_originals_5 <- transmute(netflix_originals_5,
                                  Language = NA,
                                  Status = Status)
 
-netflix_originals_6 <- read_csv("../datasets/netflix/table-6.csv")
+netflix_originals_6 <- read_csv("../datasets/netflix/shows/table-6.csv")
 netflix_originals_6 <- transmute(netflix_originals_6,
                                  Title = Title,
                                  Genre = Genre,
@@ -84,7 +84,7 @@ netflix_originals_6 <- transmute(netflix_originals_6,
                                  Language = "French",
                                  Status = Status)
 
-netflix_originals_7 <- read_csv("../datasets/netflix/table-7.csv")
+netflix_originals_7 <- read_csv("../datasets/netflix/shows/table-7.csv")
 netflix_originals_7 <- transmute(netflix_originals_7,
                                  Title = Title,
                                  Genre = Genre,
@@ -94,7 +94,7 @@ netflix_originals_7 <- transmute(netflix_originals_7,
                                  Language = "German",
                                  Status = Status)
 
-netflix_originals_8 <- read_csv("../datasets/netflix/table-8.csv")
+netflix_originals_8 <- read_csv("../datasets/netflix/shows/table-8.csv")
 netflix_originals_8 <- transmute(netflix_originals_8,
                                  Title = Title,
                                  Genre = Genre,
@@ -104,7 +104,7 @@ netflix_originals_8 <- transmute(netflix_originals_8,
                                  Language = "Hindi",
                                  Status = Status)
 
-netflix_originals_9 <- read_csv("../datasets/netflix/table-9.csv")
+netflix_originals_9 <- read_csv("../datasets/netflix/shows/table-9.csv")
 netflix_originals_9 <- transmute(netflix_originals_9,
                                  Title = Title,
                                  Genre = Genre,
@@ -114,7 +114,7 @@ netflix_originals_9 <- transmute(netflix_originals_9,
                                  Language = "Italian",
                                  Status = Status)
 
-netflix_originals_10 <- read_csv("../datasets/netflix/table-10.csv")
+netflix_originals_10 <- read_csv("../datasets/netflix/shows/table-10.csv")
 netflix_originals_10 <- transmute(netflix_originals_10,
                                   Title = Title,
                                   Genre = Genre,
@@ -124,7 +124,7 @@ netflix_originals_10 <- transmute(netflix_originals_10,
                                   Language = "Japanese",
                                   Status = Status)
 
-netflix_originals_11 <- read_csv("../datasets/netflix/table-11.csv")
+netflix_originals_11 <- read_csv("../datasets/netflix/shows/table-11.csv")
 netflix_originals_11 <- transmute(netflix_originals_11,
                                   Title = Title,
                                   Genre = Genre,
@@ -134,7 +134,7 @@ netflix_originals_11 <- transmute(netflix_originals_11,
                                   Language = "Korean",
                                   Status = Status)
 
-netflix_originals_12 <- read_csv("../datasets/netflix/table-12.csv")
+netflix_originals_12 <- read_csv("../datasets/netflix/shows/table-12.csv")
 netflix_originals_12 <- transmute(netflix_originals_12,
                                   Title = Title,
                                   Genre = Genre,
@@ -144,7 +144,7 @@ netflix_originals_12 <- transmute(netflix_originals_12,
                                   Language = "Mandarin",
                                   Status = Status)
 
-netflix_originals_13 <- read_csv("../datasets/netflix/table-13.csv")
+netflix_originals_13 <- read_csv("../datasets/netflix/shows/table-13.csv")
 netflix_originals_13 <- transmute(netflix_originals_13,
                                   Title = Title,
                                   Genre = Genre,
@@ -155,7 +155,7 @@ netflix_originals_13 <- transmute(netflix_originals_13,
                                   Status = Status)
 
 
-netflix_originals_14 <- read_csv("../datasets/netflix/table-14.csv")
+netflix_originals_14 <- read_csv("../datasets/netflix/shows/table-14.csv")
 netflix_originals_14 <- transmute(netflix_originals_14,
                                   Title = Title,
                                   Genre = Genre,
@@ -165,7 +165,7 @@ netflix_originals_14 <- transmute(netflix_originals_14,
                                   Language = "Portuguese",
                                   Status = Status)
 
-netflix_originals_15 <- read_csv("../datasets/netflix/table-15.csv")
+netflix_originals_15 <- read_csv("../datasets/netflix/shows/table-15.csv")
 netflix_originals_15 <- transmute(netflix_originals_15,
                                   Title = Title,
                                   Genre = Genre,
@@ -175,7 +175,7 @@ netflix_originals_15 <- transmute(netflix_originals_15,
                                   Language = "Spanish",
                                   Status = Status)
 
-netflix_originals_16 <- read_csv("../datasets/netflix/table-16.csv")
+netflix_originals_16 <- read_csv("../datasets/netflix/shows/table-16.csv")
 netflix_originals_16 <- transmute(netflix_originals_16,
                                   Title = Title,
                                   Genre = Genre,
@@ -185,7 +185,7 @@ netflix_originals_16 <- transmute(netflix_originals_16,
                                   Language = "Turkish",
                                   Status = Status)
 
-netflix_originals_17 <- read_csv("../datasets/netflix/table-17.csv")
+netflix_originals_17 <- read_csv("../datasets/netflix/shows/table-17.csv")
 netflix_originals_17 <- transmute(netflix_originals_17,
                                   Title = Title,
                                   Genre = Genre,
@@ -195,7 +195,7 @@ netflix_originals_17 <- transmute(netflix_originals_17,
                                   Language = Language,
                                   Status = Status)
 
-netflix_originals_18 <- read_csv("../datasets/netflix/table-18.csv")
+netflix_originals_18 <- read_csv("../datasets/netflix/shows/table-18.csv")
 netflix_originals_18 <- transmute(netflix_originals_18,
                                   Title = Title,
                                   Genre = Genre,
@@ -205,7 +205,7 @@ netflix_originals_18 <- transmute(netflix_originals_18,
                                   Language = Language,
                                   Status = Status)
 
-netflix_originals_19 <- read_csv("../datasets/netflix/table-19.csv")
+netflix_originals_19 <- read_csv("../datasets/netflix/shows/table-19.csv")
 netflix_originals_19 <- transmute(netflix_originals_19,
                                   Title = Title,
                                   Genre = Genre,
@@ -215,7 +215,7 @@ netflix_originals_19 <- transmute(netflix_originals_19,
                                   Language = Language,
                                   Status = Status)
 
-netflix_originals_20 <- read_csv("../datasets/netflix/table-20.csv")
+netflix_originals_20 <- read_csv("../datasets/netflix/shows/table-20.csv")
 netflix_originals_20 <- transmute(netflix_originals_20,
                                   Title = Title,
                                   Genre = Genre,
@@ -225,7 +225,7 @@ netflix_originals_20 <- transmute(netflix_originals_20,
                                   Language = Language,
                                   Status = Status)
 
-netflix_originals_21 <- read_csv("../datasets/netflix/table-21.csv")
+netflix_originals_21 <- read_csv("../datasets/netflix/shows/table-21.csv")
 netflix_originals_21 <- transmute(netflix_originals_21,
                                   Title = Title,
                                   Genre = Genre,
@@ -235,7 +235,7 @@ netflix_originals_21 <- transmute(netflix_originals_21,
                                   Language = Language,
                                   Status = Status)
 
-netflix_originals_22 <- read_csv("../datasets/netflix/table-22.csv")
+netflix_originals_22 <- read_csv("../datasets/netflix/shows/table-22.csv")
 netflix_originals_22 <- transmute(netflix_originals_22,
                                   Title = Title,
                                   Genre = Genre,
@@ -245,7 +245,7 @@ netflix_originals_22 <- transmute(netflix_originals_22,
                                   Language = Language,
                                   Status = Status)
 
-netflix_originals_23 <- read_csv("../datasets/netflix/table-23.csv")
+netflix_originals_23 <- read_csv("../datasets/netflix/shows/table-23.csv")
 netflix_originals_23 <- transmute(netflix_originals_23,
                                   Title = Title,
                                   Genre = Genre,
@@ -255,7 +255,7 @@ netflix_originals_23 <- transmute(netflix_originals_23,
                                   Language = NA,
                                   Status = "Event")
 
-netflix_originals_24 <- read_csv("../datasets/netflix/table-24.csv")
+netflix_originals_24 <- read_csv("../datasets/netflix/shows/table-24.csv")
 netflix_originals_24 <- transmute(netflix_originals_24,
                                   Title = Title,
                                   Genre = paste(Genre, " Drama"),
@@ -265,7 +265,7 @@ netflix_originals_24 <- transmute(netflix_originals_24,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_25 <- read_csv("../datasets/netflix/table-25.csv")
+netflix_originals_25 <- read_csv("../datasets/netflix/shows/table-25.csv")
 netflix_originals_25 <- transmute(netflix_originals_25,
                                   Title = Title,
                                   Genre = paste(Genre, " Comedy"),
@@ -275,7 +275,7 @@ netflix_originals_25 <- transmute(netflix_originals_25,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_26 <- read_csv("../datasets/netflix/table-26.csv")
+netflix_originals_26 <- read_csv("../datasets/netflix/shows/table-26.csv")
 netflix_originals_26 <- transmute(netflix_originals_26,
                                   Title = Title,
                                   Genre = paste(Genre, " Adult Animation"),
@@ -286,7 +286,7 @@ netflix_originals_26 <- transmute(netflix_originals_26,
                                   Status = "Development")
 
 
-netflix_originals_27 <- read_csv("../datasets/netflix/table-27.csv")
+netflix_originals_27 <- read_csv("../datasets/netflix/shows/table-27.csv")
 netflix_originals_27 <- transmute(netflix_originals_27,
                                   Title = Title,
                                   Genre = paste(Genre, " Anime"),
@@ -296,7 +296,7 @@ netflix_originals_27 <- transmute(netflix_originals_27,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_28 <- read_csv("../datasets/netflix/table-28.csv")
+netflix_originals_28 <- read_csv("../datasets/netflix/shows/table-28.csv")
 netflix_originals_28 <- transmute(netflix_originals_28,
                                   Title = Title,
                                   Genre = paste(Genre, " Children"),
@@ -306,7 +306,7 @@ netflix_originals_28 <- transmute(netflix_originals_28,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_29 <- read_csv("../datasets/netflix/table-29.csv")
+netflix_originals_29 <- read_csv("../datasets/netflix/shows/table-29.csv")
 netflix_originals_29 <- transmute(netflix_originals_29,
                                   Title = Title,
                                   Genre = Genre,
@@ -316,7 +316,7 @@ netflix_originals_29 <- transmute(netflix_originals_29,
                                   Language = Language,
                                   Status = "Development")
 
-netflix_originals_30 <- read_csv("../datasets/netflix/table-30.csv")
+netflix_originals_30 <- read_csv("../datasets/netflix/shows/table-30.csv")
 netflix_originals_30 <- transmute(netflix_originals_30,
                                   Title = Title,
                                   Genre = Genre,
@@ -326,7 +326,7 @@ netflix_originals_30 <- transmute(netflix_originals_30,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_31 <- read_csv("../datasets/netflix/table-31.csv")
+netflix_originals_31 <- read_csv("../datasets/netflix/shows/table-31.csv")
 netflix_originals_31 <- transmute(netflix_originals_31,
                                   Title = Title,
                                   Genre = Genre,
@@ -336,7 +336,7 @@ netflix_originals_31 <- transmute(netflix_originals_31,
                                   Language = Language,
                                   Status = "Development")
 
-netflix_originals_32 <- read_csv("../datasets/netflix/table-32.csv")
+netflix_originals_32 <- read_csv("../datasets/netflix/shows/table-32.csv")
 netflix_originals_32 <- transmute(netflix_originals_32,
                                   Title = Title,
                                   Genre = Genre,
@@ -346,7 +346,7 @@ netflix_originals_32 <- transmute(netflix_originals_32,
                                   Language = Language,
                                   Status = "Development")
 
-netflix_originals_33 <- read_csv("../datasets/netflix/table-33.csv")
+netflix_originals_33 <- read_csv("../datasets/netflix/shows/table-33.csv")
 netflix_originals_33 <- transmute(netflix_originals_33,
                                   Title = Title,
                                   Genre = Genre,
@@ -356,7 +356,7 @@ netflix_originals_33 <- transmute(netflix_originals_33,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_34 <- read_csv("../datasets/netflix/table-34.csv")
+netflix_originals_34 <- read_csv("../datasets/netflix/shows/table-34.csv")
 netflix_originals_34 <- transmute(netflix_originals_34,
                                   Title = Title,
                                   Genre = Genre,
@@ -366,7 +366,7 @@ netflix_originals_34 <- transmute(netflix_originals_34,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_35 <- read_csv("../datasets/netflix/table-35.csv")
+netflix_originals_35 <- read_csv("../datasets/netflix/shows/table-35.csv")
 netflix_originals_35 <- transmute(netflix_originals_35,
                                   Title = Title,
                                   Genre = Genre,
@@ -376,7 +376,7 @@ netflix_originals_35 <- transmute(netflix_originals_35,
                                   Language = NA,
                                   Status = "Development")
 
-netflix_originals_36 <- read_csv("../datasets/netflix/table-36.csv")
+netflix_originals_36 <- read_csv("../datasets/netflix/shows/table-36.csv")
 netflix_originals_36 <- transmute(netflix_originals_36,
                                   Title = Title,
                                   Genre = Genre,
@@ -385,6 +385,46 @@ netflix_originals_36 <- transmute(netflix_originals_36,
                                   Runtime = NA,
                                   Language = NA,
                                   Status = "Development")
+
+netflix_originals_37 <- read_csv("../datasets/netflix/shows/table-37.csv")
+netflix_originals_37 <- transmute(netflix_originals_37,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = Premiere,
+                                  Seasons = Seasons,
+                                  Runtime = Runtime,
+                                  Language = NA,
+                                  Status = "Ended")
+
+netflix_originals_38 <- read_csv("../datasets/netflix/shows/table-38.csv")
+netflix_originals_38 <- transmute(netflix_originals_38,
+                                  Title = Title,
+                                  Genre = paste(Genre, " Comedy"),
+                                  Premiere = Premiere,
+                                  Seasons = Seasons,
+                                  Runtime = Runtime,
+                                  Language = NA,
+                                  Status = "Ended")
+
+netflix_originals_39 <- read_csv("../datasets/netflix/shows/table-39.csv")
+netflix_originals_39 <- transmute(netflix_originals_39,
+                                  Title = Title,
+                                  Genre = paste(Genre, " Miniseries"),
+                                  Premiere = Premiere,
+                                  Seasons = Episodes,
+                                  Runtime = Runtime,
+                                  Language = NA,
+                                  Status = "Ended")
+
+netflix_originals_40 <- read_csv("../datasets/netflix/shows/table-40.csv")
+netflix_originals_40 <- transmute(netflix_originals_40,
+                                  Title = Title,
+                                  Genre = paste(Genre, " Adult Animation"),
+                                  Premiere = Premiere,
+                                  Seasons = Seasons,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Ended")
 
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
@@ -421,6 +461,10 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_33)
 netflix_originals <- rbind(netflix_originals, netflix_originals_34)
 netflix_originals <- rbind(netflix_originals, netflix_originals_35)
 netflix_originals <- rbind(netflix_originals, netflix_originals_36)
+netflix_originals <- rbind(netflix_originals, netflix_originals_37)
+netflix_originals <- rbind(netflix_originals, netflix_originals_38)
+netflix_originals <- rbind(netflix_originals, netflix_originals_39)
+netflix_originals <- rbind(netflix_originals, netflix_originals_40)
 
 netflix_originals
 
@@ -433,7 +477,7 @@ netflix_originals <- transmute(netflix_originals,
                                Seasons = Seasons,
                                Runtime = Runtime,
                                Language = Language,
-                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development)"), levels = statuses))
+                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended)"), levels = statuses))
 
 netflix_originals
 ```
