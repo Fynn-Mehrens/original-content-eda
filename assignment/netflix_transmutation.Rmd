@@ -25,6 +25,47 @@ netflix_originals
 ## Transmutation of the given Netflix series and movie table
 
 ```{r}
+test_string <- "Police / anthology"
+
+anycharacter <- "(A-Z|a-z)"
+
+genres_to_uppercase <- function(genres) {
+  curr <- ""
+  all_genres <- ""
+  for (i in 1:length(strsplit(genres, "")[[1]])) {
+    c <- strsplit(genres, "")[[1]]
+    print(paste(c(c[i], ": ", grepl(anycharacter, c[i])), ""))
+    if(grepl(anycharacter, c[i])) {
+      curr <- paste(c(curr, c[i]), "")
+    } else {
+      whole_word = strsplit(curr, "")[[1]]
+      for (j in 1:length(whole_word)) {
+        if (j == 1) {
+          curr <- toupper(whole_word[j])
+        } else {
+          curr <- paste(c(curr, tolower(whole_word[j])), "")
+        }
+      }
+      
+      if (i != length(strsplit(genres, "")[[1]])) {
+        all_genres <- paste(c(all_genres, curr, " / "), "")
+      } else {
+        all_genres <- paste(c(all_genres, curr), "")
+      }
+      curr <- ""
+    }
+  }
+  return(all_genres)
+}
+
+strsplit(test_string, "")[[1]]
+
+
+genres_to_uppercase(test_string)
+```
+
+
+```{r}
 netflix_originals <- filter(netflix_originals,
                             !grepl("Pending|pending", Title),
                             Title != "Awaiting release",
