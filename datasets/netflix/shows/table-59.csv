@@ -1,34 +1,34 @@
-Title,Genre,Premiere,Finale,Seasons,Runtime,Language,Notes
-White Rabbit Project,Science investigation,"December 9, 2016","December 9, 2016","1 season, 10 episodes",45–48 min.,English,[102]
-Chasing Cameron,Celebrity,"December 27, 2016","December 27, 2016","1 season, 10 episodes",26–33 min.,English,[103]
-Ultimate Beastmaster,Competition,"February 24, 2017","August 31, 2018","3 seasons, 29 episodes",41–84 min.,English,
-Fastest Car,Motoring,"April 6, 2018","September 20, 2019","2 seasons, 15 episodes",41–52 min.,English,
-Cooking on High,Cooking show,"June 22, 2018","June 22, 2018","1 season, 12 episodes",13–15 min.,English,
-Amazing Interiors,Reality,"July 20, 2018","July 20, 2018","1 season, 12 episodes",21–28 min.,English,
-Stay Here,Reality,"August 17, 2018","August 17, 2018","1 season, 8 episodes",31–33 min.,English,
-Battlefish,Reality,"September 21, 2018","September 21, 2018","1 season, 8 episodes",38–46 min.,English,
-Made in Mexico,Reality series,"September 28, 2018","September 28, 2018","1 season, 8 episodes",45–54 min.,Spanish,
-Dancing Queen,Celebrity,"October 5, 2018","October 5, 2018","1 season, 8 episodes",38–46 min.,English,
-The Curious Creations of Christine McConnell,Cooking show,"October 12, 2018","October 12, 2018","1 season, 6 episodes",24–29 min.,English,[104]
-Haunted,Horror,"October 19, 2018","October 11, 2019","2 seasond, 12 episodes",20–31 min.,English,
-Westside,Music,"November 9, 2018","November 9, 2018","1 season, 8 episodes",46–58 min.,English,
-The Final Table,Culinary competition,"November 20, 2018","November 20, 2018","1 season, 10 episodes",48–60 min.,English,
-Death by Magic,Reality,"November 30, 2018","November 30, 2018","1 season, 8 episodes",31–39 min.,English,
-Nailed It! Holiday,Reality competition,"December 7, 2018","November 22, 2019","2 seasons, 13 episodes",32–35 min.,English,
-Tidying Up with Marie Kondo,Reality show,"January 1, 2019","January 1, 2019","1 season, 8 episodes",35–47 min.,English,
-You vs. Wild,Interactive reality,"April 10, 2019","April 10, 2019","1 season, 8 episodes",14–26 min.,English,
-Flinch,Game show,"May 3, 2019","May 3, 2019","1 season, 10 episodes",20–25 min.,English,
-Jailbirds,Reality television,"May 10, 2019","May 10, 2019","1 season, 10 episodes",37–47 min.,English,
-Awake: The Million Dollar Game,Reality television,"June 14, 2019","June 14, 2019","1 season, 8 episodes",35–41 min.,English,
-Extreme Engagement,Reality television,"July 12, 2019","July 12, 2019","1 season, 8 episodes",32–40 min.,English,
-Basketball or Nothing,Reality competition,"August 2, 2019","August 2, 2019","1 season, 6 episodes",31–37 min.,English,
-Hyperdrive,Reality competition,"August 21, 2019","August 21, 2019","1 season, 10 episodes",43–61 min.,English,
-Styling Hollywood,Reality television,"August 30, 2019","August 30, 2019","1 season, 8 episodes",33–40 min.,English,
-Nailed It! France,Reality competition,"October 25, 2019","October 25, 2019","1 season, 6 episodes",34 min.,French,[105]
-Nailed It! Spain,Reality competition,"October 25, 2019","October 25, 2019","1 season, 6 episodes",31–34 min.,Spanish,
-Prank Encounters,Prank show,"October 25, 2019","October 25, 2019","1 season, 8 episodes",21–26 min.,English,
-Queer Eye: We're in Japan!,Reality television,"November 1, 2019","November 1, 2019","1 season, 4 episodes",49–51 min.,English,
-I'm with the Band: Nasty Cherry,Reality television,"November 15, 2019","November 15, 2019","1 season, 6 episodes",25–41 min.,English,
-No Time for Shame,Reality television,"November 19, 2019","November 19, 2019","1 season, 6 episodes",38–47 min.,Spanish,
-Singapore Social,Reality,"November 22, 2019","November 22, 2019","1 season, 8 episodes",35–44 min.,English,
-Next In Fashion,Reality competition,"January 29, 2020","January 29, 2020","1 season, 10 episodes",46–56 min.,English,[106]
+Title,Genre,Premiere,Finale,Seasons,Runtime,Language
+White Rabbit Project,Science investigation,"December 9, 2016","December 9, 2016","1 season, 10 episodes",45-48 min.,English
+Chasing Cameron,Celebrity,"December 27, 2016","December 27, 2016","1 season, 10 episodes",26-33 min.,English
+Ultimate Beastmaster,Competition,"February 24, 2017","August 31, 2018","3 seasons, 29 episodes",41-84 min.,English
+Fastest Car,Motoring,"April 6, 2018","September 20, 2019","2 seasons, 15 episodes",41-52 min.,English
+Cooking on High,Cooking show,"June 22, 2018","June 22, 2018","1 season, 12 episodes",13-15 min.,English
+Amazing Interiors,Reality,"July 20, 2018","July 20, 2018","1 season, 12 episodes",21-28 min.,English
+Stay Here,Reality,"August 17, 2018","August 17, 2018","1 season, 8 episodes",31-33 min.,English
+Battlefish,Reality,"September 21, 2018","September 21, 2018","1 season, 8 episodes",38-46 min.,English
+Made in Mexico,Reality series,"September 28, 2018","September 28, 2018","1 season, 8 episodes",45-54 min.,Spanish
+Dancing Queen,Celebrity,"October 5, 2018","October 5, 2018","1 season, 8 episodes",38-46 min.,English
+The Curious Creations of Christine McConnell,Cooking show,"October 12, 2018","October 12, 2018","1 season, 6 episodes",24-29 min.,English
+Haunted,Horror,"October 19, 2018","October 11, 2019","2 seasond, 12 episodes",20-31 min.,English
+Westside,Music,"November 9, 2018","November 9, 2018","1 season, 8 episodes",46-58 min.,English
+The Final Table,Culinary competition,"November 20, 2018","November 20, 2018","1 season, 10 episodes",48-60 min.,English
+Death by Magic,Reality,"November 30, 2018","November 30, 2018","1 season, 8 episodes",31-39 min.,English
+Nailed It! Holiday,Reality competition,"December 7, 2018","November 22, 2019","2 seasons, 13 episodes",32-35 min.,English
+Tidying Up with Marie Kondo,Reality show,"January 1, 2019","January 1, 2019","1 season, 8 episodes",35-47 min.,English
+You vs. Wild,Interactive reality,"April 10, 2019","April 10, 2019","1 season, 8 episodes",14-26 min.,English
+Flinch,Game show,"May 3, 2019","May 3, 2019","1 season, 10 episodes",20-25 min.,English
+Jailbirds,Reality television,"May 10, 2019","May 10, 2019","1 season, 10 episodes",37-47 min.,English
+Awake: The Million Dollar Game,Reality television,"June 14, 2019","June 14, 2019","1 season, 8 episodes",35-41 min.,English
+Extreme Engagement,Reality television,"July 12, 2019","July 12, 2019","1 season, 8 episodes",32-40 min.,English
+Basketball or Nothing,Reality competition,"August 2, 2019","August 2, 2019","1 season, 6 episodes",31-37 min.,English
+Hyperdrive,Reality competition,"August 21, 2019","August 21, 2019","1 season, 10 episodes",43-61 min.,English
+Styling Hollywood,Reality television,"August 30, 2019","August 30, 2019","1 season, 8 episodes",33-40 min.,English
+Nailed It! France,Reality competition,"October 25, 2019","October 25, 2019","1 season, 6 episodes",34 min.,French
+Nailed It! Spain,Reality competition,"October 25, 2019","October 25, 2019","1 season, 6 episodes",31-34 min.,Spanish
+Prank Encounters,Prank show,"October 25, 2019","October 25, 2019","1 season, 8 episodes",21-26 min.,English
+Queer Eye: We're in Japan!,Reality television,"November 1, 2019","November 1, 2019","1 season, 4 episodes",49-51 min.,English
+I'm with the Band: Nasty Cherry,Reality television,"November 15, 2019","November 15, 2019","1 season, 6 episodes",25-41 min.,English
+No Time for Shame,Reality television,"November 19, 2019","November 19, 2019","1 season, 6 episodes",38-47 min.,Spanish
+Singapore Social,Reality,"November 22, 2019","November 22, 2019","1 season, 8 episodes",35-44 min.,English
+Next In Fashion,Reality competition,"January 29, 2020","January 29, 2020","1 season, 10 episodes",46-56 min.,English
