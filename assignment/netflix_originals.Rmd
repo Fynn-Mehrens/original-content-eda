@@ -637,6 +637,16 @@ netflix_originals_61 <- transmute(netflix_originals_61,
                                   Language = Language,
                                   Status = "Ended")
 
+netflix_originals_62 <- read_csv("../datasets/netflix/shows/table-62.csv")
+netflix_originals_62 <- transmute(netflix_originals_62,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = Premiere,
+                                  Seasons = Seasons,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Ended")
+
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
 netflix_originals <- rbind(netflix_originals, netflix_originals_4)
@@ -697,6 +707,7 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_58)
 netflix_originals <- rbind(netflix_originals, netflix_originals_59)
 netflix_originals <- rbind(netflix_originals, netflix_originals_60)
 netflix_originals <- rbind(netflix_originals, netflix_originals_61)
+netflix_originals <- rbind(netflix_originals, netflix_originals_62)
 
 netflix_originals
 
