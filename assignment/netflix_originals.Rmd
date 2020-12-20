@@ -16,7 +16,7 @@ only_keep <- function(row, regex) {
   return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
 }
 
-statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended")
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film")
 ```
 
 ## CSV import
@@ -657,6 +657,16 @@ netflix_originals_63 <- transmute(netflix_originals_63,
                                   Language = NA,
                                   Status = "Ended")
 
+netflix_originals_64 <- read_csv("../datasets/netflix/films/table-1.csv")
+netflix_originals_64 <- transmute(netflix_originals_64,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = Premiere,
+                                  Seasons = NA,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Film")
+
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
 netflix_originals <- rbind(netflix_originals, netflix_originals_4)
@@ -719,6 +729,7 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_60)
 netflix_originals <- rbind(netflix_originals, netflix_originals_61)
 netflix_originals <- rbind(netflix_originals, netflix_originals_62)
 netflix_originals <- rbind(netflix_originals, netflix_originals_63)
+netflix_originals <- rbind(netflix_originals, netflix_originals_64)
 
 netflix_originals
 
@@ -731,7 +742,7 @@ netflix_originals <- transmute(netflix_originals,
                                Seasons = Seasons,
                                Runtime = Runtime,
                                Language = Language,
-                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended)"), levels = statuses))
+                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film)"), levels = statuses))
 
 netflix_originals
 ```
