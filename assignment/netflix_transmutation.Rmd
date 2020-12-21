@@ -25,6 +25,8 @@ netflix_originals
 ## Transmutation of the given Netflix series and movie table
 
 ```{r}
+anycharacter <- "([a-zA-Z]+)"
+
 genres_to_uppercase <- function(genres) {
   curr <- ""
   all_genres <- ""
