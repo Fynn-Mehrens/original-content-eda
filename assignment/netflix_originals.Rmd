@@ -807,6 +807,17 @@ netflix_originals_78 <- transmute(netflix_originals_78,
                                   Language = NA,
                                   Status = "Distribution")
 
+
+netflix_originals_79 <- read_csv("../datasets/netflix/exclusives/table-3.csv")
+netflix_originals_79 <- transmute(netflix_originals_79,
+                                  Title = `International title`,
+                                  Genre = paste(Genre, " Adult Animation"),
+                                  Premiere = `Original run`,
+                                  Seasons = Seasons,
+                                  Runtime = NA,
+                                  Language = Language,
+                                  Status = "Distribution")
+
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
 netflix_originals <- rbind(netflix_originals, netflix_originals_4)
@@ -884,6 +895,7 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_75)
 netflix_originals <- rbind(netflix_originals, netflix_originals_76)
 netflix_originals <- rbind(netflix_originals, netflix_originals_77)
 netflix_originals <- rbind(netflix_originals, netflix_originals_78)
+netflix_originals <- rbind(netflix_originals, netflix_originals_79)
 
 netflix_originals
 
