@@ -1109,6 +1109,36 @@ netflix_originals_108 <- transmute(netflix_originals_108,
                                   Language = Language,
                                   Status = "Distribution")
 
+netflix_originals_109 <- read_csv("../datasets/netflix/exclusives/table-33.csv")
+netflix_originals_109 <- transmute(netflix_originals_109,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = `First screening`,
+                                  Seasons = NA,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Distribution")
+
+netflix_originals_110 <- read_csv("../datasets/netflix/exclusives/table-34.csv")
+netflix_originals_110 <- transmute(netflix_originals_110,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = `First screening`,
+                                  Seasons = NA,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Distribution")
+
+netflix_originals_111 <- read_csv("../datasets/netflix/exclusives/table-35.csv")
+netflix_originals_111 <- transmute(netflix_originals_111,
+                                  Title = Title,
+                                  Genre = Genre,
+                                  Premiere = `First screening`,
+                                  Seasons = NA,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Distribution")
+
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
 netflix_originals <- rbind(netflix_originals, netflix_originals_4)
@@ -1216,6 +1246,9 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_105)
 netflix_originals <- rbind(netflix_originals, netflix_originals_106)
 netflix_originals <- rbind(netflix_originals, netflix_originals_107)
 netflix_originals <- rbind(netflix_originals, netflix_originals_108)
+netflix_originals <- rbind(netflix_originals, netflix_originals_109)
+netflix_originals <- rbind(netflix_originals, netflix_originals_110)
+netflix_originals <- rbind(netflix_originals, netflix_originals_111)
 
 netflix_originals
 
