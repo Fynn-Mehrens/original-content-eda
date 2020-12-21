@@ -16,7 +16,7 @@ only_keep <- function(row, regex) {
   return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
 }
 
-statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film")
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film", "Special")
 ```
 
 ## CSV import
@@ -747,7 +747,6 @@ netflix_originals_72 <- transmute(netflix_originals_72,
                                   Language = Language,
                                   Status = "Film")
 
-
 netflix_originals_73 <- read_csv("../datasets/netflix/specials/table-1.csv")
 netflix_originals_73 <- transmute(netflix_originals_73,
                                   Title = Title,
@@ -757,6 +756,26 @@ netflix_originals_73 <- transmute(netflix_originals_73,
                                   Runtime = Runtime,
                                   Language = Language,
                                   Status = "Special")
+
+netflix_originals_74 <- read_csv("../datasets/netflix/specials/table-2.csv")
+netflix_originals_74 <- transmute(netflix_originals_74,
+                                  Title = Title,
+                                  Genre = "Comedy Special",
+                                  Premiere = Premiere,
+                                  Seasons = Seasons,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = Status)
+
+netflix_originals_75 <- read_csv("../datasets/netflix/specials/table-3.csv")
+netflix_originals_75 <- transmute(netflix_originals_75,
+                                  Title = Title,
+                                  Genre = "Comedy Special",
+                                  Premiere = Premiere,
+                                  Seasons = NA,
+                                  Runtime = Runtime,
+                                  Language = Language,
+                                  Status = "Development")
 
 netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
 netflix_originals <- rbind(netflix_originals, netflix_originals_3)
@@ -830,6 +849,8 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_70)
 netflix_originals <- rbind(netflix_originals, netflix_originals_71)
 netflix_originals <- rbind(netflix_originals, netflix_originals_72)
 netflix_originals <- rbind(netflix_originals, netflix_originals_73)
+netflix_originals <- rbind(netflix_originals, netflix_originals_74)
+netflix_originals <- rbind(netflix_originals, netflix_originals_75)
 
 netflix_originals
 
@@ -842,7 +863,7 @@ netflix_originals <- transmute(netflix_originals,
                                Seasons = Seasons,
                                Runtime = Runtime,
                                Language = Language,
-                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film)"), levels = statuses))
+                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special)"), levels = statuses))
 
 netflix_originals
 ```
