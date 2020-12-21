@@ -25,43 +25,38 @@ netflix_originals
 ## Transmutation of the given Netflix series and movie table
 
 ```{r}
-test_string <- "Police / anthology"
-
-anycharacter <- "(A-Z|a-z)"
+anycharacter <- "([a-zA-Z]+)"
 
 genres_to_uppercase <- function(genres) {
   curr <- ""
   all_genres <- ""
-  for (i in 1:length(strsplit(genres, "")[[1]])) {
-    c <- strsplit(genres, "")[[1]]
-    print(paste(c(c[i], ": ", grepl(anycharacter, c[i])), ""))
-    if(grepl(anycharacter, c[i])) {
-      curr <- paste(c(curr, c[i]), "")
-    } else {
-      whole_word = strsplit(curr, "")[[1]]
-      for (j in 1:length(whole_word)) {
-        if (j == 1) {
-          curr <- toupper(whole_word[j])
-        } else {
-          curr <- paste(c(curr, tolower(whole_word[j])), "")
+  c <- strsplit(genres, "")[[1]]
+  for (i in 1:length(c)) {
+    if (grepl(anycharacter, c[i])) {
+      curr <- gsub(" ", "", str_squish(paste(curr, c[i])))
+    }
+    if (!grepl(anycharacter, c[i]) | i == length(c)) {
+      if (i > 1 & grepl(anycharacter, c[i-1])) {
+        whole_word = strsplit(curr, "")[[1]]
+        single_genre <- ""
+        for (j in 1:length(whole_word)) {
+          if (j == 1) {
+            single_genre <- gsub(" ", "", str_squish(toupper(whole_word[j])))
+          } else {
+            single_genre <- gsub(" ", "", str_squish(paste(single_genre, tolower(whole_word[j]))))
+          }
         }
-      }
-      
-      if (i != length(strsplit(genres, "")[[1]])) {
-        all_genres <- paste(c(all_genres, curr, " / "), "")
-      } else {
-        all_genres <- paste(c(all_genres, curr), "")
+        if (i != length(strsplit(genres, "")[[1]])) {
+          all_genres <- str_squish(paste(all_genres, single_genre, "/"))
+        } else {
+          all_genres <- paste(all_genres, single_genre)
+        }
       }
       curr <- ""
     }
   }
   return(all_genres)
 }
-
-strsplit(test_string, "")[[1]]
-
-
-genres_to_uppercase(test_string)
 ```
 
 
