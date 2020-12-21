@@ -25,12 +25,13 @@ netflix_originals
 ## Transmutation of the given Netflix series and movie table
 
 ```{r}
-anycharacter <- "([a-zA-Z]+)"
+anycharacter <- "([a-zA-Z]|-+)"
 
-genres_to_uppercase <- function(genres) {
+genre_to_uppercase <- function(genre) {
   curr <- ""
   all_genres <- ""
-  c <- strsplit(genres, "")[[1]]
+  c <- strsplit(genre, "")[[1]]
+  print("Printing in front of the for loop")
   for (i in 1:length(c)) {
     if (grepl(anycharacter, c[i])) {
       curr <- gsub(" ", "", str_squish(paste(curr, c[i])))
@@ -43,10 +44,10 @@ genres_to_uppercase <- function(genres) {
           if (j == 1) {
             single_genre <- gsub(" ", "", str_squish(toupper(whole_word[j])))
           } else {
-            single_genre <- gsub(" ", "", str_squish(paste(single_genre, tolower(whole_word[j]))))
+            single_genre <- gsub(" ", "", str_squish(paste(single_genre, whole_word[j])))
           }
         }
-        if (i != length(strsplit(genres, "")[[1]])) {
+        if (i != length(c)) {
           all_genres <- str_squish(paste(all_genres, single_genre, "/"))
         } else {
           all_genres <- paste(all_genres, single_genre)
@@ -55,7 +56,17 @@ genres_to_uppercase <- function(genres) {
       curr <- ""
     }
   }
+  print("Printing after the for loop")
   return(all_genres)
+}
+
+genres_to_uppercase <- function(genres) {
+  genres_vector <- c()
+  for (genre in genres) {
+    genres_vector <- c(genres_vector, c(genre_to_uppercase(genre)))
+  }
+  print(genres_vector)
+  return(genres_vector)
 }
 ```
 
@@ -70,7 +81,7 @@ netflix_originals <- filter(netflix_originals,
 
 transmuted <- transmute(netflix_originals, 
                                 Title = Title,
-                                Genre = str_replace_all(
+                                Genre = genres_to_uppercase(str_replace_all(
                                           str_squish(
                                             str_replace_all(
                                               str_replace_all(
@@ -80,7 +91,7 @@ transmuted <- transmute(netflix_originals,
                                               "(C|c)oming-of-age ", ""),
                                             "(C|c)omedy-(D|d)rama", "Dramedy")
                                           ),
-                                        "/| ", " / "),
+                                        "/| ", " / ")),
                                 Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
                                 Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
                                                   str_match(Seasons, "([0-9]+) (episode*)")[,2],
