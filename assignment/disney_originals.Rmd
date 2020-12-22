@@ -42,7 +42,18 @@ disney_originals_2 <- transmute(disney_originals_2,
                                 Language = NA,
                                 Status = Status)
 
+disney_originals_3 <- read_csv("../datasets/disney/shows/table-3.csv")
+disney_originals_3 <- transmute(disney_originals_3,
+                                Title = Title,
+                                Genre = paste(Genre, " Shorts"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status)
+
 disney_originals <- rbind(disney_originals_1, disney_originals_2)
+disney_originals <- rbind(disney_originals, disney_originals_3)
 
 unique(select(disney_originals, Status))
 
