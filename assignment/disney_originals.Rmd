@@ -22,6 +22,16 @@ statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "
 ## CSV import
 
 ```{r}
+
+# Statuses = Renewed, Pending, Awaiting release, Ended, Special, Development
+# Formats = Series, Miniseries, Film, Event
+# Origin = Continuation, Distribution, Original
+
+# old: Title, Genre, Premiere, Seasons, Runtime, Language, Status
+
+
+# new: Title, Genre, Premiere, Seasons, Runtime, Language, Status, Format, Origin, Service, Network, Region
+
 disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
 disney_originals_1 <- transmute(disney_originals_1,
                                 Title = Title,
@@ -30,7 +40,11 @@ disney_originals_1 <- transmute(disney_originals_1,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_2 <- read_csv("../datasets/disney/shows/table-2.csv")
 disney_originals_2 <- transmute(disney_originals_2,
@@ -40,7 +54,11 @@ disney_originals_2 <- transmute(disney_originals_2,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_3 <- read_csv("../datasets/disney/shows/table-3.csv")
 disney_originals_3 <- transmute(disney_originals_3,
@@ -50,7 +68,11 @@ disney_originals_3 <- transmute(disney_originals_3,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_4 <- read_csv("../datasets/disney/shows/table-4.csv")
 disney_originals_4 <- transmute(disney_originals_4,
@@ -60,7 +82,11 @@ disney_originals_4 <- transmute(disney_originals_4,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_5 <- read_csv("../datasets/disney/shows/table-5.csv")
 disney_originals_5 <- transmute(disney_originals_5,
@@ -70,7 +96,11 @@ disney_originals_5 <- transmute(disney_originals_5,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_6 <- read_csv("../datasets/disney/shows/table-6.csv")
 disney_originals_6 <- transmute(disney_originals_6,
@@ -80,7 +110,11 @@ disney_originals_6 <- transmute(disney_originals_6,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_7 <- read_csv("../datasets/disney/shows/table-7.csv")
 disney_originals_7 <- transmute(disney_originals_7,
@@ -332,7 +366,8 @@ disney_originals <- transmute(disney_originals,
                               Seasons = Seasons,
                               Runtime = Runtime,
                               Language = Language,
-                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses))
+                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses)
+                              Service = "Disney+")
 
 disney_originals
 ```
