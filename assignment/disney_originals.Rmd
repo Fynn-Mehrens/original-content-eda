@@ -100,22 +100,15 @@ disney_originals_8 <- transmute(disney_originals_8,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Exclusive")
+                                Status = "Special")
 
-disney_originals_9 <- read_csv("../datasets/disney/shows/table-9.csv")
-disney_originals_9 <- transmute(disney_originals_9,
-                                Title = Title,
-                                Genre = paste(Genre, " Drama"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = Status)
+# missing exclusives
+# missing table-9 content on wiki
 
 disney_originals_10 <- read_csv("../datasets/disney/shows/table-10.csv")
 disney_originals_10 <- transmute(disney_originals_10,
                                 Title = Title,
-                                Genre = paste(Genre, " Comedy"),
+                                Genre = Genre,
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -125,7 +118,7 @@ disney_originals_10 <- transmute(disney_originals_10,
 disney_originals_11 <- read_csv("../datasets/disney/shows/table-11.csv")
 disney_originals_11 <- transmute(disney_originals_11,
                                 Title = Title,
-                                Genre = paste(Genre, " Animation"),
+                                Genre = paste(Genre, " Drama"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -135,7 +128,7 @@ disney_originals_11 <- transmute(disney_originals_11,
 disney_originals_12 <- read_csv("../datasets/disney/shows/table-12.csv")
 disney_originals_12 <- transmute(disney_originals_12,
                                 Title = Title,
-                                Genre = paste(Genre, " Docuseries Unscripted"),
+                                Genre = paste(Genre, " Comedy"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -145,7 +138,7 @@ disney_originals_12 <- transmute(disney_originals_12,
 disney_originals_13 <- read_csv("../datasets/disney/shows/table-13.csv")
 disney_originals_13 <- transmute(disney_originals_13,
                                 Title = Title,
-                                Genre = paste(Genre, " Reality Unscripted"),
+                                Genre = paste(Genre, " Animation"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -155,12 +148,42 @@ disney_originals_13 <- transmute(disney_originals_13,
 disney_originals_14 <- read_csv("../datasets/disney/shows/table-14.csv")
 disney_originals_14 <- transmute(disney_originals_14,
                                 Title = Title,
-                                Genre = Genre,
+                                Genre = paste(Genre, " Docuseries Unscripted"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
                                 Status = Status)
+
+disney_originals_15 <- read_csv("../datasets/disney/shows/table-15.csv")
+disney_originals_15 <- transmute(disney_originals_15,
+                                Title = Title,
+                                Genre = paste(Genre, " Reality Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status)
+
+disney_originals_16 <- read_csv("../datasets/disney/shows/table-16.csv")
+disney_originals_16 <- transmute(disney_originals_16,
+                                Title = Title,
+                                Genre = paste(Genre, " Continuations"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status)
+
+disney_originals_17 <- read_csv("../datasets/disney/shows/table-17.csv")
+disney_originals_17 <- transmute(disney_originals_17,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = NA,
+                                Seasons = NA,
+                                Runtime = NA,
+                                Language = NA,
+                                Status = "Development")
 
 disney_originals <- rbind(disney_originals_1, disney_originals_2)
 disney_originals <- rbind(disney_originals, disney_originals_3)
@@ -169,12 +192,15 @@ disney_originals <- rbind(disney_originals, disney_originals_5)
 disney_originals <- rbind(disney_originals, disney_originals_6)
 disney_originals <- rbind(disney_originals, disney_originals_7)
 disney_originals <- rbind(disney_originals, disney_originals_8)
-disney_originals <- rbind(disney_originals, disney_originals_9)
+#disney_originals <- rbind(disney_originals, disney_originals_9)
 disney_originals <- rbind(disney_originals, disney_originals_10)
 disney_originals <- rbind(disney_originals, disney_originals_11)
 disney_originals <- rbind(disney_originals, disney_originals_12)
 disney_originals <- rbind(disney_originals, disney_originals_13)
 disney_originals <- rbind(disney_originals, disney_originals_14)
+disney_originals <- rbind(disney_originals, disney_originals_15)
+disney_originals <- rbind(disney_originals, disney_originals_16)
+disney_originals <- rbind(disney_originals, disney_originals_17)
 
 unique(select(disney_originals, Status))
 
