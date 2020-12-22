@@ -22,7 +22,27 @@ statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "
 ## CSV import
 
 ```{r}
-disney_originals
+disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
+disney_originals_1 <- transmute(disney_originals_1,
+                                Title = Title,
+                                Genre = paste(Genre, " Drama"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status)
+
+disney_originals_2 <- read_csv("../datasets/disney/shows/table-2.csv")
+disney_originals_2 <- transmute(disney_originals_2,
+                                Title = Title,
+                                Genre = paste(Genre, " Comedy"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status)
+
+disney_originals <- rbind(disney_originals_1, disney_originals_2)
 
 unique(select(disney_originals, Status))
 
