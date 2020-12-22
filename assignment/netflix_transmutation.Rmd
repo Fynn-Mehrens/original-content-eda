@@ -127,8 +127,9 @@ To see how the production of original content has evolved over the years, we wan
 netflix_prem_year <- filter(mutate(netflix, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
 netflix_prem_year
 
-ggplot(data = netflix_prem_year, mapping = aes(x = Premiere_Year)) +
-  geom_bar()
+ggplot(data = netflix_prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Premiere_Year))) +
+  geom_bar() +
+  labs(fill = "Premiere Year")
 ```
 
 
