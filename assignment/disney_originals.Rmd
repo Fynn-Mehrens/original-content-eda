@@ -119,12 +119,16 @@ disney_originals_6 <- transmute(disney_originals_6,
 disney_originals_7 <- read_csv("../datasets/disney/shows/table-7.csv")
 disney_originals_7 <- transmute(disney_originals_7,
                                 Title = Title,
-                                Genre = paste(Genre, " Continuations"),
+                                Genre = Genre,
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Continuation",
+                                Network = Network,
+                                Region = NA)
 
 disney_originals_8 <- read_csv("../datasets/disney/shows/table-8.csv")
 disney_originals_8 <- transmute(disney_originals_8,
@@ -134,7 +138,11 @@ disney_originals_8 <- transmute(disney_originals_8,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Special")
+                                Status = "Special",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 # missing exclusives
 # missing table-9 content on wiki
@@ -147,7 +155,11 @@ disney_originals_10 <- transmute(disney_originals_10,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_11 <- read_csv("../datasets/disney/shows/table-11.csv")
 disney_originals_11 <- transmute(disney_originals_11,
@@ -157,7 +169,11 @@ disney_originals_11 <- transmute(disney_originals_11,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_12 <- read_csv("../datasets/disney/shows/table-12.csv")
 disney_originals_12 <- transmute(disney_originals_12,
@@ -167,7 +183,11 @@ disney_originals_12 <- transmute(disney_originals_12,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_13 <- read_csv("../datasets/disney/shows/table-13.csv")
 disney_originals_13 <- transmute(disney_originals_13,
@@ -177,7 +197,11 @@ disney_originals_13 <- transmute(disney_originals_13,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_14 <- read_csv("../datasets/disney/shows/table-14.csv")
 disney_originals_14 <- transmute(disney_originals_14,
@@ -187,7 +211,11 @@ disney_originals_14 <- transmute(disney_originals_14,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_15 <- read_csv("../datasets/disney/shows/table-15.csv")
 disney_originals_15 <- transmute(disney_originals_15,
@@ -197,17 +225,25 @@ disney_originals_15 <- transmute(disney_originals_15,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_16 <- read_csv("../datasets/disney/shows/table-16.csv")
 disney_originals_16 <- transmute(disney_originals_16,
                                 Title = Title,
-                                Genre = paste(Genre, " Continuations"),
+                                Genre = Genre,
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = Status)
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Continuation",
+                                Network = `Prev. network(s)`,
+                                Region = NA)
 
 disney_originals_17 <- read_csv("../datasets/disney/shows/table-17.csv")
 disney_originals_17 <- transmute(disney_originals_17,
@@ -217,7 +253,11 @@ disney_originals_17 <- transmute(disney_originals_17,
                                 Seasons = NA,
                                 Runtime = NA,
                                 Language = NA,
-                                Status = "Development")
+                                Status = "Development",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_18 <- read_csv("../datasets/disney/films/table-1.csv")
 disney_originals_18 <- transmute(disney_originals_18,
@@ -227,7 +267,11 @@ disney_originals_18 <- transmute(disney_originals_18,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_19 <- read_csv("../datasets/disney/films/table-2.csv")
 disney_originals_19 <- transmute(disney_originals_19,
@@ -237,7 +281,11 @@ disney_originals_19 <- transmute(disney_originals_19,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_20 <- read_csv("../datasets/disney/films/table-3.csv")
 disney_originals_20 <- transmute(disney_originals_20,
@@ -247,7 +295,11 @@ disney_originals_20 <- transmute(disney_originals_20,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_21 <- read_csv("../datasets/disney/films/table-4.csv")
 disney_originals_21 <- transmute(disney_originals_21,
@@ -257,17 +309,25 @@ disney_originals_21 <- transmute(disney_originals_21,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_22 <- read_csv("../datasets/disney/films/table-5.csv")
 disney_originals_22 <- transmute(disney_originals_22,
                                 Title = Title,
-                                Genre = paste(Genre, " Special"),
+                                Genre = Genre,
                                 Premiere = `Release date`,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Special",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_23 <- read_csv("../datasets/disney/films/table-6.csv")
 disney_originals_23 <- transmute(disney_originals_23,
@@ -277,17 +337,25 @@ disney_originals_23 <- transmute(disney_originals_23,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Distribution",
+                                Network = NA,
+                                Region = "France")
 
 disney_originals_24 <- read_csv("../datasets/disney/films/table-7.csv")
 disney_originals_24 <- transmute(disney_originals_24,
                                 Title = Title,
-                                Genre = paste(Genre, " Feature"),
+                                Genre = Genre,
                                 Premiere = `Release date`,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_25 <- read_csv("../datasets/disney/films/table-8.csv")
 disney_originals_25 <- transmute(disney_originals_25,
@@ -297,37 +365,53 @@ disney_originals_25 <- transmute(disney_originals_25,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_26 <- read_csv("../datasets/disney/films/table-9.csv")
 disney_originals_26 <- transmute(disney_originals_26,
                                 Title = Title,
-                                Genre = paste(Genre, " Special"),
+                                Genre = Genre,
                                 Premiere = `Release date`,
                                 Seasons = NA,
                                 Runtime = Runtime,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Development",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_27 <- read_csv("../datasets/disney/films/table-10.csv")
 disney_originals_27 <- transmute(disney_originals_27,
                                 Title = Title,
-                                Genre = paste(Genre, " Development"),
+                                Genre = Genre,
                                 Premiere = NA,
                                 Seasons = NA,
                                 Runtime = NA,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Development",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals_28 <- read_csv("../datasets/disney/films/table-11.csv")
 disney_originals_28 <- transmute(disney_originals_28,
                                 Title = Title,
-                                Genre = paste(Genre, " Special"),
+                                Genre = Genre,
                                 Premiere = NA,
                                 Seasons = NA,
                                 Runtime = NA,
                                 Language = NA,
-                                Status = "Film")
+                                Status = "Development",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
 
 disney_originals <- rbind(disney_originals_1, disney_originals_2)
 disney_originals <- rbind(disney_originals, disney_originals_3)
@@ -366,8 +450,12 @@ disney_originals <- transmute(disney_originals,
                               Seasons = Seasons,
                               Runtime = Runtime,
                               Language = Language,
-                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses)
-                              Service = "Disney+")
+                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                              Service = "Disney+",
+                              Format = Format,
+                              Origin = Origin,
+                              Network = Network,
+                              Region = Region)
 
 disney_originals
 ```
