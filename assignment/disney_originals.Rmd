@@ -17,6 +17,12 @@ only_keep <- function(row, regex) {
 }
 
 statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film", "Special", "Distribution")
+
+formats <- c("Series", "Miniseries", "Film", "Special")
+
+origins <- c("Continuation", "Distribution", "Original")
+
+services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
 ```
 
 ## CSV import
@@ -451,9 +457,9 @@ disney_originals <- transmute(disney_originals,
                               Runtime = Runtime,
                               Language = Language,
                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
-                              Service = "Disney+",
-                              Format = Format,
-                              Origin = Origin,
+                              Service = parse_factor("Disney+", levels = services),
+                              Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                              Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
                               Network = Network,
                               Region = Region)
 
