@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
+library(viridis)
 ```
 
 ## Importing from other Rmd file
@@ -132,6 +133,18 @@ ggplot(data = netflix_prem_year, mapping = aes(x = Premiere_Year, fill = as.fact
   labs(fill = "Premiere Year")
 ```
 
+
+```{r}
+netflix_prem_month <- filter(mutate(netflix,
+                              Premiere_Month = as.character(month(ymd(010101) + months(lubridate::month(Premiere)-1),label=TRUE,abbr=TRUE))),
+                              lubridate::year(Premiere) != 2021, !is.na(lubridate::year(Premiere)))
+netflix_prem_month
+
+ggplot(data = netflix_prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),
+                                                fill = reorder(as.factor(Premiere_Month), lubridate::month(Premiere)))) +
+  geom_bar(width = 0.85) +
+  labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series")
+```
 
 
 ```{r}
