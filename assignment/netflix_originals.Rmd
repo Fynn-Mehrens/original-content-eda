@@ -262,12 +262,16 @@ netflix_originals_17 <- transmute(netflix_originals_17,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = Status,
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_18 <- read_csv("../datasets/netflix/shows/table-18.csv")
 netflix_originals_18 <- transmute(netflix_originals_18,
                                   Title = Title,
-                                  Genre = Genre,
+                                  Genre = paste(Genre, " Docuseries Unscripted"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -281,22 +285,30 @@ netflix_originals_18 <- transmute(netflix_originals_18,
 netflix_originals_19 <- read_csv("../datasets/netflix/shows/table-19.csv")
 netflix_originals_19 <- transmute(netflix_originals_19,
                                   Title = Title,
-                                  Genre = Genre,
+                                  Genre = paste(Genre, " Reality Unscripted"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = Status,
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_20 <- read_csv("../datasets/netflix/shows/table-20.csv")
 netflix_originals_20 <- transmute(netflix_originals_20,
                                   Title = Title,
-                                  Genre = Genre,
+                                  Genre = paste(Genre, " Variety Unscripted"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = Status,
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_21 <- read_csv("../datasets/netflix/shows/table-21.csv")
 netflix_originals_21 <- transmute(netflix_originals_21,
@@ -306,7 +318,11 @@ netflix_originals_21 <- transmute(netflix_originals_21,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = Status,
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_22 <- read_csv("../datasets/netflix/shows/table-22.csv")
 netflix_originals_22 <- transmute(netflix_originals_22,
@@ -316,7 +332,11 @@ netflix_originals_22 <- transmute(netflix_originals_22,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = Status,
+                                  Format = "Series",
+                                  Origin = "Continuation",
+                                  Network = `Prev. network()`,
+                                  Region = NA)
 
 netflix_originals_23 <- read_csv("../datasets/netflix/shows/table-23.csv")
 netflix_originals_23 <- transmute(netflix_originals_23,
