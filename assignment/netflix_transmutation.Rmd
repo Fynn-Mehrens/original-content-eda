@@ -132,7 +132,7 @@ ggplot(data = netflix_prem_year, mapping = aes(x = Premiere_Year, fill = as.fact
   geom_bar() +
   labs(fill = "Premiere Year")
 ```
-
+In society there is a common agreement, that most of the interesting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
 
 ```{r}
 netflix_prem_month <- filter(mutate(netflix,
