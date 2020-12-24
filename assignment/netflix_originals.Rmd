@@ -1052,27 +1052,39 @@ netflix_originals_73 <- transmute(netflix_originals_73,
                                   Seasons = NA,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = "Special")
+                                  Status = "Event",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_74 <- read_csv("../datasets/netflix/specials/table-2.csv")
 netflix_originals_74 <- transmute(netflix_originals_74,
                                   Title = Title,
-                                  Genre = "Comedy Special",
+                                  Genre = "Comedy",
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = "Event",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_75 <- read_csv("../datasets/netflix/specials/table-3.csv")
 netflix_originals_75 <- transmute(netflix_originals_75,
                                   Title = Title,
-                                  Genre = "Comedy Special",
+                                  Genre = "Comedy",
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = "Development")
+                                  Status = "Development",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_76 <- read_csv("../datasets/netflix/specials/table-4.csv")
 netflix_originals_76 <- transmute(netflix_originals_76,
@@ -1082,7 +1094,11 @@ netflix_originals_76 <- transmute(netflix_originals_76,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = Status)
+                                  Status = "Development",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_77 <- read_csv("../datasets/netflix/exclusives/table-1.csv")
 netflix_originals_77 <- transmute(netflix_originals_77,
@@ -1092,7 +1108,11 @@ netflix_originals_77 <- transmute(netflix_originals_77,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = NA,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 netflix_originals_78 <- read_csv("../datasets/netflix/exclusives/table-2.csv")
 netflix_originals_78 <- transmute(netflix_originals_78,
@@ -1102,7 +1122,11 @@ netflix_originals_78 <- transmute(netflix_originals_78,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = NA,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 
 netflix_originals_79 <- read_csv("../datasets/netflix/exclusives/table-3.csv")
@@ -1113,7 +1137,11 @@ netflix_originals_79 <- transmute(netflix_originals_79,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = Language,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 netflix_originals_80 <- read_csv("../datasets/netflix/exclusives/table-4.csv")
 netflix_originals_80 <- transmute(netflix_originals_80,
@@ -1123,17 +1151,25 @@ netflix_originals_80 <- transmute(netflix_originals_80,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = Language,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 netflix_originals_81 <- read_csv("../datasets/netflix/exclusives/table-5.csv")
 netflix_originals_81 <- transmute(netflix_originals_81,
                                   Title = `International title`,
-                                  Genre = paste(Genre, " Children"),
+                                  Genre = paste(Genre, " Children Kids Family"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = Language,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 netflix_originals_82 <- read_csv("../datasets/netflix/exclusives/table-6.csv")
 netflix_originals_82 <- transmute(netflix_originals_82,
@@ -1143,7 +1179,11 @@ netflix_originals_82 <- transmute(netflix_originals_82,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = "Arabic",
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = `Original network`,
+                                  Region = `Original region`)
 
 netflix_originals_83 <- read_csv("../datasets/netflix/exclusives/table-7.csv")
 netflix_originals_83 <- transmute(netflix_originals_83,
