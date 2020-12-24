@@ -8,6 +8,21 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(forcats)
+```
+
+```{r}
+only_keep <- function(row, regex) {
+  return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
+}
+
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film", "Special", "Distribution")
+
+formats <- c("Series", "Miniseries", "Film", "Special")
+
+origins <- c("Continuation", "Distribution", "Original")
+
+services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
 ```
 
 ## CSV import
