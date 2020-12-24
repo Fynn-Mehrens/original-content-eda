@@ -29,7 +29,66 @@ services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
 
 
 ```{r}
-amazon_originals <- read_csv("../datasets/amazon_originals.csv")
+amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv")
+amazon_originals_1 <- transmute(amazon_originals_1,
+                              Title = Title,
+                              Genre = paste(Genre, " Drama"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = NA,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+amazon_originals_2 <- read_csv("../datasets/amazon/shows/table-2.csv")
+amazon_originals_2 <- transmute(amazon_originals_2,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = NA,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+amazon_originals_3 <- read_csv("../datasets/amazon/shows/table-3.csv")
+amazon_originals_3 <- transmute(amazon_originals_3,
+                              Title = Title,
+                              Genre = paste(Genre, " Adult Animation"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = NA,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+amazon_originals <- rbind(amazon_originals_1, amazon_originals_2)
+amazon_originals <- rbind(amazon_originals, amazon_originals_3)
+
+unique(select(amazon_originals, Status))
+
+amazon_originals <- transmute(amazon_originals, 
+                            Title = Title,
+                            Genre = Genre,
+                            Premiere = Premiere,
+                            Seasons = Seasons,
+                            Runtime = Runtime,
+                            Language = Language,
+                            Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                            Service = parse_factor("Amazon Prime Video", levels = services),
+                            Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                            Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                            Network = Network,
+                            Region = Region)
 
 amazon_originals
 ```
