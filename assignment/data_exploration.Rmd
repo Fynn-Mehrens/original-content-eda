@@ -1,0 +1,26 @@
+---
+title: "data_exploration"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing and combining the transmuted data frames
+
+In the following four code chunks the transmutation files are being executed. The transmutation files themselves rely on their respective "<name>_originals" file which uses data that is scraped from Wikipedia to identify the original creations from the streaming services.
+
+```{r child = 'netflix_transmutation.Rmd'}
+```
+
+```{r child = 'amazon_prime_transmutation.Rmd'}
+```
+
+```{r child = 'disney_transmutation.Rmd'}
+```
+
+```{r child = 'hulu_transmutation.Rmd'}
+```
+
+The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
