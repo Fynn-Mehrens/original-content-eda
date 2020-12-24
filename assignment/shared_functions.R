@@ -1,5 +1,7 @@
 # This file contains all the self-written function used for importing and transmuting the given data
 
+## @knitr genre_functions
+
 anycharacter <- "([a-zA-Z]|-+)"
 
 genre_to_uppercase <- function(genre) {
