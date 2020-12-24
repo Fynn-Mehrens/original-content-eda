@@ -1160,12 +1160,16 @@ netflix_originals_80 <- transmute(netflix_originals_80,
 netflix_originals_81 <- read_csv("../datasets/netflix/exclusives/table-5.csv")
 netflix_originals_81 <- transmute(netflix_originals_81,
                                   Title = `International title`,
-                                  Genre = paste(Genre, " Children"),
+                                  Genre = paste(Genre, " Children Kids Family"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = Language,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 netflix_originals_82 <- read_csv("../datasets/netflix/exclusives/table-6.csv")
 netflix_originals_82 <- transmute(netflix_originals_82,
