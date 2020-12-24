@@ -627,7 +627,11 @@ netflix_originals_43 <- transmute(netflix_originals_43,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Arabic",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_44 <- read_csv("../datasets/netflix/shows/table-44.csv")
 netflix_originals_44 <- transmute(netflix_originals_44,
@@ -637,7 +641,11 @@ netflix_originals_44 <- transmute(netflix_originals_44,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Danish",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_45 <- read_csv("../datasets/netflix/shows/table-45.csv")
 netflix_originals_45 <- transmute(netflix_originals_45,
@@ -647,7 +655,11 @@ netflix_originals_45 <- transmute(netflix_originals_45,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "French",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_46 <- read_csv("../datasets/netflix/shows/table-46.csv")
 netflix_originals_46 <- transmute(netflix_originals_46,
@@ -657,7 +669,11 @@ netflix_originals_46 <- transmute(netflix_originals_46,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "German",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_47 <- read_csv("../datasets/netflix/shows/table-47.csv")
 netflix_originals_47 <- transmute(netflix_originals_47,
@@ -667,7 +683,11 @@ netflix_originals_47 <- transmute(netflix_originals_47,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Hindi",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_48 <- read_csv("../datasets/netflix/shows/table-48.csv")
 netflix_originals_48 <- transmute(netflix_originals_48,
@@ -677,7 +697,11 @@ netflix_originals_48 <- transmute(netflix_originals_48,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Italian",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_49 <- read_csv("../datasets/netflix/shows/table-49.csv")
 netflix_originals_49 <- transmute(netflix_originals_49,
@@ -687,7 +711,11 @@ netflix_originals_49 <- transmute(netflix_originals_49,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Japanese",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_50 <- read_csv("../datasets/netflix/shows/table-50.csv")
 netflix_originals_50 <- transmute(netflix_originals_50,
@@ -697,7 +725,11 @@ netflix_originals_50 <- transmute(netflix_originals_50,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Korean",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_51 <- read_csv("../datasets/netflix/shows/table-51.csv")
 netflix_originals_51 <- transmute(netflix_originals_51,
@@ -707,7 +739,11 @@ netflix_originals_51 <- transmute(netflix_originals_51,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Mandarin",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_52 <- read_csv("../datasets/netflix/shows/table-52.csv")
 netflix_originals_52 <- transmute(netflix_originals_52,
@@ -717,7 +753,11 @@ netflix_originals_52 <- transmute(netflix_originals_52,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Polish",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_53 <- read_csv("../datasets/netflix/shows/table-53.csv")
 netflix_originals_53 <- transmute(netflix_originals_53,
@@ -727,7 +767,11 @@ netflix_originals_53 <- transmute(netflix_originals_53,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Portuguese",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_54 <- read_csv("../datasets/netflix/shows/table-54.csv")
 netflix_originals_54 <- transmute(netflix_originals_54,
@@ -737,7 +781,11 @@ netflix_originals_54 <- transmute(netflix_originals_54,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Spanish",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_55 <- read_csv("../datasets/netflix/shows/table-55.csv")
 netflix_originals_55 <- transmute(netflix_originals_55,
@@ -747,7 +795,11 @@ netflix_originals_55 <- transmute(netflix_originals_55,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Swedish",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_56 <- read_csv("../datasets/netflix/shows/table-56.csv")
 netflix_originals_56 <- transmute(netflix_originals_56,
@@ -757,7 +809,11 @@ netflix_originals_56 <- transmute(netflix_originals_56,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Thai",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_57 <- read_csv("../datasets/netflix/shows/table-57.csv")
 netflix_originals_57 <- transmute(netflix_originals_57,
@@ -767,7 +823,11 @@ netflix_originals_57 <- transmute(netflix_originals_57,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = "Turkish",
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_58 <- read_csv("../datasets/netflix/shows/table-58.csv")
 netflix_originals_58 <- transmute(netflix_originals_58,
