@@ -335,7 +335,7 @@ netflix_originals_22 <- transmute(netflix_originals_22,
                                   Status = Status,
                                   Format = "Series",
                                   Origin = "Continuation",
-                                  Network = `Prev. network()`,
+                                  Network = Network,
                                   Region = NA)
 
 netflix_originals_23 <- read_csv("../datasets/netflix/shows/table-23.csv")
