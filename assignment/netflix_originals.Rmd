@@ -956,6 +956,8 @@ netflix_originals_66 <- transmute(netflix_originals_66,
                                   Network = NA,
                                   Region = NA)
 
+# Break awaiting release into new rows
+
 netflix_originals_67 <- read_csv("../datasets/netflix/films/table-4.csv")
 netflix_originals_67 <- transmute(netflix_originals_67,
                                   Title = Title,
@@ -970,6 +972,8 @@ netflix_originals_67 <- transmute(netflix_originals_67,
                                   Network = NA,
                                   Region = NA)
 
+# ...
+
 netflix_originals_68 <- read_csv("../datasets/netflix/films/table-5.csv")
 netflix_originals_68 <- transmute(netflix_originals_68,
                                   Title = Title,
@@ -978,7 +982,11 @@ netflix_originals_68 <- transmute(netflix_originals_68,
                                   Seasons = NA,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = "Film")
+                                  Status = "Ended",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_69 <- read_csv("../datasets/netflix/films/table-6.csv")
 netflix_originals_69 <- transmute(netflix_originals_69,
