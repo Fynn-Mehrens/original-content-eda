@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Importing and combining the transmuted data frames
+## Importing the transmuted data frames
 
 In the following four code chunks the transmutation files are being executed. The transmutation files themselves rely on their respective "<name>_originals" file which uses data that is scraped from Wikipedia to identify the original creations from the streaming services.
 
@@ -24,3 +24,38 @@ In the following four code chunks the transmutation files are being executed. Th
 ```
 
 The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
+## Data Exploration
+
+To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year.
+
+```{r}
+netflix
+
+# Adding a column to sort by, will be used as a categorical variable later on
+netflix_prem_year <- filter(mutate(netflix, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
+
+ggplot(data = netflix_prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Premiere_Year))) +
+  geom_bar() +
+  labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series")
+```
+In society there is a common agreement, that most of the interesting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
+
+```{r}
+netflix_prem_month <- filter(mutate(netflix,
+                              Premiere_Month = as.character(month(ymd(010101) + months(lubridate::month(Premiere) - 1), label = TRUE, abbr = TRUE))),
+                              lubridate::year(Premiere) != 2021, !is.na(lubridate::year(Premiere)))
+
+ggplot(data = netflix_prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),
+                                                fill = reorder(as.factor(Premiere_Month), lubridate::month(Premiere)))) +
+  geom_bar(width = 0.85) +
+  labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series")
+```
+It might also be interesting to take a look at how the minimum and maximum runtimes are distributed for the series and movies
+
+```{r}
+ggplot(data = netflix) +
+  geom_boxplot(mapping = aes(y = Min_Time)) +
+  geom_boxplot(mapping = aes(y = Max_Time))
+
+filter(netflix, Min_Time > 1500)
+```
