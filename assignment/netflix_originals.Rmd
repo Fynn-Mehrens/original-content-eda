@@ -1151,7 +1151,11 @@ netflix_originals_80 <- transmute(netflix_originals_80,
                                   Seasons = Seasons,
                                   Runtime = NA,
                                   Language = Language,
-                                  Status = "Distribution")
+                                  Status = "Distribution",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = Network,
+                                  Region = Region)
 
 netflix_originals_81 <- read_csv("../datasets/netflix/exclusives/table-5.csv")
 netflix_originals_81 <- transmute(netflix_originals_81,
