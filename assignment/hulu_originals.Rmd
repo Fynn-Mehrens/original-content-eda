@@ -28,7 +28,66 @@ services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
 ## CSV import
 
 ```{r}
-hulu_originals <- read_csv("../datasets/hulu_originals.csv")
+hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv")
+hulu_originals_1 <- transmute(hulu_originals_1,
+                              Title = Title,
+                              Genre = paste(Genre, " Drama"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_2 <- read_csv("../datasets/hulu/shows/table-2.csv")
+hulu_originals_2 <- transmute(hulu_originals_2,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_3 <- read_csv("../datasets/hulu/shows/table-3.csv")
+hulu_originals_3 <- transmute(hulu_originals_3,
+                              Title = Title,
+                              Genre = paste(Genre, " Adult Animation"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
+hulu_originals <- rbind(hulu_originals, hulu_originals_3)
+
+unique(select(hulu_originals, Status))
+
+hulu_originals <- transmute(hulu_originals, 
+                            Title = Title,
+                            Genre = Genre,
+                            Premiere = Premiere,
+                            Seasons = Seasons,
+                            Runtime = Runtime,
+                            Language = Language,
+                            Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                            Service = parse_factor("Hulu", levels = services),
+                            Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                            Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                            Network = Network,
+                            Region = Region)
 
 hulu_originals
 ```
