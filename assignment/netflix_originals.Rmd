@@ -515,7 +515,11 @@ netflix_originals_35 <- transmute(netflix_originals_35,
                                   Seasons = NA,
                                   Runtime = NA,
                                   Language = NA,
-                                  Status = "Development")
+                                  Status = "Development",
+                                  Format = "Special",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_36 <- read_csv("../datasets/netflix/shows/table-36.csv")
 netflix_originals_36 <- transmute(netflix_originals_36,
@@ -525,7 +529,11 @@ netflix_originals_36 <- transmute(netflix_originals_36,
                                   Seasons = NA,
                                   Runtime = NA,
                                   Language = NA,
-                                  Status = "Development")
+                                  Status = "Development",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_37 <- read_csv("../datasets/netflix/shows/table-37.csv")
 netflix_originals_37 <- transmute(netflix_originals_37,
