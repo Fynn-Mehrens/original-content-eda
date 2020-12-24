@@ -557,17 +557,25 @@ netflix_originals_38 <- transmute(netflix_originals_38,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = NA,
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_39 <- read_csv("../datasets/netflix/shows/table-39.csv")
 netflix_originals_39 <- transmute(netflix_originals_39,
                                   Title = Title,
-                                  Genre = paste(Genre, " Miniseries"),
+                                  Genre = Genre,
                                   Premiere = Premiere,
                                   Seasons = Episodes,
                                   Runtime = Runtime,
                                   Language = NA,
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Miniseries",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_40 <- read_csv("../datasets/netflix/shows/table-40.csv")
 netflix_originals_40 <- transmute(netflix_originals_40,
@@ -577,7 +585,11 @@ netflix_originals_40 <- transmute(netflix_originals_40,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_41 <- read_csv("../datasets/netflix/shows/table-41.csv")
 netflix_originals_41 <- transmute(netflix_originals_41,
@@ -587,17 +599,25 @@ netflix_originals_41 <- transmute(netflix_originals_41,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_42 <- read_csv("../datasets/netflix/shows/table-42.csv")
 netflix_originals_42 <- transmute(netflix_originals_42,
                                   Title = Title,
-                                  Genre = "Children",
+                                  Genre = "Children Kids Family",
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
                                   Language = NA,
-                                  Status = "Ended")
+                                  Status = "Ended",
+                                  Format = "Series",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_43 <- read_csv("../datasets/netflix/shows/table-43.csv")
 netflix_originals_43 <- transmute(netflix_originals_43,
