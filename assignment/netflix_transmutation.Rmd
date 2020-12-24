@@ -9,8 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
+library(knitr)
 install.packages("viridis")
 library(viridis)
+read_chunk('shared_functions.R')
 ```
 
 ## Importing from other Rmd file
@@ -22,7 +24,6 @@ This section parses the data from the "netflix_originals.Rmd" file that imported
 
 ```{r}
 netflix_originals <- netflix_originals
-# netflix_originals <- read.csv("../datasets/netflix_originals.csv")
 netflix_originals
 ```
 
@@ -30,55 +31,11 @@ netflix_originals
 
 After the data has been imported into the correct columns in the "netflix_originals.Rmd" file, we are now going to transmute the data into the proper data types and into readable formats, as it is needed with multi-value cells like the Genre. For this, we needed a function that parses the value of the cells for the Genre and unifies the content, so that we can be sure that it is in a format that can be properly plotted afterwards.
 
-```{r}
-anycharacter <- "([a-zA-Z]|-+)"
 
-genre_to_uppercase <- function(genre) {
-  if (length(genre) == 0 | genre == "") {
-    return(NA)
-  }
-  curr <- ""
-  all_genres <- ""
-  c <- strsplit(genre, "")[[1]]
-  for (i in 1:length(c)) {
-    if (grepl(anycharacter, c[i])) {
-      curr <- gsub(" ", "", str_squish(paste(curr, c[i])))
-    }
-    if (!grepl(anycharacter, c[i]) | i == length(c)) {
-      if (i > 1 & grepl(anycharacter, c[i-1])) {
-        whole_word = strsplit(curr, "")[[1]]
-        single_genre <- ""
-        for (j in 1:length(whole_word)) {
-          if (j == 1) {
-            single_genre <- gsub(" ", "", str_squish(toupper(whole_word[j])))
-          } else {
-            single_genre <- gsub(" ", "", str_squish(paste(single_genre, whole_word[j])))
-          }
-        }
-        if (i != length(c)) {
-          all_genres <- str_squish(paste(all_genres, single_genre, "/"))
-        } else {
-          all_genres <- paste(all_genres, single_genre)
-        }
-      }
-      curr <- ""
-    }
-  }
-  return(all_genres)
-}
-
-genres_to_uppercase <- function(genres) {
-  genres_vector <- c()
-  for (genre in genres) {
-    genres_vector <- c(genres_vector, c(genre_to_uppercase(genre)))
-  }
-  return(genres_vector)
-}
-```
 
 After the function has been defined, we can start converting the columns of the data frame into their respective data types, so that it is easier to deal with them during the plotting process. This means, that the premiere is being converted into a Date object and the Seasons column as well as the Runtime column are converted and split up, so that there are only integer values left. The rest of the columns is just carried over.
 
-```{r}
+```{r code = readlines("shared_functions.R")}
 netflix_originals <- filter(netflix_originals,
                             !grepl("Pending|pending", Title),
                             Title != "Awaiting release",
