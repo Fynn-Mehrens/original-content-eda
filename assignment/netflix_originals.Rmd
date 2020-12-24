@@ -922,7 +922,11 @@ netflix_originals_64 <- transmute(netflix_originals_64,
                                   Seasons = NA,
                                   Runtime = Runtime,
                                   Language = Language,
-                                  Status = "Film")
+                                  Status = "Ended",
+                                  Format = "Film",
+                                  Origin = "Original",
+                                  Network = NA,
+                                  Region = NA)
 
 netflix_originals_65 <- read_csv("../datasets/netflix/films/table-2.csv")
 netflix_originals_65 <- transmute(netflix_originals_65,
