@@ -1773,7 +1773,12 @@ netflix_originals <- transmute(netflix_originals,
                                Seasons = Seasons,
                                Runtime = Runtime,
                                Language = Language,
-                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses))
+                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                               Service = parse_factor("Netflix", levels = services),
+                               Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                               Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                               Network = Network,
+                               Region = Region)
 
 netflix_originals
 ```
