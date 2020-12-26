@@ -20,10 +20,6 @@ This section parses the data from the "netflix_originals.Rmd" file that imported
 ```{r child = 'netflix_originals.Rmd'}
 ```
 
-```{r}
-netflix_originals
-```
-
 ## Transmutation of the given Netflix series and movie table
 
 After the data has been imported into the correct columns in the "netflix_originals.Rmd" file, we are now going to transmute the data into the proper data types and into readable formats, as it is needed with multi-value cells like the Genre. For this, we needed a function that parses the value of the cells for the Genre and unifies the content, so that we can be sure that it is in a format that can be properly plotted afterwards.
