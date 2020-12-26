@@ -5,6 +5,10 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(knitr)
+read_chunk('shared_functions.R')
 install.packages("viridis")
 library(viridis)
 ```
@@ -32,12 +36,17 @@ hulu
 The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
 
 ```{r}
-original_content <- rbind(original_content, netflix)
-original_content <- rbind(original_content, amazon)
+original_content <- rbind(netflix, amazon)
 original_content <- rbind(original_content, hulu)
 original_content <- rbind(original_content, disney)
 
 original_content
+
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(15/255, 27/255, 77/255, 1)
+                     )
 ```
 
 ## Data Exploration
@@ -54,19 +63,22 @@ prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Pre
 
 ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
   geom_bar() +
-  labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series")
+  labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series") +
+  scale_fill_manual(values = original_colors)
 ```
 In society there is a common agreement, that most of the interesting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
 
 ```{r}
-netflix_prem_month <- filter(mutate(netflix,
-                              Premiere_Month = as.character(month(ymd(010101) + months(lubridate::month(Premiere) - 1), label = TRUE, abbr = TRUE))),
+prem_month <- filter(mutate(original_content,
+                              Premiere_Month = as.character(lubridate::month(lubridate::ymd(010101) +
+                                                                               months(lubridate::month(Premiere) - 1), label = TRUE, abbr = TRUE))),
                               lubridate::year(Premiere) != 2021, !is.na(lubridate::year(Premiere)))
 
-ggplot(data = netflix_prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),
-                                                fill = reorder(as.factor(Premiere_Month), lubridate::month(Premiere)))) +
+ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),
+                                                fill = as.factor(Service))) +
   geom_bar(width = 0.85) +
-  labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series")
+  labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series") +
+  scale_fill_manual(values = original_colors)
 ```
 It might also be interesting to take a look at how the minimum and maximum runtimes are distributed for the series and movies
 
