@@ -5,6 +5,10 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(knitr)
+read_chunk('shared_functions.R')
 ```
 
 ```{r child = 'amazon_originals.Rmd'}
