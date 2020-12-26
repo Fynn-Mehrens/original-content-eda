@@ -14,29 +14,45 @@ library(viridis)
 In the following four code chunks the transmutation files are being executed. The transmutation files themselves rely on their respective "<name>_originals" file which uses data that is scraped from Wikipedia to identify the original creations from the streaming services.
 
 ```{r child = 'netflix_transmutation.Rmd'}
+netflix
 ```
 
 ```{r child = 'amazon_prime_transmutation.Rmd'}
+amazon
 ```
 
 ```{r child = 'disney_transmutation.Rmd'}
+disney
 ```
 
 ```{r child = 'hulu_transmutation.Rmd'}
+hulu
 ```
 
 The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
+
+```{r}
+original_content <- rbind(original_content, netflix)
+original_content <- rbind(original_content, amazon)
+original_content <- rbind(original_content, hulu)
+original_content <- rbind(original_content, disney)
+
+original_content
+```
+
 ## Data Exploration
 
 To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year.
 
 ```{r}
-netflix
+original_content
+
+mutate(original_content, Premiere_Year = lubridate::year(Premiere))
 
 # Adding a column to sort by, will be used as a categorical variable later on
-netflix_prem_year <- filter(mutate(netflix, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
+prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
 
-ggplot(data = netflix_prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Premiere_Year))) +
+ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
   geom_bar() +
   labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series")
 ```
