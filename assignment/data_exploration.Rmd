@@ -51,13 +51,9 @@ original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
 
 ## Data Exploration
 
-To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year.
+To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
 
 ```{r}
-original_content
-
-mutate(original_content, Premiere_Year = lubridate::year(Premiere))
-
 # Adding a column to sort by, will be used as a categorical variable later on
 prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
 
@@ -80,6 +76,55 @@ ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::m
   labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series") +
   scale_fill_manual(values = original_colors)
 ```
+From our feeling the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
+
+```{r}
+service_netflix <- filter(prem_year, Service != "Netflix")
+service_amazon <- filter(prem_year, Service != "Amazon Prime Video")
+service_hulu <- filter(prem_year, Service != "Hulu")
+service_disney <- filter(prem_year, Service != "Disney+")
+
+# Creating a data frame that groups all the entries by their Service, Release Year
+# and their Format
+series_and_movies <- as_tibble(filter(prem_year %>%
+  group_by(Service, Premiere_Year = strtoi(Premiere_Year), Format) %>%
+  summarise(Entries = length(Service)), Format == "Film" | Format == "Series"))
+series_and_movies
+
+percentage_of_series <- function(dataframe) {
+  series_percentages <- data.frame(Service = c(), Premiere_Year = c(), Series_Percentage = c())
+  services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
+  years <- c(2000:2020)
+  for (service in services) {
+    service_rows <- filter(dataframe, Service == service)
+    for (year in years) {
+      nr_series <- sum(pull(filter(service_rows, Format == "Series", Premiere_Year == year), Entries))
+      print(paste("Nr. series:", nr_series))
+      nr_films <- sum(pull(filter(service_rows, Format == "Film", Premiere_Year == year), Entries))
+      print(paste("Nr. films:", nr_films))
+      series_percentages <- rbind(series_percentages,
+                                  data.frame(as.factor(c(service)),c(year),c(ifelse(nr_series == 0,
+                                                                                    ifelse(nr_films == 0,
+                                                                                           50,
+                                                                                           0),
+                                                                                    ifelse(nr_films == 0,
+                                                                                           100,
+                                                                                           nr_series / (nr_series + nr_films) * 100)))))
+    }
+  }
+  return(series_percentages)
+}
+percentage_of_series(series_and_movies)
+
+ggplot() +
+  geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Film") +
+  scale_colour_manual(values = original_colors)
+
+ggplot() +
+  geom_line(data = filter(series_and_movies, Format == "Series"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
+  scale_colour_manual(values = original_colors)
+```
+
 It might also be interesting to take a look at how the minimum and maximum runtimes are distributed for the series and movies
 
 ```{r}
