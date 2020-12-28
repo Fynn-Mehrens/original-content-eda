@@ -23,7 +23,7 @@ disney_originals
 
 disney <- transmute(disney_originals, 
                                 Title = Title,
-                                Genre = genres_to_uppercase(str_replace_all(
+                                Genre = genres_to_uppercase_unique(str_replace_all(
                                           str_squish(
                                             str_replace_all(
                                               str_replace_all(
