@@ -87,7 +87,21 @@ hulu_originals_4 <- transmute(hulu_originals_4,
 hulu_originals_5 <- read_csv("../datasets/hulu/shows/table-5.csv")
 hulu_originals_5 <- transmute(hulu_originals_5,
                               Title = Title,
-                              Genre = paste(Genre, " Docu-series"),
+                              Genre = paste(Genre, " Docu-series Unscripted"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_6 <- read_csv("../datasets/hulu/shows/table-6.csv")
+hulu_originals_6 <- transmute(hulu_originals_6,
+                              Title = Title,
+                              Genre = paste(Genre, " Reality Unscripted"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -102,6 +116,7 @@ hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
 hulu_originals <- rbind(hulu_originals, hulu_originals_3)
 hulu_originals <- rbind(hulu_originals, hulu_originals_4)
 hulu_originals <- rbind(hulu_originals, hulu_originals_5)
+hulu_originals <- rbind(hulu_originals, hulu_originals_6)
 
 unique(select(hulu_originals, Status))
 
