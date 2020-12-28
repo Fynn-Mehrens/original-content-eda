@@ -77,11 +77,6 @@ productions <- function(years, dataframe) {
   return(productions)
 }
 
-productions(years, prem_year)
-
-length(productions(years, prem_year))
-length(unique(pull(prem_year, Premiere_Year)))
-
 linear_regression <- lm(years ~ productions(years, prem_year), data = filter(prem_year, is.na(match(Premiere_Year, years))))
 summary(linear_regression)
 plot(linear_regression)
