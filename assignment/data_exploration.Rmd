@@ -41,12 +41,6 @@ original_content <- rbind(original_content, hulu)
 original_content <- rbind(original_content, disney)
 
 original_content
-
-original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
-                     rgb(0/255, 163/255, 218/255, 1),
-                     rgb(28/255, 231/255, 131/255, 1),
-                     rgb(15/255, 27/255, 77/255, 1)
-                     )
 ```
 
 ## Data Exploration
@@ -55,9 +49,17 @@ original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
 
 To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
 
+To make the following plots easier to read, we picked colors from the streaming services' logos, so that the readers can identify the streaming services more naturally.
+
 ```{r}
 # Adding a column to sort by, will be used as a categorical variable later on
 prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
+
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(15/255, 27/255, 77/255, 1)
+                     )
 
 ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
   geom_bar() +
@@ -158,12 +160,9 @@ ggplot() +
   scale_color_manual(values = original_colors)
 ```
 
-It might also be interesting to take a look at how the minimum and maximum runtimes are distributed for the series and movies
+Genre counter
 
 ```{r}
-ggplot(data = netflix) +
-  geom_boxplot(mapping = aes(y = Min_Time)) +
-  geom_boxplot(mapping = aes(y = Max_Time))
 
-filter(netflix, Min_Time > 1500)
 ```
+
