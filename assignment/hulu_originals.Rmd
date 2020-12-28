@@ -126,12 +126,27 @@ hulu_originals_7 <- transmute(hulu_originals_7,
                               Network = NA,
                               Region = NA)
 
+hulu_originals_8 <- read_csv("../datasets/hulu/shows/table-8.csv")
+hulu_originals_8 <- transmute(hulu_originals_8,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = `Partner / Country`,
+                              Region = NA)
+
 hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
 hulu_originals <- rbind(hulu_originals, hulu_originals_3)
 hulu_originals <- rbind(hulu_originals, hulu_originals_4)
 hulu_originals <- rbind(hulu_originals, hulu_originals_5)
 hulu_originals <- rbind(hulu_originals, hulu_originals_6)
 hulu_originals <- rbind(hulu_originals, hulu_originals_7)
+hulu_originals <- rbind(hulu_originals, hulu_originals_8)
 
 unique(select(hulu_originals, Status))
 
