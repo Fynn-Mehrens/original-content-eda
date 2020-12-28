@@ -77,6 +77,8 @@ ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::m
   scale_fill_manual(values = original_colors)
 ```
 From our feeling the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
+We first started off by creating two separate graphs that display us the amount of movies or series grouped by the streaming services, but as you can see, it does not really help the situation since there is a general tendency that the streaming services produce more original content either way.
+This has lead to the approach that is displayed in the last of the three graphs. We set out that 50% is the baseline for the case that there are no movies and series produced. From there on we can determine what the ratio of series produced to the number of produced movies is. For Netflix for example, it is realistic to say that there is trend that can be recognized from the data that has been gathered so far.
 
 ```{r}
 series_and_movies <- as_tibble(filter(prem_year %>%
@@ -102,20 +104,36 @@ percentage_of_series <- function(dataframe) {
 }
 percentage_of_series(series_and_movies)
 
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(15/255, 27/255, 77/255, 1)
+                     )
+
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
-  labs(colour = "Streaming Services", title = "Release Movies by streaming services", x = "Year", y = "Number of movies")
+  labs(colour = "Streaming Services", title = "Release Movies by streaming services", x = "Year", y = "Number of movies") +
   scale_colour_manual(values = original_colors)
 
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(15/255, 27/255, 77/255, 1)
+                     )
+  
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Series"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
-  labs(colour = "Streaming Services", title = "Release Series by streaming services", x = "Year", y = "Number of series")
+  labs(colour = "Streaming Services", title = "Release Series by streaming services", x = "Year", y = "Number of series") +
   scale_colour_manual(values = original_colors)
 
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(15/255, 27/255, 77/255, 1)
+                     )
+  
 ggplot() +
   geom_line(data = percentage_of_series(series_and_movies), mapping = aes(x = Premiere_Year, y = Percentage, colour = as.factor(Service))) +
-  labs(colour = "Streaming Services", title = "Ratio of series to movies", x = "Year", y = "% of series")
-  scale_colour_manual(values = original_colors)
+  labs(colour = "Streaming Services", title = "Ratio of series to movies", x = "Year", y = "% of series") +
+  scale_color_manual(values = original_colors)
 ```
 
 It might also be interesting to take a look at how the minimum and maximum runtimes are distributed for the series and movies
