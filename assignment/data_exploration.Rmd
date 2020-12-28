@@ -51,6 +51,8 @@ original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
 
 ## Data Exploration
 
+### Production of original content thorughout the years
+
 To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
 
 ```{r}
@@ -62,6 +64,31 @@ ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Servi
   labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series") +
   scale_fill_manual(values = original_colors)
 ```
+Linear regression model for the amount of original content until 2050
+
+```{r}
+years <- c(2005:2020)
+
+productions <- function(years, dataframe) {
+  productions <- c()
+  for (year in years) {
+    productions <- c(productions, nrow(filter(select(dataframe, Premiere_Year), Premiere_Year == year)))
+  }
+  return(productions)
+}
+
+productions(years, prem_year)
+
+length(productions(years, prem_year))
+length(unique(pull(prem_year, Premiere_Year)))
+
+linear_regression <- lm(years ~ productions(years, prem_year), data = filter(prem_year, is.na(match(Premiere_Year, years))))
+summary(linear_regression)
+plot(linear_regression)
+```
+
+### Production of original content grouped by months
+
 In society there is a common agreement, that most of the interesting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
 
 ```{r}
@@ -110,7 +137,7 @@ original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
 
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
-  labs(colour = "Streaming Services", title = "Release Movies by streaming services", x = "Year", y = "Number of movies") +
+  labs(colour = "Streaming Services", title = "Amount of released Movies by streaming services", x = "Year", y = "Number of movies") +
   scale_colour_manual(values = original_colors)
 
 original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
@@ -121,7 +148,7 @@ original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
   
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Series"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
-  labs(colour = "Streaming Services", title = "Release Series by streaming services", x = "Year", y = "Number of series") +
+  labs(colour = "Streaming Services", title = "Amount of released Series by streaming services", x = "Year", y = "Number of series") +
   scale_colour_manual(values = original_colors)
 
 original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
