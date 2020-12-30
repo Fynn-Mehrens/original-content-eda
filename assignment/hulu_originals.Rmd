@@ -379,6 +379,20 @@ hulu_originals_25 <- transmute(hulu_originals_25,
                               Network = NA,
                               Region = "Japan")
 
+hulu_originals_26 <- read_csv("../datasets/hulu/shows/table-26.csv")
+hulu_originals_26 <- transmute(hulu_originals_26,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = "Japan")
+
 hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
 hulu_originals <- rbind(hulu_originals, hulu_originals_3)
 hulu_originals <- rbind(hulu_originals, hulu_originals_4)
@@ -403,6 +417,7 @@ hulu_originals <- rbind(hulu_originals, hulu_originals_22)
 hulu_originals <- rbind(hulu_originals, hulu_originals_23)
 hulu_originals <- rbind(hulu_originals, hulu_originals_24)
 hulu_originals <- rbind(hulu_originals, hulu_originals_25)
+hulu_originals <- rbind(hulu_originals, hulu_originals_26)
 
 unique(select(hulu_originals, Status))
 
