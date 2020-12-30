@@ -168,6 +168,34 @@ hulu_originals_10 <- transmute(hulu_originals_10,
                               Network = NA,
                               Region = NA)
 
+hulu_originals_11 <- read_csv("../datasets/hulu/shows/table-11.csv")
+hulu_originals_11 <- transmute(hulu_originals_11,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Release,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                              Format = "Film",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_12 <- read_csv("../datasets/hulu/shows/table-12.csv")
+hulu_originals_12 <- transmute(hulu_originals_12,
+                              Title = Title,
+                              Genre = "Documentary",
+                              Premiere = Release,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Ended",
+                              Format = "Film",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
 hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
 hulu_originals <- rbind(hulu_originals, hulu_originals_3)
 hulu_originals <- rbind(hulu_originals, hulu_originals_4)
@@ -177,6 +205,8 @@ hulu_originals <- rbind(hulu_originals, hulu_originals_7)
 hulu_originals <- rbind(hulu_originals, hulu_originals_8)
 hulu_originals <- rbind(hulu_originals, hulu_originals_9)
 hulu_originals <- rbind(hulu_originals, hulu_originals_10)
+hulu_originals <- rbind(hulu_originals, hulu_originals_11)
+hulu_originals <- rbind(hulu_originals, hulu_originals_12)
 
 unique(select(hulu_originals, Status))
 
