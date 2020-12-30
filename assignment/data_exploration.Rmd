@@ -197,3 +197,11 @@ number_of_genre_entries <- function(dataframe) {
 
 ```
 
+### Exporting the data frame to CSV
+
+In order to make it reusable for other people, we also wanted to export our final data frame for following usage. We are also planning to publish this data set to Kaggle.
+
+```{r}
+write.csv(original_content, "../original_content.csv", row.names = TRUE)
+```
+
