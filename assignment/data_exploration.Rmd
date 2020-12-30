@@ -163,6 +163,37 @@ ggplot() +
 Genre counter
 
 ```{r}
+original_split_by_genre <- mutate(original_content, Genre = str_split(Genre, " / ")) %>%
+  unnest(Genre) %>% 
+  mutate(Genre = str_replace_all(Genre, " ", ""))
+
+original_split_by_genre$Genre <- as.factor(og_split_by_genre$Genre)
+filter(original_split_by_genre, Genre == "Action")
+
+original_split_by_genre <- group_by(oc_split_by_genre, Genre) %>%
+  summarise(Count = length(Genre))
+
+for (genre in str_trim(unique(as.character(original_split_by_genre$Genre)))) {
+  print(genre)
+}
+
+levels(original_split_by_genre$Genre)
+
+
+genres <- unique(pull(original_split_by_genre, Genre))
+
+
+
+number_of_genre_entries <- function(dataframe) {
+  all_genre_entries <- data.frame(Genre = c())
+  for (genres in pull(dataframe, Genre)) {
+    single_entry_frame <- data.frame(Genre = str_split(genres, " / "))
+    all_genre_entries <- rbind(all_genre_entries, single_entry_frame)
+  }
+  print(all_genre_entries)
+  return(all_genre_entries)
+}
+
 
 ```
 
