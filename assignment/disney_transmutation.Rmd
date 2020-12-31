@@ -11,6 +11,9 @@ library(knitr)
 read_chunk('shared_functions.R')
 ```
 
+```{r child = 'disney_originals.Rmd'}
+```
+
 ```{r code = readlines("shared_functions.R")}
 disney_originals <- filter(disney_originals,
                             !grepl("Pending|pending", Title),

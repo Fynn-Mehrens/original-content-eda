@@ -129,6 +129,7 @@ percentage_of_series <- function(dataframe) {
 percentage_of_series(series_and_movies)
 
 original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
                      rgb(15/255, 27/255, 77/255, 1)
                      )
 
@@ -163,37 +164,33 @@ ggplot() +
 Genre counter
 
 ```{r}
-original_split_by_genre <- mutate(original_content, Genre = str_split(Genre, " / ")) %>%
-  unnest(Genre) %>% 
-  mutate(Genre = str_replace_all(Genre, " ", ""))
+genre_string <- paste(original_content$Genre, collapse = "/")
+genre_vector <- strsplit(genre_string, "/")[[1]]
+genre_vector_clean <- gsub(" ", "", genre_vector)
 
-original_split_by_genre$Genre <- as.factor(og_split_by_genre$Genre)
-filter(original_split_by_genre, Genre == "Action")
+genre_frame = transmute(data.frame(table(genre_vector_clean)),
+          Genre = genre_vector_clean,
+          Count = Freq)
 
-original_split_by_genre <- group_by(oc_split_by_genre, Genre) %>%
-  summarise(Count = length(Genre))
-
-for (genre in str_trim(unique(as.character(original_split_by_genre$Genre)))) {
-  print(genre)
+for (i in 1:nrow(genre_frame)) {
+  print(paste("Genre:", genre_frame[i, ]$Genre, "| Count:", genre_frame[i, ]$Count))
 }
 
-levels(original_split_by_genre$Genre)
-
-
-genres <- unique(pull(original_split_by_genre, Genre))
-
-
-
-number_of_genre_entries <- function(dataframe) {
-  all_genre_entries <- data.frame(Genre = c())
-  for (genres in pull(dataframe, Genre)) {
-    single_entry_frame <- data.frame(Genre = str_split(genres, " / "))
-    all_genre_entries <- rbind(all_genre_entries, single_entry_frame)
+find_eight_largest_genres <- function() {
+  eight_largest <- c()
+  for (i in 1:nrow(genre_frame)) {
+    if (length(eight_largest < 8)) {
+      eight_largest <- c(as.factor(genre_frame[i, ]$Genre))
+    }
+    for (variable in vector) {
+      # find if the count is larger than for any of the contained genres, if that
+      # is the case, then replace that genre
+    }
+    print(paste("Genre:", genre_frame[i, ]$Genre, "| Count:", genre_frame[i, ]$Count))
   }
-  print(all_genre_entries)
-  return(all_genre_entries)
 }
 
+eight_largest_genres <- filter()
 
 ```
 
