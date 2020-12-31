@@ -294,6 +294,34 @@ apple_originals_19 <- transmute(apple_originals_19,
                                 Network = NA,
                                 Region = NA)
 
+apple_originals_20 <- read_csv("../datasets/apple/films/table-5.csv")
+apple_originals_20 <- transmute(apple_originals_20,
+                                Title = Title,
+                                Genre = paste(Genre, " Documentary"),
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_21 <- read_csv("../datasets/apple/films/table-6.csv")
+apple_originals_21 <- transmute(apple_originals_21,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Length,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
 apple_originals <- rbind(apple_originals_1, apple_originals_2)
 apple_originals <- rbind(apple_originals, apple_originals_3)
 apple_originals <- rbind(apple_originals, apple_originals_4)
@@ -312,6 +340,8 @@ apple_originals <- rbind(apple_originals, apple_originals_16)
 apple_originals <- rbind(apple_originals, apple_originals_17)
 apple_originals <- rbind(apple_originals, apple_originals_18)
 apple_originals <- rbind(apple_originals, apple_originals_19)
+apple_originals <- rbind(apple_originals, apple_originals_20)
+apple_originals <- rbind(apple_originals, apple_originals_21)
 
 unique(select(apple_originals, Status))
 
