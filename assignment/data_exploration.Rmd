@@ -181,16 +181,29 @@ find_eight_largest_genres <- function() {
   for (i in 1:nrow(genre_frame)) {
     if (length(eight_largest < 8)) {
       eight_largest <- c(as.factor(genre_frame[i, ]$Genre))
-    }
-    for (variable in vector) {
-      # find if the count is larger than for any of the contained genres, if that
-      # is the case, then replace that genre
+    } else {
+      # finding the smallest element from the current "eight_largest" vector
+      smallest <- NA
+      for (j in 1:8) {
+        if (j == 1) {
+          smallest <- eight_largest[1]
+        } else {
+          if (filter(genre_frame, Genre == smallest)$Count > filter(genre_frame, Genre == eight_largest[j])$Count) {
+            smallest <- eight_largest[j]
+          }
+        }
+      }
+      
+      if (genre_frame[i, ]$Count > filter(genre_frame, Genre == smallest)$Count) {
+        replace(eight_largest, eight_largest == smallest, as.factor(genre_frame[i, ]$Genre))
+      }
     }
     print(paste("Genre:", genre_frame[i, ]$Genre, "| Count:", genre_frame[i, ]$Count))
   }
+  return(eight_largest)
 }
 
-eight_largest_genres <- filter()
+find_eight_largest_genres()
 
 ```
 
