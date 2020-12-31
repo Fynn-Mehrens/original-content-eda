@@ -22,7 +22,7 @@ formats <- c("Series", "Miniseries", "Film", "Special")
 
 origins <- c("Continuation", "Distribution", "Original")
 
-services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
+services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
 ```
 
 ## CSV import
