@@ -1,0 +1,93 @@
+---
+title: "apple_originals"
+author: "grevend"
+date: "31 12 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(forcats)
+```
+
+```{r}
+only_keep <- function(row, regex) {
+  return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
+}
+
+statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film", "Special", "Distribution")
+
+formats <- c("Series", "Miniseries", "Film", "Special")
+
+origins <- c("Continuation", "Distribution", "Original")
+
+services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
+```
+
+## CSV import
+
+```{r}
+apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv")
+apple_originals_1 <- transmute(apple_originals_1,
+                              Title = Title,
+                              Genre = paste(Genre, " Drama"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Runtime,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv")
+apple_originals_2 <- transmute(apple_originals_2,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Runtime,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+apple_originals_3 <- read_csv("../datasets/apple/shows/table-3.csv")
+apple_originals_3 <- transmute(apple_originals_3,
+                              Title = Title,
+                              Genre = paste(Genre, " Adult Animation"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Runtime,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+apple_originals <- rbind(apple_originals_1, apple_originals_2)
+apple_originals <- rbind(apple_originals, apple_originals_3)
+
+unique(select(apple_originals, Status))
+
+apple_originals <- transmute(apple_originals, 
+                             Title = Title,
+                             Genre = Genre,
+                             Premiere = Premiere,
+                             Seasons = Seasons,
+                             Runtime = Runtime,
+                             Language = Language,
+                             Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                             Service = parse_factor("Apple TV+", levels = services),
+                             Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                             Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                             Network = Network,
+                             Region = Region)
+
+apple_originals
+```
