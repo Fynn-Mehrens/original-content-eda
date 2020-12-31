@@ -255,7 +255,7 @@ apple_originals_16 <- transmute(apple_originals_16,
 apple_originals_17 <- read_csv("../datasets/apple/films/table-2.csv")
 apple_originals_17 <- transmute(apple_originals_17,
                                 Title = Title,
-                                Genre = Genre,
+                                Genre = paste(Genre, " Documentary"),
                                 Premiere = Release,
                                 Seasons = NA,
                                 Runtime = Runtime,
