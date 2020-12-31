@@ -247,7 +247,7 @@ apple_originals_16 <- transmute(apple_originals_16,
                                 Runtime = Runtime,
                                 Language = NA,
                                 Status = "Ended",
-                                Format = "Series",
+                                Format = "Film",
                                 Origin = "Original",
                                 Network = NA,
                                 Region = NA)
@@ -261,7 +261,21 @@ apple_originals_17 <- transmute(apple_originals_17,
                                 Runtime = Runtime,
                                 Language = NA,
                                 Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
-                                Format = "Series",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_18 <- read_csv("../datasets/apple/films/table-3.csv")
+apple_originals_18 <- transmute(apple_originals_18,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Ended",
+                                Format = "Special",
                                 Origin = "Original",
                                 Network = NA,
                                 Region = NA)
@@ -282,6 +296,7 @@ apple_originals <- rbind(apple_originals, apple_originals_14)
 apple_originals <- rbind(apple_originals, apple_originals_15)
 apple_originals <- rbind(apple_originals, apple_originals_16)
 apple_originals <- rbind(apple_originals, apple_originals_17)
+apple_originals <- rbind(apple_originals, apple_originals_18)
 
 unique(select(apple_originals, Status))
 
