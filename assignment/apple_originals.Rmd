@@ -98,10 +98,25 @@ apple_originals_5 <- transmute(apple_originals_5,
                                Network = NA,
                                Region = NA)
 
+apple_originals_6 <- read_csv("../datasets/apple/shows/table-6.csv")
+apple_originals_6 <- transmute(apple_originals_6,
+                               Title = Title,
+                               Genre = paste(Genre, " Variety Unscripted"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
 apple_originals <- rbind(apple_originals_1, apple_originals_2)
 apple_originals <- rbind(apple_originals, apple_originals_3)
 apple_originals <- rbind(apple_originals, apple_originals_4)
 apple_originals <- rbind(apple_originals, apple_originals_5)
+apple_originals <- rbind(apple_originals, apple_originals_6)
 
 unique(select(apple_originals, Status))
 
