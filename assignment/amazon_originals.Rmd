@@ -225,6 +225,34 @@ amazon_originals_14 <- transmute(amazon_originals_14,
                                  Network = Partner,
                                  Region = NA)
 
+amazon_originals_15 <- read_csv("../datasets/amazon/shows/table-15.csv")
+amazon_originals_15 <- transmute(amazon_originals_15,
+                                 Title = Title,
+                                 Genre = Genre,
+                                 Premiere = Premiere,
+                                 Seasons = `Seasons/episodes`,
+                                 Runtime = NA,
+                                 Language = Language,
+                                 Status = Status,
+                                 Format = "Series",
+                                 Origin = "Continuation",
+                                 Network = `Previous channel`,
+                                 Region = `Prime Video exclusive region`)
+
+amazon_originals_16 <- read_csv("../datasets/amazon/shows/table-16.csv")
+amazon_originals_16 <- transmute(amazon_originals_16,
+                                 Title = Title,
+                                 Genre = Genre,
+                                 Premiere = Premiere,
+                                 Seasons = Seasons,
+                                 Runtime = NA,
+                                 Language = Language,
+                                 Status = Status,
+                                 Format = "Series",
+                                 Origin = "Continuation",
+                                 Network = `Previous channel`,
+                                 Region = `Prime Video exclusive region`)
+
 amazon_originals <- rbind(amazon_originals_1, amazon_originals_2)
 amazon_originals <- rbind(amazon_originals, amazon_originals_3)
 amazon_originals <- rbind(amazon_originals, amazon_originals_4)
@@ -238,6 +266,7 @@ amazon_originals <- rbind(amazon_originals, amazon_originals_11)
 amazon_originals <- rbind(amazon_originals, amazon_originals_12)
 amazon_originals <- rbind(amazon_originals, amazon_originals_13)
 amazon_originals <- rbind(amazon_originals, amazon_originals_14)
+amazon_originals <- rbind(amazon_originals, amazon_originals_15)
 
 unique(select(amazon_originals, Status))
 
