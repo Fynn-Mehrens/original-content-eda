@@ -71,8 +71,23 @@ amazon_originals_3 <- transmute(amazon_originals_3,
                                 Network = NA,
                                 Region = NA)
 
+amazon_originals_4 <- read_csv("../datasets/amazon/shows/table-4.csv")
+amazon_originals_4 <- transmute(amazon_originals_4,
+                                Title = Title,
+                                Genre = paste(Genre, " Kids Family Children Animation"),
+                                Premiere = Premiere,
+                                Seasons = `Seasons/episodes`,
+                                Runtime = NA,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
 amazon_originals <- rbind(amazon_originals_1, amazon_originals_2)
 amazon_originals <- rbind(amazon_originals, amazon_originals_3)
+amazon_originals <- rbind(amazon_originals, amazon_originals_4)
 
 unique(select(amazon_originals, Status))
 
