@@ -169,6 +169,20 @@ amazon_originals_10 <- transmute(amazon_originals_10,
                                  Network = NA,
                                  Region = NA)
 
+amazon_originals_11 <- read_csv("../datasets/amazon/shows/table-11.csv")
+amazon_originals_11 <- transmute(amazon_originals_11,
+                                 Title = Title,
+                                 Genre = paste(Genre, " Docuseries Unscripted"),
+                                 Premiere = Premiere,
+                                 Seasons = `Seasons/episodes`,
+                                 Runtime = NA,
+                                 Language = Language,
+                                 Status = Status,
+                                 Format = "Series",
+                                 Origin = "Original",
+                                 Network = NA,
+                                 Region = NA)
+
 amazon_originals <- rbind(amazon_originals_1, amazon_originals_2)
 amazon_originals <- rbind(amazon_originals, amazon_originals_3)
 amazon_originals <- rbind(amazon_originals, amazon_originals_4)
@@ -178,6 +192,7 @@ amazon_originals <- rbind(amazon_originals, amazon_originals_7)
 amazon_originals <- rbind(amazon_originals, amazon_originals_8)
 amazon_originals <- rbind(amazon_originals, amazon_originals_9)
 amazon_originals <- rbind(amazon_originals, amazon_originals_10)
+amazon_originals <- rbind(amazon_originals, amazon_originals_11)
 
 unique(select(amazon_originals, Status))
 
