@@ -2250,3 +2250,1229 @@ amazon_originals <- transmute(amazon_originals,
 
 amazon_originals
 ```
+
+## Import Hulu
+
+```{r}
+hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv")
+hulu_originals_1 <- transmute(hulu_originals_1,
+                              Title = Title,
+                              Genre = paste(Genre, " Drama"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_2 <- read_csv("../datasets/hulu/shows/table-2.csv")
+hulu_originals_2 <- transmute(hulu_originals_2,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_3 <- read_csv("../datasets/hulu/shows/table-3.csv")
+hulu_originals_3 <- transmute(hulu_originals_3,
+                              Title = Title,
+                              Genre = paste(Genre, " Adult Animation"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_4 <- read_csv("../datasets/hulu/shows/table-4.csv")
+hulu_originals_4 <- transmute(hulu_originals_4,
+                              Title = Title,
+                              Genre = paste(Genre, " Children Kids Family"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_5 <- read_csv("../datasets/hulu/shows/table-5.csv")
+hulu_originals_5 <- transmute(hulu_originals_5,
+                              Title = Title,
+                              Genre = paste(Genre, " Docu-series Unscripted"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_6 <- read_csv("../datasets/hulu/shows/table-6.csv")
+hulu_originals_6 <- transmute(hulu_originals_6,
+                              Title = Title,
+                              Genre = paste(Genre, " Reality Unscripted"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_7 <- read_csv("../datasets/hulu/shows/table-7.csv")
+hulu_originals_7 <- transmute(hulu_originals_7,
+                              Title = Title,
+                              Genre = paste(Genre, " Variety Unscripted"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_8 <- read_csv("../datasets/hulu/shows/table-8.csv")
+hulu_originals_8 <- transmute(hulu_originals_8,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = `Partner / Country`,
+                              Region = `Partner / Country`)
+
+hulu_originals_9 <- read_csv("../datasets/hulu/shows/table-9.csv")
+hulu_originals_9 <- transmute(hulu_originals_9,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Continuation",
+                              Network = Network,
+                              Region = NA)
+
+hulu_originals_10 <- read_csv("../datasets/hulu/shows/table-10.csv")
+hulu_originals_10 <- transmute(hulu_originals_10,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Event",
+                              Format = "Special",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_11 <- read_csv("../datasets/hulu/shows/table-11.csv")
+hulu_originals_11 <- transmute(hulu_originals_11,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Release,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                              Format = "Film",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_12 <- read_csv("../datasets/hulu/shows/table-12.csv")
+hulu_originals_12 <- transmute(hulu_originals_12,
+                              Title = Title,
+                              Genre = "Documentary",
+                              Premiere = Release,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Ended",
+                              Format = "Film",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_13 <- read_csv("../datasets/hulu/shows/table-13.csv")
+hulu_originals_13 <- transmute(hulu_originals_13,
+                              Title = Title,
+                              Genre = paste(Genre, " Drama"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_14 <- read_csv("../datasets/hulu/shows/table-14.csv")
+hulu_originals_14 <- transmute(hulu_originals_14,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_15 <- read_csv("../datasets/hulu/shows/table-15.csv")
+hulu_originals_15 <- transmute(hulu_originals_15,
+                              Title = Title,
+                              Genre = paste(Genre, " Adult Animation"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_16 <- read_csv("../datasets/hulu/shows/table-16.csv")
+hulu_originals_16 <- transmute(hulu_originals_16,
+                              Title = Title,
+                              Genre = paste(Genre, " Kids Family"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_17 <- read_csv("../datasets/hulu/shows/table-17.csv")
+hulu_originals_17 <- transmute(hulu_originals_17,
+                              Title = Title,
+                              Genre = paste(Genre, " Docuseries Unscripted"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_18 <- read_csv("../datasets/hulu/shows/table-18.csv")
+hulu_originals_18 <- transmute(hulu_originals_18,
+                              Title = Title,
+                              Genre = paste(Genre, " Reality Unscripted"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_19 <- read_csv("../datasets/hulu/shows/table-19.csv")
+hulu_originals_19 <- transmute(hulu_originals_19,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = `Partner/Country`,
+                              Region = `Partner/Country`)
+
+
+hulu_originals_20 <- read_csv("../datasets/hulu/shows/table-20.csv")
+hulu_originals_20 <- transmute(hulu_originals_20,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Series",
+                              Origin = "Continuation",
+                              Network = Network,
+                              Region = NA)
+
+hulu_originals_21 <- read_csv("../datasets/hulu/shows/table-21.csv")
+hulu_originals_21 <- transmute(hulu_originals_21,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = NA,
+                              Seasons = NA,
+                              Runtime = NA,
+                              Language = NA,
+                              Status = "Development",
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_22 <- read_csv("../datasets/hulu/shows/table-22.csv")
+hulu_originals_22 <- transmute(hulu_originals_22,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Release,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Film",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_23 <- read_csv("../datasets/hulu/shows/table-23.csv")
+hulu_originals_23 <- transmute(hulu_originals_23,
+                              Title = Title,
+                              Genre = "Documentary",
+                              Premiere = Release,
+                              Seasons = NA,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = "Pending",
+                              Format = "Film",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = NA)
+
+hulu_originals_24 <- read_csv("../datasets/hulu/shows/table-24.csv")
+hulu_originals_24 <- transmute(hulu_originals_24,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Run,
+                              Seasons = Seasons,
+                              Runtime = NA,
+                              Language = Language,
+                              Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                              Format = "Film",
+                              Origin = "Distribution",
+                              Network = `Original network`,
+                              Region = `Original region`)
+
+hulu_originals_25 <- read_csv("../datasets/hulu/shows/table-25.csv")
+hulu_originals_25 <- transmute(hulu_originals_25,
+                              Title = Title,
+                              Genre = paste(Genre, " Drama"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = "Japan")
+
+hulu_originals_26 <- read_csv("../datasets/hulu/shows/table-26.csv")
+hulu_originals_26 <- transmute(hulu_originals_26,
+                              Title = Title,
+                              Genre = paste(Genre, " Comedy"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = "Japan")
+
+hulu_originals_27 <- read_csv("../datasets/hulu/shows/table-27.csv")
+hulu_originals_27 <- transmute(hulu_originals_27,
+                              Title = Title,
+                              Genre = paste(Genre, " Animation"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = "Japan")
+
+hulu_originals_28 <- read_csv("../datasets/hulu/shows/table-28.csv")
+hulu_originals_28 <- transmute(hulu_originals_28,
+                              Title = Title,
+                              Genre = paste(Genre, " Variety"),
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = NA,
+                              Region = "Japan")
+
+hulu_originals_29 <- read_csv("../datasets/hulu/shows/table-29.csv")
+hulu_originals_29 <- transmute(hulu_originals_29,
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Length,
+                              Language = NA,
+                              Status = Status,
+                              Format = "Series",
+                              Origin = "Original",
+                              Network = Partner,
+                              Region = "Japan")
+
+hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
+hulu_originals <- rbind(hulu_originals, hulu_originals_3)
+hulu_originals <- rbind(hulu_originals, hulu_originals_4)
+hulu_originals <- rbind(hulu_originals, hulu_originals_5)
+hulu_originals <- rbind(hulu_originals, hulu_originals_6)
+hulu_originals <- rbind(hulu_originals, hulu_originals_7)
+hulu_originals <- rbind(hulu_originals, hulu_originals_8)
+hulu_originals <- rbind(hulu_originals, hulu_originals_9)
+hulu_originals <- rbind(hulu_originals, hulu_originals_10)
+hulu_originals <- rbind(hulu_originals, hulu_originals_11)
+hulu_originals <- rbind(hulu_originals, hulu_originals_12)
+hulu_originals <- rbind(hulu_originals, hulu_originals_13)
+hulu_originals <- rbind(hulu_originals, hulu_originals_14)
+hulu_originals <- rbind(hulu_originals, hulu_originals_15)
+hulu_originals <- rbind(hulu_originals, hulu_originals_16)
+hulu_originals <- rbind(hulu_originals, hulu_originals_17)
+hulu_originals <- rbind(hulu_originals, hulu_originals_18)
+hulu_originals <- rbind(hulu_originals, hulu_originals_19)
+hulu_originals <- rbind(hulu_originals, hulu_originals_20)
+hulu_originals <- rbind(hulu_originals, hulu_originals_21)
+hulu_originals <- rbind(hulu_originals, hulu_originals_22)
+hulu_originals <- rbind(hulu_originals, hulu_originals_23)
+hulu_originals <- rbind(hulu_originals, hulu_originals_24)
+hulu_originals <- rbind(hulu_originals, hulu_originals_25)
+hulu_originals <- rbind(hulu_originals, hulu_originals_26)
+hulu_originals <- rbind(hulu_originals, hulu_originals_27)
+hulu_originals <- rbind(hulu_originals, hulu_originals_28)
+hulu_originals <- rbind(hulu_originals, hulu_originals_29)
+
+unique(select(hulu_originals, Status))
+
+hulu_originals <- transmute(hulu_originals, 
+                            Title = Title,
+                            Genre = Genre,
+                            Premiere = Premiere,
+                            Seasons = Seasons,
+                            Runtime = Runtime,
+                            Language = Language,
+                            Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                            Service = parse_factor("Hulu", levels = services),
+                            Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                            Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                            Network = Network,
+                            Region = Region)
+
+hulu_originals
+```
+
+## Disney+
+
+```{r}
+disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
+disney_originals_1 <- transmute(disney_originals_1,
+                                Title = Title,
+                                Genre = paste(Genre, " Drama"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_2 <- read_csv("../datasets/disney/shows/table-2.csv")
+disney_originals_2 <- transmute(disney_originals_2,
+                                Title = Title,
+                                Genre = paste(Genre, " Comedy"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_3 <- read_csv("../datasets/disney/shows/table-3.csv")
+disney_originals_3 <- transmute(disney_originals_3,
+                                Title = Title,
+                                Genre = paste(Genre, " Shorts"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_4 <- read_csv("../datasets/disney/shows/table-4.csv")
+disney_originals_4 <- transmute(disney_originals_4,
+                                Title = Title,
+                                Genre = paste(Genre, " Docuseries Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_5 <- read_csv("../datasets/disney/shows/table-5.csv")
+disney_originals_5 <- transmute(disney_originals_5,
+                                Title = Title,
+                                Genre = paste(Genre, " Reality Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_6 <- read_csv("../datasets/disney/shows/table-6.csv")
+disney_originals_6 <- transmute(disney_originals_6,
+                                Title = Title,
+                                Genre = paste(Genre, " Variety Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_7 <- read_csv("../datasets/disney/shows/table-7.csv")
+disney_originals_7 <- transmute(disney_originals_7,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Continuation",
+                                Network = Network,
+                                Region = NA)
+
+disney_originals_8 <- read_csv("../datasets/disney/shows/table-8.csv")
+disney_originals_8 <- transmute(disney_originals_8,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Premiere,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Special",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+# missing exclusives
+# missing table-9 content on wiki
+
+disney_originals_10 <- read_csv("../datasets/disney/shows/table-10.csv")
+disney_originals_10 <- transmute(disney_originals_10,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_11 <- read_csv("../datasets/disney/shows/table-11.csv")
+disney_originals_11 <- transmute(disney_originals_11,
+                                Title = Title,
+                                Genre = paste(Genre, " Drama"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_12 <- read_csv("../datasets/disney/shows/table-12.csv")
+disney_originals_12 <- transmute(disney_originals_12,
+                                Title = Title,
+                                Genre = paste(Genre, " Comedy"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_13 <- read_csv("../datasets/disney/shows/table-13.csv")
+disney_originals_13 <- transmute(disney_originals_13,
+                                Title = Title,
+                                Genre = paste(Genre, " Animation"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_14 <- read_csv("../datasets/disney/shows/table-14.csv")
+disney_originals_14 <- transmute(disney_originals_14,
+                                Title = Title,
+                                Genre = paste(Genre, " Docuseries Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_15 <- read_csv("../datasets/disney/shows/table-15.csv")
+disney_originals_15 <- transmute(disney_originals_15,
+                                Title = Title,
+                                Genre = paste(Genre, " Reality Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_16 <- read_csv("../datasets/disney/shows/table-16.csv")
+disney_originals_16 <- transmute(disney_originals_16,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = Status,
+                                Format = "Series",
+                                Origin = "Continuation",
+                                Network = `Prev. network(s)`,
+                                Region = NA)
+
+disney_originals_17 <- read_csv("../datasets/disney/shows/table-17.csv")
+disney_originals_17 <- transmute(disney_originals_17,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = NA,
+                                Seasons = NA,
+                                Runtime = NA,
+                                Language = NA,
+                                Status = "Development",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_18 <- read_csv("../datasets/disney/films/table-1.csv")
+disney_originals_18 <- transmute(disney_originals_18,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_19 <- read_csv("../datasets/disney/films/table-2.csv")
+disney_originals_19 <- transmute(disney_originals_19,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_20 <- read_csv("../datasets/disney/films/table-3.csv")
+disney_originals_20 <- transmute(disney_originals_20,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_21 <- read_csv("../datasets/disney/films/table-4.csv")
+disney_originals_21 <- transmute(disney_originals_21,
+                                Title = Title,
+                                Genre = paste(Genre, " Documentary"),
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_22 <- read_csv("../datasets/disney/films/table-5.csv")
+disney_originals_22 <- transmute(disney_originals_22,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Special",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_23 <- read_csv("../datasets/disney/films/table-6.csv")
+disney_originals_23 <- transmute(disney_originals_23,
+                                Title = Title,
+                                Genre = paste(Genre, " Exclusive"),
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Distribution",
+                                Network = NA,
+                                Region = "France")
+
+disney_originals_24 <- read_csv("../datasets/disney/films/table-7.csv")
+disney_originals_24 <- transmute(disney_originals_24,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_25 <- read_csv("../datasets/disney/films/table-8.csv")
+disney_originals_25 <- transmute(disney_originals_25,
+                                Title = Title,
+                                Genre = paste(Genre, " Documentary"),
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_26 <- read_csv("../datasets/disney/films/table-9.csv")
+disney_originals_26 <- transmute(disney_originals_26,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = `Release date`,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Development",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_27 <- read_csv("../datasets/disney/films/table-10.csv")
+disney_originals_27 <- transmute(disney_originals_27,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = NA,
+                                Seasons = NA,
+                                Runtime = NA,
+                                Language = NA,
+                                Status = "Development",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals_28 <- read_csv("../datasets/disney/films/table-11.csv")
+disney_originals_28 <- transmute(disney_originals_28,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = NA,
+                                Seasons = NA,
+                                Runtime = NA,
+                                Language = NA,
+                                Status = "Development",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+disney_originals <- rbind(disney_originals_1, disney_originals_2)
+disney_originals <- rbind(disney_originals, disney_originals_3)
+disney_originals <- rbind(disney_originals, disney_originals_4)
+disney_originals <- rbind(disney_originals, disney_originals_5)
+disney_originals <- rbind(disney_originals, disney_originals_6)
+disney_originals <- rbind(disney_originals, disney_originals_7)
+disney_originals <- rbind(disney_originals, disney_originals_8)
+#disney_originals <- rbind(disney_originals, disney_originals_9)
+disney_originals <- rbind(disney_originals, disney_originals_10)
+disney_originals <- rbind(disney_originals, disney_originals_11)
+disney_originals <- rbind(disney_originals, disney_originals_12)
+disney_originals <- rbind(disney_originals, disney_originals_13)
+disney_originals <- rbind(disney_originals, disney_originals_14)
+disney_originals <- rbind(disney_originals, disney_originals_15)
+disney_originals <- rbind(disney_originals, disney_originals_16)
+disney_originals <- rbind(disney_originals, disney_originals_17)
+disney_originals <- rbind(disney_originals, disney_originals_18)
+disney_originals <- rbind(disney_originals, disney_originals_19)
+disney_originals <- rbind(disney_originals, disney_originals_20)
+disney_originals <- rbind(disney_originals, disney_originals_21)
+disney_originals <- rbind(disney_originals, disney_originals_22)
+disney_originals <- rbind(disney_originals, disney_originals_23)
+disney_originals <- rbind(disney_originals, disney_originals_24)
+disney_originals <- rbind(disney_originals, disney_originals_25)
+disney_originals <- rbind(disney_originals, disney_originals_26)
+disney_originals <- rbind(disney_originals, disney_originals_27)
+disney_originals <- rbind(disney_originals, disney_originals_28)
+
+unique(select(disney_originals, Status))
+
+disney_originals <- transmute(disney_originals, 
+                              Title = Title,
+                              Genre = Genre,
+                              Premiere = Premiere,
+                              Seasons = Seasons,
+                              Runtime = Runtime,
+                              Language = Language,
+                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                              Service = parse_factor("Disney+", levels = services),
+                              Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                              Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                              Network = Network,
+                              Region = Region)
+
+disney_originals
+```
+
+## Import Apple TV+
+
+```{r}
+apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv")
+apple_originals_1 <- transmute(apple_originals_1,
+                               Title = Title,
+                               Genre = paste(Genre, " Drama"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv")
+apple_originals_2 <- transmute(apple_originals_2,
+                               Title = Title,
+                               Genre = paste(Genre, " Comedy"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_3 <- read_csv("../datasets/apple/shows/table-3.csv")
+apple_originals_3 <- transmute(apple_originals_3,
+                               Title = Title,
+                               Genre = paste(Genre, " Adult Animation"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_4 <- read_csv("../datasets/apple/shows/table-4.csv")
+apple_originals_4 <- transmute(apple_originals_4,
+                               Title = Title,
+                               Genre = paste(Genre, " Kids Family Children"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_5 <- read_csv("../datasets/apple/shows/table-5.csv")
+apple_originals_5 <- transmute(apple_originals_5,
+                               Title = Title,
+                               Genre = paste(Genre, " Docuseries Unscripted"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_6 <- read_csv("../datasets/apple/shows/table-6.csv")
+apple_originals_6 <- transmute(apple_originals_6,
+                               Title = Title,
+                               Genre = paste(Genre, " Variety Unscripted"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_7 <- read_csv("../datasets/apple/shows/table-7.csv")
+apple_originals_7 <- transmute(apple_originals_7,
+                               Title = Title,
+                               Genre = Genre,
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = Status,
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = `Partner/Country`,
+                               Region = `Partner/Country`)
+
+apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv")
+apple_originals_8 <- transmute(apple_originals_8,
+                               Title = Title,
+                               Genre = paste(Genre, " Drama"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = "Pending",
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv")
+apple_originals_9 <- transmute(apple_originals_9,
+                               Title = Title,
+                               Genre = paste(Genre, " Comedy"),
+                               Premiere = Premiere,
+                               Seasons = Seasons,
+                               Runtime = Runtime,
+                               Language = NA,
+                               Status = "Pending",
+                               Format = "Series",
+                               Origin = "Original",
+                               Network = NA,
+                               Region = NA)
+
+apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv")
+apple_originals_10 <- transmute(apple_originals_10,
+                                Title = Title,
+                                Genre = paste(Genre, " Kids Family Children Animation"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv")
+apple_originals_11 <- transmute(apple_originals_11,
+                                Title = Title,
+                                Genre = paste(Genre, " Docuseries Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_12 <- read_csv("../datasets/apple/shows/table-12.csv")
+apple_originals_12 <- transmute(apple_originals_12,
+                                Title = Title,
+                                Genre = paste(Genre, " Reality Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_13 <- read_csv("../datasets/apple/shows/table-13.csv")
+apple_originals_13 <- transmute(apple_originals_13,
+                                Title = Title,
+                                Genre = paste(Genre, " Variety Unscripted"),
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_14 <- read_csv("../datasets/apple/shows/table-14.csv")
+apple_originals_14 <- transmute(apple_originals_14,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Premiere,
+                                Seasons = Seasons,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = `Partner/Country`,
+                                Region = `Partner/Country`)
+
+apple_originals_15 <- read_csv("../datasets/apple/shows/table-15.csv")
+apple_originals_15 <- transmute(apple_originals_15,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = NA,
+                                Seasons = NA,
+                                Runtime = NA,
+                                Language = NA,
+                                Status = "Development",
+                                Format = "Series",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_16 <- read_csv("../datasets/apple/films/table-1.csv")
+apple_originals_16 <- transmute(apple_originals_16,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Ended",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_17 <- read_csv("../datasets/apple/films/table-2.csv")
+apple_originals_17 <- transmute(apple_originals_17,
+                                Title = Title,
+                                Genre = paste(Genre, " Documentary"),
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_18 <- read_csv("../datasets/apple/films/table-3.csv")
+apple_originals_18 <- transmute(apple_originals_18,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Ended",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_19 <- read_csv("../datasets/apple/films/table-4.csv")
+apple_originals_19 <- transmute(apple_originals_19,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_20 <- read_csv("../datasets/apple/films/table-5.csv")
+apple_originals_20 <- transmute(apple_originals_20,
+                                Title = Title,
+                                Genre = paste(Genre, " Documentary"),
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Runtime,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Film",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals_21 <- read_csv("../datasets/apple/films/table-6.csv")
+apple_originals_21 <- transmute(apple_originals_21,
+                                Title = Title,
+                                Genre = Genre,
+                                Premiere = Release,
+                                Seasons = NA,
+                                Runtime = Length,
+                                Language = NA,
+                                Status = "Pending",
+                                Format = "Special",
+                                Origin = "Original",
+                                Network = NA,
+                                Region = NA)
+
+apple_originals <- rbind(apple_originals_1, apple_originals_2)
+apple_originals <- rbind(apple_originals, apple_originals_3)
+apple_originals <- rbind(apple_originals, apple_originals_4)
+apple_originals <- rbind(apple_originals, apple_originals_5)
+apple_originals <- rbind(apple_originals, apple_originals_6)
+apple_originals <- rbind(apple_originals, apple_originals_7)
+apple_originals <- rbind(apple_originals, apple_originals_8)
+apple_originals <- rbind(apple_originals, apple_originals_9)
+apple_originals <- rbind(apple_originals, apple_originals_10)
+apple_originals <- rbind(apple_originals, apple_originals_11)
+apple_originals <- rbind(apple_originals, apple_originals_12)
+apple_originals <- rbind(apple_originals, apple_originals_13)
+apple_originals <- rbind(apple_originals, apple_originals_14)
+apple_originals <- rbind(apple_originals, apple_originals_15)
+apple_originals <- rbind(apple_originals, apple_originals_16)
+apple_originals <- rbind(apple_originals, apple_originals_17)
+apple_originals <- rbind(apple_originals, apple_originals_18)
+apple_originals <- rbind(apple_originals, apple_originals_19)
+apple_originals <- rbind(apple_originals, apple_originals_20)
+apple_originals <- rbind(apple_originals, apple_originals_21)
+
+unique(select(apple_originals, Status))
+
+apple_originals <- transmute(apple_originals, 
+                             Title = Title,
+                             Genre = Genre,
+                             Premiere = Premiere,
+                             Seasons = Seasons,
+                             Runtime = Runtime,
+                             Language = Language,
+                             Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                             Service = parse_factor("Apple TV+", levels = services),
+                             Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
+                             Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                             Network = Network,
+                             Region = Region)
+
+apple_originals
+```
