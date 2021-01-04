@@ -365,6 +365,20 @@ amazon_originals_24 <- transmute(amazon_originals_24,
                                  Network = `Original network`,
                                  Region = `Prime Video exclusive region`)
 
+amazon_originals_25 <- read_csv("../datasets/amazon/films/table-1.csv")
+amazon_originals_25 <- transmute(amazon_originals_25,
+                                 Title = Title,
+                                 Genre = Genre,
+                                 Premiere = Premiere,
+                                 Seasons = NA,
+                                 Runtime = NA,
+                                 Language = Language,
+                                 Status = "Ended",
+                                 Format = "Film",
+                                 Origin = "Original",
+                                 Network = NA,
+                                 Region = NA)
+
 amazon_originals <- rbind(amazon_originals_1, amazon_originals_2)
 amazon_originals <- rbind(amazon_originals, amazon_originals_3)
 amazon_originals <- rbind(amazon_originals, amazon_originals_4)
@@ -388,6 +402,7 @@ amazon_originals <- rbind(amazon_originals, amazon_originals_21)
 amazon_originals <- rbind(amazon_originals, amazon_originals_22)
 amazon_originals <- rbind(amazon_originals, amazon_originals_23)
 amazon_originals <- rbind(amazon_originals, amazon_originals_24)
+amazon_originals <- rbind(amazon_originals, amazon_originals_25)
 
 unique(select(amazon_originals, Status))
 
