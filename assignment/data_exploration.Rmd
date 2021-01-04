@@ -172,38 +172,18 @@ genre_frame = transmute(data.frame(table(genre_vector_clean)),
           Genre = genre_vector_clean,
           Count = Freq)
 
-for (i in 1:nrow(genre_frame)) {
-  print(paste("Genre:", genre_frame[i, ]$Genre, "| Count:", genre_frame[i, ]$Count))
-}
-
-find_eight_largest_genres <- function() {
-  eight_largest <- c()
-  for (i in 1:nrow(genre_frame)) {
-    if (length(eight_largest < 8)) {
-      eight_largest <- c(as.factor(genre_frame[i, ]$Genre))
-    } else {
-      # finding the smallest element from the current "eight_largest" vector
-      smallest <- NA
-      for (j in 1:8) {
-        if (j == 1) {
-          smallest <- eight_largest[1]
-        } else {
-          if (filter(genre_frame, Genre == smallest)$Count > filter(genre_frame, Genre == eight_largest[j])$Count) {
-            smallest <- eight_largest[j]
-          }
-        }
-      }
-      
-      if (genre_frame[i, ]$Count > filter(genre_frame, Genre == smallest)$Count) {
-        replace(eight_largest, eight_largest == smallest, as.factor(genre_frame[i, ]$Genre))
-      }
-    }
-    print(paste("Genre:", genre_frame[i, ]$Genre, "| Count:", genre_frame[i, ]$Count))
+top_eight_genres <- function(dataframe) {
+  arranged_df <- data.frame(Genre = arrange(dataframe, desc(Count))$Genre, Entries = arrange(dataframe, desc(Count))$Count)
+  top_eight <- data.frame(Genre = c(), Entries = c())
+  for (i in 1:8) {
+    top_eight <- rbind(top_eight, arranged_df[i, ])
   }
-  return(eight_largest)
+  return(top_eight)
 }
 
-find_eight_largest_genres()
+ggplot(data = top_eight_genres(genre_frame)) +
+  geom_line(mapping = aes(x = Genre, y = Entries))
+
 
 ```
 
