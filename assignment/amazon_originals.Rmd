@@ -284,7 +284,7 @@ amazon_originals_18 <- transmute(amazon_originals_18,
 amazon_originals_19 <- read_csv("../datasets/amazon/shows/table-19.csv")
 amazon_originals_19 <- transmute(amazon_originals_19,
                                  Title = Title,
-                                 Genre = Genre,
+                                 Genre = paste(Genre, " Drama"),
                                  Premiere = `Original run`,
                                  Seasons = Seasons,
                                  Runtime = NA,
