@@ -424,7 +424,7 @@ amazon_originals_28 <- transmute(amazon_originals_28,
 amazon_originals_29 <- read_csv("../datasets/amazon/films/table-5.csv")
 amazon_originals_29 <- transmute(amazon_originals_29,
                                  Title = Title,
-                                 Genre = "Comedy",
+                                 Genre = Genre,
                                  Premiere = Release,
                                  Seasons = NA,
                                  Runtime = Runtime,
