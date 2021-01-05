@@ -360,4 +360,6 @@ apple_originals <- transmute(apple_originals,
                              Region = Region)
 
 apple_originals
+
+rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
