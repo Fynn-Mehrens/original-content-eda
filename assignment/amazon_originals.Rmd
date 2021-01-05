@@ -496,4 +496,6 @@ amazon_originals <- transmute(amazon_originals,
                               Region = Region)
 
 amazon_originals
+
+rm(list = ls(pattern = "_originals_[0-9]+"))
 ```

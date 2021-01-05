@@ -3766,6 +3766,60 @@ disney <- transmute(disney_originals,
 disney
 ```
 
+## Transmute Apple TV+
+
+### Transmutation of the given Apple TV+ series and movie table
+
+```{r}
+apple_originals <- filter(apple_originals,
+                          !grepl("Pending|pending", Title),
+                          Title != "Awaiting release",
+                          !grepl("Miniseries|miniseries", Title),
+                          !grepl("Renewed|renewed", Title),
+                          !grepl("due to premiere", Title))
+
+apple_originals
+
+apple <- transmute(apple_originals, 
+                   Title = Title,
+                                Genre = genres_to_uppercase_unique(str_replace_all(
+                                          str_squish(
+                                            str_replace_all(
+                                              str_replace_all(
+                                                str_replace_all(
+                                                  str_replace_all(
+                                                    str_replace_all(Genre, "series|procedural", ""),
+                                                  "Science fiction", "Science-Fiction"),
+                                                "(C|c)oming-of-age ", ""),
+                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
+                                            "(Docu|docu).*", "Documentary")
+                                          ),
+                                        "/| ", " / ")),
+                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
+                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
+                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
+                                                  NA)),
+                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
+                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
+                                                  NA)),
+                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Language = Language,
+                                Status = Status,
+                                Service = Service,
+                                Format = as.factor(Format),
+                                Origin = as.factor(Origin),
+                                Network = as.factor(Network),
+                                Region = as.factor(Region)
+                               )
+
+apple
+```
+
 ## Combine Services
 
 The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
@@ -3774,6 +3828,7 @@ The goal now is to combine the results from the transmutation into one large dat
 #original_content <- rbind(netflix, amazon)
 original_content <- rbind(netflix, hulu)
 original_content <- rbind(original_content, disney)
+original_content <- rbind(original_content, apple)
 
 original_content
 ```
