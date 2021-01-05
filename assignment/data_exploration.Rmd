@@ -184,7 +184,6 @@ top_eight_genres <- function(dataframe) {
 ggplot(data = as.tibble(top_eight_genres(genre_frame) %>% group_by(Genre) %>% summarise(Entries = strtoi(Entries)))) +
   geom_bar(mapping = aes(x = reorder(Genre, Entries), y = Entries), stat = "identity") +
   labs(title = "Top 8 most popular genres of all streaming services", x = "Genres", y = "No. of series and movies")
-
 ```
 
 ### Exporting the data frame to CSV
