@@ -464,4 +464,6 @@ disney_originals <- transmute(disney_originals,
                               Region = Region)
 
 disney_originals
+
+rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
