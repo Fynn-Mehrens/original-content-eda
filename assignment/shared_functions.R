@@ -5,7 +5,7 @@
 anycharacter <- "([a-zA-Z]|-+)"
 
 genre_to_uppercase_unique <- function(genre) {
-  if (length(genre) == 0 | genre == "") {
+  if (length(genre) == 0 | genre == "" | is.na(genre)) {
     return(NA)
   }
   
