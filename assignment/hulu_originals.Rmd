@@ -481,4 +481,6 @@ hulu_originals <- transmute(hulu_originals,
                             Region = Region)
 
 hulu_originals
+
+rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
