@@ -3546,6 +3546,32 @@ apple_originals
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
+## Import Movies
+
+```{r}
+movies <- read_csv("../datasets/movies.csv")
+
+movies <- transmute(movies,
+                    Title = Title,
+                    Genre = str_replace_all(Genres, ",", " / "),
+                    Year = Year,
+                    Age = Age,
+                    Runtime = Runtime,
+                    IMDb = IMDb,
+                    `Rotten Tomatoes` = `Rotten Tomatoes`,
+                    Netflix = Netflix > 0,
+                    Hulu = Hulu > 0,
+                    `Prime Video` = `Prime Video` > 0,
+                    `Disney+` = `Disney+` > 0,
+                    `Apple TV+` = FALSE,
+                    Type = Type,
+                    Directors = Directors,
+                    Country = Country,
+                    Language = str_replace_all(Language, ",", " / "))
+
+movies
+```
+
 ## Transmute Netflix
 
 ### Transmutation of the given Netflix series and movie table
@@ -3832,6 +3858,21 @@ original_content <- rbind(original_content, apple)
 
 original_content
 ```
+
+## Join with Movies
+
+```{r}
+natural_joined <- full_join(movies, original_content, by = "Title")
+
+natural_joined <- mutate(natural_joined, `Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
+
+natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y"))]
+
+natural_joined
+
+unique(select(natural_joined, `Genre.x`))
+```
+
 
 ## Data Exploration
 
