@@ -1781,4 +1781,6 @@ netflix_originals <- transmute(netflix_originals,
                                Region = Region)
 
 netflix_originals
+
+rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
