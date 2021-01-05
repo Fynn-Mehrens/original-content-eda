@@ -3884,12 +3884,13 @@ To make the following plots easier to read, we picked colors from the streaming 
 
 ```{r}
 # Adding a column to sort by, will be used as a categorical variable later on
-prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), !Premiere_Year == 2021, !is.na(Premiere_Year))
+prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), Premiere_Year != 2021, !is.na(Premiere_Year))
 
 original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
                      rgb(0/255, 163/255, 218/255, 1),
                      rgb(28/255, 231/255, 131/255, 1),
-                     rgb(15/255, 27/255, 77/255, 1)
+                     rgb(148 / 255, 31 / 255, 138 / 255, 1),
+                     rgb(0, 0, 0, 1)
                      )
 
 ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
@@ -3943,7 +3944,7 @@ series_and_movies
 
 percentage_of_series <- function(dataframe) {
   series_percentages <- data.frame(Service = c(), Premiere_Year = c(), Series_Percentage = c())
-  services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+")
+  services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
   years <- c(2000:2020)
   for (service in services) {
     service_rows <- filter(dataframe, Service == service)
@@ -3959,32 +3960,15 @@ percentage_of_series <- function(dataframe) {
 }
 percentage_of_series(series_and_movies)
 
-original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
-                     rgb(28/255, 231/255, 131/255, 1),
-                     rgb(15/255, 27/255, 77/255, 1)
-                     )
-
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
   labs(colour = "Streaming Services", title = "Amount of released Movies by streaming services", x = "Year", y = "Number of movies") +
   scale_colour_manual(values = original_colors)
-
-original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
-                     rgb(0/255, 163/255, 218/255, 1),
-                     rgb(28/255, 231/255, 131/255, 1),
-                     rgb(15/255, 27/255, 77/255, 1)
-                     )
   
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Series"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
   labs(colour = "Streaming Services", title = "Amount of released Series by streaming services", x = "Year", y = "Number of series") +
   scale_colour_manual(values = original_colors)
-
-original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
-                     rgb(0/255, 163/255, 218/255, 1),
-                     rgb(28/255, 231/255, 131/255, 1),
-                     rgb(15/255, 27/255, 77/255, 1)
-                     )
   
 ggplot() +
   geom_line(data = percentage_of_series(series_and_movies), mapping = aes(x = Premiere_Year, y = Percentage, colour = as.factor(Service))) +
