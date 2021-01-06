@@ -3564,10 +3564,11 @@ movies <- transmute(movies,
                     `Prime Video` = `Prime Video` > 0,
                     `Disney+` = `Disney+` > 0,
                     `Apple TV+` = FALSE,
-                    Type = Type,
-                    Directors = Directors,
-                    Country = Country,
-                    Language = str_replace_all(Language, ",", " / "))
+                    Director = str_replace_all(Directors, ",", " / "),
+                    Country = str_replace_all(Country, ",", " / "),
+                    Language = str_replace_all(Language, ",", " / "),
+                    Format = as.factor("Film"),
+                    Status = as.factor("Ended"))
 
 movies
 ```
@@ -3852,11 +3853,11 @@ The goal now is to combine the results from the transmutation into one large dat
 
 ```{r}
 #original_content <- rbind(netflix, amazon)
-original_content <- rbind(netflix, hulu)
-original_content <- rbind(original_content, disney)
-original_content <- rbind(original_content, apple)
+#original_content <- rbind(netflix, hulu)
+#original_content <- rbind(original_content, disney)
+#original_content <- rbind(original_content, apple)
 
-original_content
+original_content <- netflix
 ```
 
 ## Join with Movies
@@ -3865,12 +3866,21 @@ original_content
 natural_joined <- full_join(movies, original_content, by = "Title")
 
 natural_joined <- mutate(natural_joined, `Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
+natural_joined <- mutate(natural_joined, `Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
 
-natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y"))]
+natural_joined <- mutate(natural_joined, `Format.x` = levels(formats)[ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)])
+natural_joined <- mutate(natural_joined, `Status.x` = levels(statuses)[ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)])
+natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
+
+natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y"))]
 
 natural_joined
 
-unique(select(natural_joined, `Genre.x`))
+natural_joined <- rename(natural_joined, Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`)
+
+natural_joined
+
+unique(select(natural_joined, Genre))
 ```
 
 
