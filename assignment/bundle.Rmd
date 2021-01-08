@@ -87,7 +87,7 @@ origins <- c("Continuation", "Distribution", "Original")
 
 services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
 
-ages <- c("7+", "13+",	"16+", "18+", "all", "unknow")
+ages <- c("7+", "13+",	"16+", "18+", "all", "unknown")
 ```
 
 ## Import Netflix
@@ -3927,7 +3927,7 @@ content <- rename(content, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rot
 content <- mutate(content, Month = ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m"))))
 content <- mutate(content, Day = ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d"))))
 
-content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknow", Age), levels = ages))
+content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
 content <- mutate(content, Origin = parse_factor(ifelse(is.na(Origin), "Distribution", Origin), levels = origins))
 
 content <- mutate(content, Format = formats[[Format]])
