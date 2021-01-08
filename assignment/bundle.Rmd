@@ -3913,10 +3913,15 @@ natural_joined2 <- mutate(natural_joined2, `Netflix.x` = ifelse(is.na(`Netflix.x
 natural_joined2 <- mutate(natural_joined2, `Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
 natural_joined2 <- mutate(natural_joined2, `Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
 natural_joined2 <- mutate(natural_joined2, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
+natural_joined2 <- mutate(natural_joined2, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
+natural_joined2 <- mutate(natural_joined2, `Format.x` = as.numeric(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
+natural_joined2 <- mutate(natural_joined2, `Format.x` = formats[[`Format.x`[1]]])
+natural_joined2 <- mutate(natural_joined2, `Status.x` = as.numeric(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
+natural_joined2 <- mutate(natural_joined2, `Status.x` = statuses[[`Status.x`[1]]])
 
-natural_joined2 <- natural_joined2[, !(names(natural_joined2) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y"))]
+natural_joined2 <- natural_joined2[, !(names(natural_joined2) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
 
-(natural_joined2 <- rename(natural_joined2, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`))
+(natural_joined2 <- rename(natural_joined2, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`))
 ```
 
 ## Data Exploration
