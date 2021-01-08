@@ -13,6 +13,8 @@ library(tidyverse)
 library(forcats)
 library(readxl)
 library(knitr)
+Sys.setlocale("LC_TIME", "English")
+Sys.setlocale("LC_TIME", "en_GB.UTF-8")
 ```
 
 ## Shared
