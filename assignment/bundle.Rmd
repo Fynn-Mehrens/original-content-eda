@@ -4048,17 +4048,20 @@ genre_frame = transmute(data.frame(table(genre_vector_clean)),
           Genre = genre_vector_clean,
           Count = Freq)
 
-top_eight_genres <- function(dataframe) {
+top_x_genres <- function(dataframe, x) {
   arranged_df <- data.frame(Genre = arrange(dataframe, desc(Count))$Genre, Entries = arrange(dataframe, desc(Count))$Count)
-  top_eight <- data.frame(Genre = c(), Entries = c())
-  for (i in 1:8) {
-    top_eight <- rbind(top_eight, arranged_df[i, ])
+  top_x <- data.frame(Genre = c(), Entries = c())
+  for (i in 1:x) {
+    top_x <- rbind(top_x, arranged_df[i, ])
   }
-  return(top_eight)
+  return(top_x)
 }
 
-ggplot(data = as.tibble(top_eight_genres(genre_frame) %>% group_by(Genre) %>% summarise(Entries = strtoi(Entries)))) +
-  geom_bar(mapping = aes(x = reorder(Genre, Entries), y = Entries), stat = "identity") +
+genre_count <- as.tibble(top_x_genres(genre_frame, 20) %>% summarise(Genre, Entries = strtoi(Entries)))
+
+ggplot(data = genre_count) +
+  geom_bar(mapping = aes(x = reorder(Genre, desc(Entries)), y = Entries, fill = Genre), stat = "identity", show.legend = FALSE) +
+  coord_flip() +
   labs(title = "Top 8 most popular genres of all streaming services", x = "Genres", y = "No. of series and movies")
 ```
 
