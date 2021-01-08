@@ -3565,8 +3565,8 @@ movies <- transmute(movies,
                     Director = str_replace_all(Directors, ",", " / "),
                     Country = str_replace_all(Country, ",", " / "),
                     Language = str_replace_all(Language, ",", " / "),
-                    Format = as.factor("Film"),
-                    Status = as.factor("Ended"))
+                    Format = parse_factor("Film", levels = formats),
+                    Status = parse_factor("Ended", levels = statuses))
 
 movies
 ```
@@ -3850,12 +3850,10 @@ apple
 The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
 
 ```{r}
-#original_content <- rbind(netflix, amazon)
-#original_content <- rbind(netflix, hulu)
-#original_content <- rbind(original_content, disney)
-#original_content <- rbind(original_content, apple)
-
-original_content <- netflix
+original_content <- rbind(netflix, amazon)
+original_content <- rbind(original_content, hulu)
+original_content <- rbind(original_content, disney)
+(original_content <- rbind(original_content, apple))
 ```
 
 ## Join with Movies
@@ -3865,20 +3863,15 @@ natural_joined <- full_join(movies, original_content, by = "Title")
 
 natural_joined <- mutate(natural_joined, `Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
 natural_joined <- mutate(natural_joined, `Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
-
-natural_joined <- mutate(natural_joined, `Format.x` = levels(formats)[ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)])
-natural_joined <- mutate(natural_joined, `Status.x` = levels(statuses)[ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)])
+natural_joined <- mutate(natural_joined, `Format.x` = ifelse(is.na(`Format.x`), `Format.y`, `Format.x`))
+natural_joined <- mutate(natural_joined, `Format.x` = formats[[`Format.x`[1]]])
+natural_joined <- mutate(natural_joined, `Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
+natural_joined <- mutate(natural_joined, `Status.x` = statuses[[`Status.x`[1]]])
 natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
 
 natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y"))]
 
-natural_joined
-
-natural_joined <- rename(natural_joined, Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`)
-
-natural_joined
-
-unique(select(natural_joined, Genre))
+(natural_joined <- rename(natural_joined, Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
 ```
 
 
