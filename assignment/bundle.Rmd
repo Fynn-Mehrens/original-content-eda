@@ -86,6 +86,8 @@ formats <- c("Series", "Miniseries", "Film", "Special")
 origins <- c("Continuation", "Distribution", "Original")
 
 services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
+
+ages <- c("7+", "13+",	"16+", "18+", "all", "unknow")
 ```
 
 ## Import Netflix
@@ -3903,25 +3905,36 @@ natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "La
 ## Join with Shows
 
 ```{r}
-natural_joined2 <- full_join(shows, natural_joined, by = "Title")
+content <- full_join(shows, natural_joined, by = "Title")
 
-natural_joined2 <- mutate(natural_joined2, `Year.x` = ifelse(is.na(`Year.x`), `Year.y`, `Year.x`))
-natural_joined2 <- mutate(natural_joined2, `Age.x` = ifelse(is.na(`Age.x`), `Age.y`, `Age.x`))
-natural_joined2 <- mutate(natural_joined2, `IMDb.x` = ifelse(is.na(`IMDb.x`), `IMDb.y`, `IMDb.x`))
-natural_joined2 <- mutate(natural_joined2, `Rotten Tomatoes.x` = ifelse(is.na(`Rotten Tomatoes.x`), `Rotten Tomatoes.y`, `Rotten Tomatoes.x`))
-natural_joined2 <- mutate(natural_joined2, `Netflix.x` = ifelse(is.na(`Netflix.x`), `Netflix.y`, `Netflix.x`))
-natural_joined2 <- mutate(natural_joined2, `Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
-natural_joined2 <- mutate(natural_joined2, `Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
-natural_joined2 <- mutate(natural_joined2, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
-natural_joined2 <- mutate(natural_joined2, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
-natural_joined2 <- mutate(natural_joined2, `Format.x` = as.numeric(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
-natural_joined2 <- mutate(natural_joined2, `Format.x` = formats[[`Format.x`[1]]])
-natural_joined2 <- mutate(natural_joined2, `Status.x` = as.numeric(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
-natural_joined2 <- mutate(natural_joined2, `Status.x` = statuses[[`Status.x`[1]]])
+content <- mutate(content, `Year.x` = as.integer(ifelse(is.na(`Year.x`), `Year.y`, `Year.x`)))
+content <- mutate(content, `Age.x` = ifelse(is.na(`Age.x`), `Age.y`, `Age.x`))
+content <- mutate(content, `IMDb.x` = ifelse(is.na(`IMDb.x`), `IMDb.y`, `IMDb.x`))
+content <- mutate(content, `Rotten Tomatoes.x` = ifelse(is.na(`Rotten Tomatoes.x`), `Rotten Tomatoes.y`, `Rotten Tomatoes.x`))
+content <- mutate(content, `Netflix.x` = ifelse(is.na(`Netflix.x`), `Netflix.y`, `Netflix.x`))
+content <- mutate(content, `Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
+content <- mutate(content, `Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
+content <- mutate(content, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
+content <- mutate(content, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
+content <- mutate(content, `Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
+content <- mutate(content, `Format.x` = formats[[`Format.x`[1]]])
+content <- mutate(content, `Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
+content <- mutate(content, `Status.x` = statuses[[`Status.x`[1]]])
 
-natural_joined2 <- natural_joined2[, !(names(natural_joined2) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
+content <- content[, !(names(content) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
 
-(natural_joined2 <- rename(natural_joined2, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`))
+content <- rename(content, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
+
+content <- mutate(content, Month = ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m"))))
+content <- mutate(content, Day = ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d"))))
+
+content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknow", Age), levels = ages))
+
+#parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins)
+
+unique(select(content, Age))
+
+(content <- content[, !(names(content) %in% c("Premiere"))])
 ```
 
 ## Data Exploration
@@ -4049,6 +4062,90 @@ top_eight_genres <- function(dataframe) {
 ggplot(data = as.tibble(top_eight_genres(genre_frame) %>% group_by(Genre) %>% summarise(Entries = strtoi(Entries)))) +
   geom_bar(mapping = aes(x = reorder(Genre, Entries), y = Entries), stat = "identity") +
   labs(title = "Top 8 most popular genres of all streaming services", x = "Genres", y = "No. of series and movies")
+```
+
+### Age rating for all content
+
+```{r}
+ggplot(data = content) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Format == "Series")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Format == "Film")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+unique(select(content, Format))
+unique(select(content, Age))
+unique(select(content, Origin))
+unique(select(content, Service))
+```
+### Age rating for all Netflix content
+
+```{r}
+ggplot(data = filter(content, Netflix = TRUE)) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Netflix = TRUE, Format == "Series")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Netflix = TRUE, Format == "Film")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all original Netflix content
+
+```{r}
+ggplot(data = filter(content, Service == "Netflix", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Netflix", Format == "Series", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Netflix", Format == "Film", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all Amazon Prime Video content
+
+```{r}
+ggplot(data = filter(content, `Prime Video` = TRUE)) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, `Prime Video` = TRUE, Format == "Series")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, `Prime Video` = TRUE, Format == "Film")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all original Amazon Prime Video content
+
+```{r}
+ggplot(data = filter(content, Service == "Amazon Prime Video", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Series", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Film", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
 ```
 
 ### Exporting the data frame to CSV
