@@ -3892,12 +3892,23 @@ natural_joined <- mutate(natural_joined, `Format.x` = formats[[`Format.x`[1]]])
 natural_joined <- mutate(natural_joined, `Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
 natural_joined <- mutate(natural_joined, `Status.x` = statuses[[`Status.x`[1]]])
 natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
+natural_joined <- mutate(natural_joined, Min_Time = ifelse(is.na(Min_Time), Runtime, Min_Time))
+natural_joined <- mutate(natural_joined, Max_Time = ifelse(is.na(Max_Time), Runtime, Max_Time))
 
-natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y"))]
+natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y", "Runtime"))]
 
 (natural_joined <- rename(natural_joined, Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
 ```
 
+## Join with Shows
+
+```{r}
+natural_joined2 <- full_join(shows, natural_joined, by = "Title")
+
+natural_joined2 <- mutate(natural_joined2, `Year.x` = ifelse(is.na(`Year.x`), `Year.y`, `Year.x`))
+
+natural_joined2
+```
 
 ## Data Exploration
 
