@@ -4063,7 +4063,8 @@ genre_count <- as.tibble(top_x_genres(genre_frame, 20) %>% summarise(Genre, Entr
 ggplot(data = genre_count) +
   geom_bar(mapping = aes(x = reorder(Genre, desc(Entries)), y = Entries, fill = Genre), stat = "identity", show.legend = FALSE) +
   coord_flip() +
-  labs(title = "Top 8 most popular genres of all streaming services", x = "Genres", y = "No. of series and movies")
+  labs(title = "Top 20 Genres - Original Content", x = "", y = "No. of original content productions") +
+  theme(title = element_text(size = 16), axis.title.x = element_text(size = 12), axis.text.y = element_text(size = 11))
 ```
 
 ### Age rating for all content
