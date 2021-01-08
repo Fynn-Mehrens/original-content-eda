@@ -152,7 +152,7 @@ netflix_originals_4 <- transmute(netflix_originals_4,
 netflix_originals_5 <- read_csv("../datasets/netflix/shows/table-5.csv")
 netflix_originals_5 <- transmute(netflix_originals_5,
                                  Title = Title,
-                                 Genre = "Children Kids Family",
+                                 Genre = "Children Family",
                                  Premiere = Premiere,
                                  Seasons = Seasons,
                                  Runtime = Runtime,
@@ -474,7 +474,7 @@ netflix_originals_27 <- transmute(netflix_originals_27,
 netflix_originals_28 <- read_csv("../datasets/netflix/shows/table-28.csv")
 netflix_originals_28 <- transmute(netflix_originals_28,
                                   Title = Title,
-                                  Genre = paste(Genre, " Children Kids Family"),
+                                  Genre = paste(Genre, " Children Family"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -671,7 +671,7 @@ netflix_originals_41 <- transmute(netflix_originals_41,
 netflix_originals_42 <- read_csv("../datasets/netflix/shows/table-42.csv")
 netflix_originals_42 <- transmute(netflix_originals_42,
                                   Title = Title,
-                                  Genre = "Children Kids Family",
+                                  Genre = "Children Family",
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -1223,7 +1223,7 @@ netflix_originals_80 <- transmute(netflix_originals_80,
 netflix_originals_81 <- read_csv("../datasets/netflix/exclusives/table-5.csv")
 netflix_originals_81 <- transmute(netflix_originals_81,
                                   Title = `International title`,
-                                  Genre = paste(Genre, " Children Kids Family"),
+                                  Genre = paste(Genre, " Children Family"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1892,7 +1892,7 @@ amazon_originals_3 <- transmute(amazon_originals_3,
 amazon_originals_4 <- read_csv("../datasets/amazon/shows/table-4.csv")
 amazon_originals_4 <- transmute(amazon_originals_4,
                                 Title = Title,
-                                Genre = paste(Genre, " Kids Family Children Animation"),
+                                Genre = paste(Genre, " Family Children Animation"),
                                 Premiere = Premiere,
                                 Seasons = `Seasons/episodes`,
                                 Runtime = NA,
@@ -2364,7 +2364,7 @@ hulu_originals_3 <- transmute(hulu_originals_3,
 hulu_originals_4 <- read_csv("../datasets/hulu/shows/table-4.csv")
 hulu_originals_4 <- transmute(hulu_originals_4,
                               Title = Title,
-                              Genre = paste(Genre, " Children Kids Family"),
+                              Genre = paste(Genre, " Children Family"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2532,7 +2532,7 @@ hulu_originals_15 <- transmute(hulu_originals_15,
 hulu_originals_16 <- read_csv("../datasets/hulu/shows/table-16.csv")
 hulu_originals_16 <- transmute(hulu_originals_16,
                               Title = Title,
-                              Genre = paste(Genre, " Kids Family"),
+                              Genre = paste(Genre, " Family"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -3257,7 +3257,7 @@ apple_originals_3 <- transmute(apple_originals_3,
 apple_originals_4 <- read_csv("../datasets/apple/shows/table-4.csv")
 apple_originals_4 <- transmute(apple_originals_4,
                                Title = Title,
-                               Genre = paste(Genre, " Kids Family Children"),
+                               Genre = paste(Genre, " Family Children"),
                                Premiere = Premiere,
                                Seasons = Seasons,
                                Runtime = Runtime,
@@ -3341,7 +3341,7 @@ apple_originals_9 <- transmute(apple_originals_9,
 apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv")
 apple_originals_10 <- transmute(apple_originals_10,
                                 Title = Title,
-                                Genre = paste(Genre, " Kids Family Children Animation"),
+                                Genre = paste(Genre, " Family Children Animation"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -3894,8 +3894,8 @@ natural_joined <- mutate(natural_joined, `Format.x` = ifelse(is.na(`Format.x`), 
 natural_joined <- mutate(natural_joined, `Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
 #natural_joined <- mutate(natural_joined, `Status.x` = statuses[[`Status.x`[1]]])
 natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
-natural_joined <- mutate(natural_joined, Min_Time = ifelse(is.na(Min_Time), Runtime, Min_Time))
-natural_joined <- mutate(natural_joined, Max_Time = ifelse(is.na(Max_Time), Runtime, Max_Time))
+natural_joined <- mutate(natural_joined, Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
+natural_joined <- mutate(natural_joined, Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
 
 natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y", "Runtime"))]
 
@@ -3924,13 +3924,14 @@ content <- content[, !(names(content) %in% c("Year.y", "Age.y", "IMDb.y", "Rotte
 
 content <- rename(content, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
 
-content <- mutate(content, Month = ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m"))))
-content <- mutate(content, Day = ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d"))))
+content <- mutate(content, Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
+content <- mutate(content, Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
 
 content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
 content <- mutate(content, Origin = parse_factor(ifelse(is.na(Origin), "Distribution", Origin), levels = origins))
 
-(content <- mutate(content, Format = formats[Format], Status = statuses[Status]))
+content <- mutate(content, Format = parse_factor(formats[Format], levels = formats))
+content <- mutate(content, Status = parse_factor(statuses[Status], levels = statuses))
 
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
