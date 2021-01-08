@@ -3917,7 +3917,6 @@ content <- mutate(content, `Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Pri
 content <- mutate(content, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
 content <- mutate(content, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
 content <- mutate(content, `Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
-#content <- mutate(content, `Format.x` = formats[[`Format.x`[1]]])
 content <- mutate(content, `Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
 #content <- mutate(content, `Status.x` = statuses[[`Status.x`[1]]])
 
@@ -3930,6 +3929,8 @@ content <- mutate(content, Day = ifelse(is.na(Premiere), NA, as.numeric(format(P
 
 content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknow", Age), levels = ages))
 content <- mutate(content, Origin = parse_factor(ifelse(is.na(Origin), "Distribution", Origin), levels = origins))
+
+content <- mutate(content, Format = formats[[Format]])
 
 #parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins)
 
