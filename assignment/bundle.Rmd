@@ -13,8 +13,6 @@ library(tidyverse)
 library(forcats)
 library(readxl)
 library(knitr)
-install.packages("viridis")
-library(viridis)
 ```
 
 ## Shared
