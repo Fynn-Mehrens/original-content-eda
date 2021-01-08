@@ -3930,7 +3930,7 @@ content <- mutate(content, Day = ifelse(is.na(Premiere), NA, as.numeric(format(P
 content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
 content <- mutate(content, Origin = parse_factor(ifelse(is.na(Origin), "Distribution", Origin), levels = origins))
 
-content <- mutate(content, Format = formats[[Format]])
+content <- mutate(content, Format = formats[[Format[1]]])
 
 #parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins)
 
