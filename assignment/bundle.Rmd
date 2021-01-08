@@ -3573,6 +3573,28 @@ movies <- transmute(movies,
 movies
 ```
 
+## Import Shows
+
+```{r}
+shows <- read_csv("../datasets/shows.csv")
+
+shows <- transmute(shows,
+                   Title = Title,
+                   Year = Year,
+                   Age = Age,
+                   IMDb = IMDb,
+                   `Rotten Tomatoes` = `Rotten Tomatoes`,
+                   Netflix = Netflix > 0,
+                   Hulu = Hulu > 0,
+                   `Prime Video` = `Prime Video` > 0,
+                   `Disney+` = `Disney+` > 0,
+                   `Apple TV+` = FALSE,
+                   Format = parse_factor("Series", levels = formats),
+                   Status = parse_factor("Ended", levels = statuses))
+
+shows
+```
+
 ## Transmute Netflix
 
 ### Transmutation of the given Netflix series and movie table
