@@ -3796,6 +3796,7 @@ content %<>% mutate(Format = parse_factor(formats[Format], levels = formats))
 content %<>% mutate(Status = parse_factor(statuses[Status], levels = statuses))
 content %<>% mutate(`Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
 content %<>% mutate(Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
+content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Seasons, 1), Seasons))
 
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
