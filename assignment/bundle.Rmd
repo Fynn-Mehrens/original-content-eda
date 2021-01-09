@@ -1,6 +1,6 @@
 ---
-title: "bundle"
-author: "grevend"
+title: "The future of Original Content Programming"
+author: "David Aimé Greven "
 date: "4 1 2021"
 output: html_document
 ---
@@ -13,9 +13,9 @@ To do this analysis, we are using scraped data from various Wikipedia pages. For
 
 The web scraping tool can be found here:
 
-* [](https://wikitable2csv.ggor.de/)
+* [Wiki Table to CSV online converter](https://wikitable2csv.ggor.de/)
 
-For the Netflix sub data set these web pages have been scraped:
+For the **Netflix** sub data set these web pages have been scraped:
 
 * [List of Netflix Original Programming](https://en.wikipedia.org/wiki/List_of_Netflix_original_programming)
 * [List of ended Netflix Original Programming](https://en.wikipedia.org/wiki/List_of_ended_Netflix_original_programming)
@@ -25,17 +25,25 @@ For the Netflix sub data set these web pages have been scraped:
 * [List of Netflix Original Films 2019](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2019))
 * [List of Netflix Original Films 2020](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2020))
 * [List of Netflix Original Films 2021](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2021%E2%80%93))
-* [List of Netflix original stand-up comedy](https://en.wikipedia.org/wiki/List_of_Netflix_original_stand-up_comedy_specials)
-* [List of Netflix exclusive international distribution programming](https://en.wikipedia.org/wiki/List_of_Netflix_exclusive_international_distribution_programming)
+* [List of Netflix Original Stand-up Comedy](https://en.wikipedia.org/wiki/List_of_Netflix_original_stand-up_comedy_specials)
+* [List of Netflix exclusive International Distribution Programming](https://en.wikipedia.org/wiki/List_of_Netflix_exclusive_international_distribution_programming)
 
-For the Amazon Prime Video sub data set these web pages have been scraped:
+For the **Amazon Prime Video** sub data set these web pages have been scraped:
 
-For the Hulu sub data set these web pages have been scraped:
+* [List of Amazon Original Programming](https://en.wikipedia.org/wiki/List_of_Amazon_original_programming)
 
-For the Disney+ sub data set these web pages have been scraped:
+For the **Hulu** sub data set these web pages have been scraped:
 
-For the Apple TV+ sub data set these web pages have been scraped:
+* [List of Hulu Original Programming](https://en.wikipedia.org/wiki/List_of_Hulu_original_programming)
 
+For the **Disney+** sub data set these web pages have been scraped:
+
+* [List of Disney+ Original Programming](https://en.wikipedia.org/wiki/List_of_Disney%2B_original_programming)
+* [List of Disney+ Original Films](https://en.wikipedia.org/wiki/List_of_Disney%2B_original_films)
+
+For the **Apple TV+** sub data set these web pages have been scraped:
+
+* [List of Apple TV+ Original Programming](https://en.wikipedia.org/wiki/List_of_Apple_TV%2B_original_programming)
 
 ## Bundle
 
