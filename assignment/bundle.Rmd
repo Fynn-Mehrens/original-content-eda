@@ -110,7 +110,9 @@ netflix_originals_1 <- transmute(netflix_originals_1,
                                  Origin = "Original",
                                  Network = NA,
                                  Region = NA)
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 netflix_originals_2 <- read_csv("../datasets/netflix/shows/table-2.csv")
 netflix_originals_2 <- transmute(netflix_originals_2,
                                  Title = Title,
@@ -1864,7 +1866,9 @@ amazon_originals_1 <- transmute(amazon_originals_1,
                                 Origin = "Original",
                                 Network = NA,
                                 Region = NA)
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 amazon_originals_2 <- read_csv("../datasets/amazon/shows/table-2.csv")
 amazon_originals_2 <- transmute(amazon_originals_2,
                                 Title = Title,
@@ -2336,7 +2340,9 @@ hulu_originals_1 <- transmute(hulu_originals_1,
                               Origin = "Original",
                               Network = NA,
                               Region = NA)
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 hulu_originals_2 <- read_csv("../datasets/hulu/shows/table-2.csv")
 hulu_originals_2 <- transmute(hulu_originals_2,
                               Title = Title,
@@ -2759,8 +2765,6 @@ hulu_originals <- rbind(hulu_originals, hulu_originals_27)
 hulu_originals <- rbind(hulu_originals, hulu_originals_28)
 hulu_originals <- rbind(hulu_originals, hulu_originals_29)
 
-unique(select(hulu_originals, Status))
-
 hulu_originals <- transmute(hulu_originals, 
                             Title = Title,
                             Genre = Genre,
@@ -2796,7 +2800,9 @@ disney_originals_1 <- transmute(disney_originals_1,
                                 Origin = "Original",
                                 Network = NA,
                                 Region = NA)
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 disney_originals_2 <- read_csv("../datasets/disney/shows/table-2.csv")
 disney_originals_2 <- transmute(disney_originals_2,
                                 Title = Title,
@@ -3192,8 +3198,6 @@ disney_originals <- rbind(disney_originals, disney_originals_26)
 disney_originals <- rbind(disney_originals, disney_originals_27)
 disney_originals <- rbind(disney_originals, disney_originals_28)
 
-unique(select(disney_originals, Status))
-
 disney_originals <- transmute(disney_originals, 
                               Title = Title,
                               Genre = Genre,
@@ -3229,7 +3233,9 @@ apple_originals_1 <- transmute(apple_originals_1,
                                Origin = "Original",
                                Network = NA,
                                Region = NA)
+```
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv")
 apple_originals_2 <- transmute(apple_originals_2,
                                Title = Title,
@@ -3530,8 +3536,6 @@ apple_originals <- rbind(apple_originals, apple_originals_18)
 apple_originals <- rbind(apple_originals, apple_originals_19)
 apple_originals <- rbind(apple_originals, apple_originals_20)
 apple_originals <- rbind(apple_originals, apple_originals_21)
-
-unique(select(apple_originals, Status))
 
 apple_originals <- transmute(apple_originals, 
                              Title = Title,
@@ -4043,79 +4047,79 @@ filter(content, !is.na(Service))
 Now that the data set is fully combined, we should add documentation to the columns, to describe what they are representing.
 
 * Title
-  * Data type: <chr>
+  * Data type: chr
   * Description: The title of the series or movie (potentially followed by listing only specific seasons, because the streaming service only acquired rights for these specific seasons)
 * Year
-  * Data type: <int>
+  * Data type: int
   * Description: The year in which the series or movie originally premiered
 * Age
-  * Data type: <fctr>
+  * Data type: fctr
   * Description: The age restriction of the series or movie (for unification purposes 7+ & 13+ have been converted to 6+ and 12+)
 * IMDb
-  * Data type: <dbl>
+  * Data type: dbl
   * Description: The IMDb (Internet Movie Database) rating, values from 1..10
 * Rotten Tomatoes
-  * Data type: <int>
+  * Data type: int
   * Description: The Rotten Tomatoes score of the series or movie
 * Netflix
-  * Data type: <lgl>
+  * Data type: lgl
   * Description: Identifier for whether the series or movie is available for streaming on Netflix
 * Hulu
-  * Data type: <lgl>
+  * Data type: lgl
   * Description: Identifier for whether the series or movie is available for streaming on Hulu
 * Prime Video
-  * Data type: <lgl>
+  * Data type: lgl
   * Description: Identifier for whether the series or movie is available for streaming on Amazon Prime Video
 * Disney+
-  * Data type: <lgl>
+  * Data type: lgl
   * Description: Identifier for whether the series or movie is available for streaming on Disney+
 * Apple TV+
-  * Data type: <lgl>
+  * Data type: lgl
   * Description: Identifier for whether the series or movie is available for streaming on Apple TV+
 * Format
-  * Data type: <fctr>
+  * Data type: fctr
   * Description: Format of the production, can be of following types: Series, Film, Miniseries, Special
 * Status
-  * Data type: <fctr>
+  * Data type: fctr
   * Description: Status of the production, can be of following types: Ended, Renewed, Pending, Miniseries, Event, Development, Distribution, Special, NA
 * Genre
-  * Data type: <chr>
+  * Data type: chr
   * Description: List of genres of the series or movie (separated by " / ")
 * Director
-  * Data type: <chr>
+  * Data type: chr
   * Description: List of the names of directors of the series or movie (separated by " / ")
 * Country
-  * Data type: <chr>
+  * Data type: chr
   * Description: List of the countries of the series or movie (separated by " / ")
 * Language
-  * Data type: <chr>
+  * Data type: chr
   * Description: List of the languages the series or movie was originally released in (separated by " / ")
 * Episodes
-  * Data type: <int>
+  * Data type: int
   * Description: Number of episodes
 * Seasons
-  * Data type: <int>
+  * Data type: int
   * Description: Number of seasons
 * Min_Time
-  * Data type: <int>
+  * Data type: int
   * Description: The smallest runtime that can be found (min and max runtime are equal for movies or productions with only one episode)
 * Max_Time
-  * Data type: <int>
+  * Data type: int
   * Description: The largest runtime that can be found (min and max runtime are equal for movies or productions with only one episode)
 * Service
-  * Data type: <fctr>
+  * Data type: fctr
   * Description: The streaming service that originally produced the content (value is NA if the production is no original content), can be of following types: Netflix, Amazon Prime Video, Hulu, Disney+, Apple TV+
 * Origin
-  * Data type: <fctr>
+  * Data type: fctr
   * Description: The origin of the production, can be of following types: Original, Distribution, Continuation, NA (no valid info found)
 * Network
-  * Data type: <fctr>
+  * Data type: fctr
   * Description: The network that (helped) produce the series or movie, usually mentioned if it is a co-production or distribution
 * Month
-  * Data type: <int>
+  * Data type: int
   * Description: The month in which the series or movie originally premiered
 * Day
-  * Data type: <int>
+  * Data type: int
   * Description: The day on which the series or movie originally premiered
 
 ## Add other missing Apple TV+ values
