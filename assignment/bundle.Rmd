@@ -4013,7 +4013,7 @@ content <- mutate(content, Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
 
-## Add missing Apple TV+ original ratings
+## Add missing Apple TV+ original age ratings
 
 ```{r}
 apple_ages <- read_csv("../datasets/apple_ages.csv")
@@ -4022,9 +4022,13 @@ apple_ages <- mutate(apple_ages, Age = parse_factor(Age, levels = ages))
 content <- full_join(content, apple_ages, by = "Title")
 content <- mutate(content, `Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`) | `Age.x` == "unknown", parse_factor(ifelse(is.na(`Age.y`), "unknown", `Age.y`)), `Age.x`)], levels = ages))
 content <- content[, !(names(content) %in% c("Age.y"))]
-(content <- rename(content, Age = `Age.x`))
+content <- rename(content, Age = `Age.x`)
 
 rm("apple_ages")
+
+content <- mutate(content, Age = parse_factor(ages[ifelse(Age == "7+", parse_factor("6+", levels = ages), Age)], levels = ages))
+content <- mutate(content, Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("12+", levels = ages), Age)], levels = ages))
+(content <- mutate(content, Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
 ```
 
 ## Add other missing Apple TV+ values
