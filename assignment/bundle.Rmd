@@ -4134,6 +4134,26 @@ content <- mutate(content, `Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`
 
 ## Data Exploration
 
+### Data exploration functions
+
+```{r}
+age_histogram_original <- function(year, service) {
+  content %>% 
+  filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+    labs(fill = "Age")
+}
+
+age_histogram <- function(format) {
+  content %>% 
+  filter(between(Year, 2006, 2020), Format == format) %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+    labs(fill = "Age")
+}
+```
+
 ### Production of original content throughout the years
 
 To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
@@ -4332,176 +4352,44 @@ ggplot(data = genre_count) +
 ### Age rating for all content
 
 ```{r}
-ggplot(data = content) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+content %>% 
+  filter(between(Year, 2006, 2020)) %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+    labs(fill = "Age")
 
-ggplot(data = filter(content, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-### Age rating for all Netflix content
-
-```{r}
-ggplot(data = filter(content, Netflix == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Netflix == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Netflix == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram("Series")
+age_histogram("Film")
 ```
 
 ### Age rating for all original Netflix content
 
 ```{r}
-ggplot(data = filter(content, Service == "Netflix", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Netflix", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Netflix", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Amazon Prime Video content
-
-```{r}
-ggplot(data = filter(content, `Prime Video` == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Prime Video` == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Prime Video` == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2007, "Netflix")
 ```
 
 ### Age rating for all original Amazon Prime Video content
 
 ```{r}
-ggplot(data = filter(content, Service == "Amazon Prime Video", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Hulu content
-
-```{r}
-ggplot(data = filter(content, Hulu == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Hulu == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Hulu == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2006, "Amazon Prime Video")
 ```
 
 ### Age rating for all original Hulu content
 
 ```{r}
-ggplot(data = filter(content, Service == "Hulu", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Hulu", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Hulu", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Disney+ content
-
-```{r}
-ggplot(data = filter(content, `Disney+` == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Disney+` == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Disney+` == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2007, "Hulu")
 ```
 
 ### Age rating for all original Disney+ content
 
 ```{r}
-ggplot(data = filter(content, Service == "Disney+", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Disney+", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Disney+", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Apple TV+ content
-
-```{r}
-ggplot(data = filter(content, `Apple TV+` == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Apple TV+` == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Apple TV+` == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2019, "Disney+")
 ```
 
 ### Age rating for all original Apple TV+ content
 
 ```{r}
-ggplot(data = filter(content, Service == "Apple TV+", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Apple TV+", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Apple TV+", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2019, "Apple TV+")
 ```
 
 ### Exporting the data frame to CSV
