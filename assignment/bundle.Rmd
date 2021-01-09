@@ -87,7 +87,7 @@ origins <- c("Continuation", "Distribution", "Original")
 
 services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
 
-ages <- c("7+", "13+",	"16+", "18+", "all", "unknown")
+ages <- c("4+", "5+", "6+", "7+", "8+", "10+", "11+", "12+", "13+", "14+", "15+",	"16+", "18+", "all", "unknown")
 ```
 
 ## Import Netflix
@@ -3653,6 +3653,8 @@ netflix <- transmute(netflix_originals,
                                )
 
 netflix
+
+rm("netflix_originals")
 ```
 
 ## Transmute Amazon Prime Video
@@ -3707,6 +3709,8 @@ amazon <- transmute(amazon_originals,
                                )
 
 amazon
+
+rm("amazon_originals")
 ```
 
 ## Transmute Hulu
@@ -3761,6 +3765,8 @@ hulu <- transmute(hulu_originals,
                                )
 
 hulu
+
+rm("hulu_originals")
 ```
 
 ## Transmute Disney+
@@ -3815,6 +3821,8 @@ disney <- transmute(disney_originals,
                                )
 
 disney
+
+rm("disney_originals")
 ```
 
 ## Transmute Apple TV+
@@ -3869,6 +3877,8 @@ apple <- transmute(apple_originals,
                                )
 
 apple
+
+rm("apple_originals")
 ```
 
 ## Combine Services
@@ -3890,9 +3900,7 @@ natural_joined <- full_join(movies, original_content, by = "Title")
 natural_joined <- mutate(natural_joined, `Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
 natural_joined <- mutate(natural_joined, `Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
 natural_joined <- mutate(natural_joined, `Format.x` = ifelse(is.na(`Format.x`), `Format.y`, `Format.x`))
-#natural_joined <- mutate(natural_joined, `Format.x` = formats[[`Format.x`[1]]])
 natural_joined <- mutate(natural_joined, `Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
-#natural_joined <- mutate(natural_joined, `Status.x` = statuses[[`Status.x`[1]]])
 natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
 natural_joined <- mutate(natural_joined, Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
 natural_joined <- mutate(natural_joined, Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
@@ -3918,7 +3926,6 @@ content <- mutate(content, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`,
 content <- mutate(content, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
 content <- mutate(content, `Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
 content <- mutate(content, `Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
-#content <- mutate(content, `Status.x` = statuses[[`Status.x`[1]]])
 
 content <- content[, !(names(content) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
 
@@ -3928,10 +3935,12 @@ content <- mutate(content, Month = as.integer(ifelse(is.na(Premiere), NA, as.num
 content <- mutate(content, Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
 
 content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
-content <- mutate(content, Origin = parse_factor(ifelse(is.na(Origin), "Distribution", Origin), levels = origins))
+content <- mutate(content, Origin = parse_factor(origins[ifelse(is.na(Origin), parse_factor("Distribution", levels = origins), Origin)], levels = origins))
 
 content <- mutate(content, Format = parse_factor(formats[Format], levels = formats))
 content <- mutate(content, Status = parse_factor(statuses[Status], levels = statuses))
+
+content <- mutate(content, `Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
 
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
@@ -4006,7 +4015,6 @@ series_and_movies
 
 percentage_of_series <- function(dataframe) {
   series_percentages <- data.frame(Service = c(), Premiere_Year = c(), Series_Percentage = c())
-  services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
   years <- c(2000:2020)
   for (service in services) {
     service_rows <- filter(dataframe, Service == service)
@@ -4077,11 +4085,6 @@ ggplot(data = filter(content, Format == "Series")) +
 ggplot(data = filter(content, Format == "Film")) +
   geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
   labs(fill = "Age")
-
-unique(select(content, Format))
-unique(select(content, Age))
-unique(select(content, Origin))
-unique(select(content, Service))
 ```
 ### Age rating for all Netflix content
 
