@@ -58,6 +58,7 @@ The first code chunk makes sure, that all the required libraries are installed. 
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(forcats)
+library(magrittr)
 library(readxl)
 library(knitr)
 install.packages("lazyeval")
@@ -3952,11 +3953,11 @@ Now that the data set is fully combined, we should add documentation to the colu
 ## Add other missing Apple TV+ values
 
 ```{r}
-content <- mutate(content, Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
-content <- mutate(content, Hulu = ifelse(is.na(Hulu), FALSE, Hulu))
-content <- mutate(content, `Prime Video` = ifelse(is.na(`Prime Video`), FALSE, `Prime Video`))
-content <- mutate(content, `Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
-(content <- mutate(content, `Apple TV+` = ifelse(Service == "Apple TV+", TRUE, `Apple TV+`)))
+content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
+content %<>% mutate(Hulu = ifelse(is.na(Hulu), FALSE, Hulu))
+content %<>% mutate(`Prime Video` = ifelse(is.na(`Prime Video`), FALSE, `Prime Video`))
+content %<>% mutate(`Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
+(content %<>% mutate(`Apple TV+` = ifelse(Service == "Apple TV+", TRUE, `Apple TV+`)))
 ```
 
 ## Data Exploration
