@@ -4025,9 +4025,97 @@ content <- content[, !(names(content) %in% c("Age.y"))]
 rm("apple_ages")
 ```
 
+## Dataset Documentation
+
+```{r}
+unique(select(content, Origin))
+
+filter(content, !is.na(Service))
+```
+
+
+Now that the data set is fully combined, we should add documentation to the columns, to describe what they are representing.
+
+* Title
+  * Data type: <chr>
+  * Description: The title of the series or movie (potentially followed by listing only specific seasons, because the streaming service only acquired rights for these specific seasons)
+* Year
+  * Data type: <int>
+  * Description: The year in which the series or movie originally premiered
+* Age
+  * Data type: <fctr>
+  * Description: The age restriction of the series or movie (for unification purposes 7+ & 13+ have been converted to 6+ and 12+)
+* IMDb
+  * Data type: <dbl>
+  * Description: The IMDb (Internet Movie Database) rating, values from 1..10
+* Rotten Tomatoes
+  * Data type: <int>
+  * Description: The Rotten Tomatoes score of the series or movie
+* Netflix
+  * Data type: <lgl>
+  * Description: Identifier for whether the series or movie is available for streaming on Netflix
+* Hulu
+  * Data type: <lgl>
+  * Description: Identifier for whether the series or movie is available for streaming on Hulu
+* Prime Video
+  * Data type: <lgl>
+  * Description: Identifier for whether the series or movie is available for streaming on Amazon Prime Video
+* Disney+
+  * Data type: <lgl>
+  * Description: Identifier for whether the series or movie is available for streaming on Disney+
+* Apple TV+
+  * Data type: <lgl>
+  * Description: Identifier for whether the series or movie is available for streaming on Apple TV+
+* Format
+  * Data type: <fctr>
+  * Description: Format of the production, can be of following types: Series, Film, Miniseries, Special
+* Status
+  * Data type: <fctr>
+  * Description: Status of the production, can be of following types: Ended, Renewed, Pending, Miniseries, Event, Development, Distribution, Special, NA
+* Genre
+  * Data type: <chr>
+  * Description: List of genres of the series or movie (separated by " / ")
+* Director
+  * Data type: <chr>
+  * Description: List of the names of directors of the series or movie (separated by " / ")
+* Country
+  * Data type: <chr>
+  * Description: List of the countries of the series or movie (separated by " / ")
+* Language
+  * Data type: <chr>
+  * Description: List of the languages the series or movie was originally released in (separated by " / ")
+* Episodes
+  * Data type: <int>
+  * Description: Number of episodes
+* Seasons
+  * Data type: <int>
+  * Description: Number of seasons
+* Min_Time
+  * Data type: <int>
+  * Description: The smallest runtime that can be found (min and max runtime are equal for movies or productions with only one episode)
+* Max_Time
+  * Data type: <int>
+  * Description: The largest runtime that can be found (min and max runtime are equal for movies or productions with only one episode)
+* Service
+  * Data type: <fctr>
+  * Description: The streaming service that originally produced the content (value is NA if the production is no original content), can be of following types: Netflix, Amazon Prime Video, Hulu, Disney+, Apple TV+
+* Origin
+  * Data type: <fctr>
+  * Description: The origin of the production, can be of following types: Original, Distribution, Continuation, NA (no valid info found)
+* Network
+  * Data type: <fctr>
+  * Description: The network that (helped) produce the series or movie, usually mentioned if it is a co-production or distribution
+* Month
+  * Data type: <int>
+  * Description: The month in which the series or movie originally premiered
+* Day
+  * Data type: <int>
+  * Description: The day on which the series or movie originally premiered
+
+
 ## Data Exploration
 
-### Production of original content thorughout the years
+### Production of original content throughout the years
 
 To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
 
