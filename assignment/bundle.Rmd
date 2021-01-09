@@ -70,7 +70,7 @@ The upcoming chapter deals with the import of the scraped and downloaded CSVs in
 
 ### Custom functions for Import Phase
 
-To exclude specific rows that
+To exclude specific rows that do not match one of the specified statuses formats or origins, the only_keep() function was written to ease the access of parsing the factors after matching parts of the previous entry to unify the content of the column.
 
 ```{r}
 only_keep <- function(row, regex, factor) {
