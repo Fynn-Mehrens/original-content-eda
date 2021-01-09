@@ -11,9 +11,22 @@ As the market for original content from various streaming services has grown thr
 
 To do this analysis, we are using scraped data from various Wikipedia pages. For this purpose we have been using an external web scraper that scrapes all the <table> elements from the web page and converts them into a CSV format.
 
-The web scraping tool can be found here: 
+The web scraping tool can be found here:
+
+* [](https://wikitable2csv.ggor.de/)
 
 For the Netflix sub data set these web pages have been scraped:
+
+* [List of Netflix Original Programming](https://en.wikipedia.org/wiki/List_of_Netflix_original_programming)
+* [List of ended Netflix Original Programming](https://en.wikipedia.org/wiki/List_of_ended_Netflix_original_programming)
+* [Lists of Netflix Original Films](https://en.wikipedia.org/wiki/Lists_of_Netflix_original_films)
+* [List of Netflix Original Films 2015](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2015%E2%80%932017))
+* [List of Netflix Original Films 2018](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2018))
+* [List of Netflix Original Films 2019](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2019))
+* [List of Netflix Original Films 2020](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2020))
+* [List of Netflix Original Films 2021](https://en.wikipedia.org/wiki/List_of_Netflix_original_films_(2021%E2%80%93))
+* [List of Netflix original stand-up comedy](https://en.wikipedia.org/wiki/List_of_Netflix_original_stand-up_comedy_specials)
+* [List of Netflix exclusive international distribution programming](https://en.wikipedia.org/wiki/List_of_Netflix_exclusive_international_distribution_programming)
 
 For the Amazon Prime Video sub data set these web pages have been scraped:
 
