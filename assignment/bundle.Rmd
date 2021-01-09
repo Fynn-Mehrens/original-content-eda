@@ -87,7 +87,7 @@ origins <- c("Continuation", "Distribution", "Original")
 
 services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
 
-ages <- c("4+", "5+", "6+", "7+", "8+", "10+", "11+", "12+", "13+", "14+", "15+",	"16+", "18+", "all", "unknown")
+ages <- c("0+", "6+", "7+", "12+", "13+", "16+", "18+", "all", "unknown")
 ```
 
 ## Import Netflix
@@ -3943,6 +3943,20 @@ content <- mutate(content, Status = parse_factor(statuses[Status], levels = stat
 content <- mutate(content, `Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
 
 (content <- content[, !(names(content) %in% c("Premiere"))])
+```
+
+## Add missing Apple TV+ original ratings
+
+```{r}
+apple_ages <- read_csv("../datasets/apple_ages.csv")
+apple_ages <- mutate(apple_ages, Age = parse_factor(Age, levels = ages))
+
+content <- full_join(content, apple_ages, by = "Title")
+content <- mutate(content, `Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`), `Age.y`, `Age.x`)], levels = ages))
+content <- content[, !(names(content) %in% c("Age.y"))]
+(content <- rename(content, Age = `Age.x`))
+
+rm("apple_ages")
 ```
 
 ## Data Exploration
