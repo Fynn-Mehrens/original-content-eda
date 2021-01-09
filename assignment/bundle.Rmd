@@ -4046,6 +4046,7 @@ original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
 
 ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
   geom_bar() +
+  theme(title = element_text(size = 14), axis.title = element_text(size = 12), legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
   labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series") +
   scale_fill_manual(values = original_colors)
 ```
@@ -4142,9 +4143,9 @@ prem_month <- filter(mutate(original_content,
                                                                                months(lubridate::month(Premiere) - 1), label = TRUE, abbr = TRUE))),
                               lubridate::year(Premiere) != 2021, !is.na(lubridate::year(Premiere)))
 
-ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),
-                                                fill = as.factor(Service))) +
+ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),fill = as.factor(Service))) +
   geom_bar(width = 0.85) +
+  theme(title = element_text(size = 14), axis.title = element_text(size = 12), legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
   labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series") +
   scale_fill_manual(values = original_colors)
 ```
@@ -4187,7 +4188,8 @@ ggplot() +
   
 ggplot() +
   geom_line(data = percentage_of_series(series_and_movies), mapping = aes(x = Premiere_Year, y = Percentage, colour = as.factor(Service))) +
-  labs(colour = "Streaming Services", title = "Ratio of series to movies", x = "Year", y = "% of series") +
+  theme(title = element_text(size = 14), axis.title = element_text(size = 12), legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
+  labs(colour = "Streaming Services", title = "% of series compared to movies", x = "Release Year", y = "% of series") +
   scale_color_manual(values = original_colors)
 ```
 
@@ -4215,7 +4217,7 @@ genre_count <- as.tibble(top_x_genres(genre_frame, 20) %>% summarise(Genre, Entr
 
 ggplot(data = genre_count) +
   geom_bar(mapping = aes(x = reorder(Genre, desc(Entries)), y = Entries, fill = Entries), stat = "identity", show.legend = FALSE) +
-  theme(title = element_text(size = 16), axis.title.x = element_text(size = 12), axis.text.y = element_text(size = 11)) +
+  theme(title = element_text(size = 14), axis.title.x = element_text(size = 12), axis.text.y = element_text(size = 11)) +
   labs(title = "Top 20 Genres - Original Content", x = "", y = "No. of original content productions") +
   coord_flip()
 ```
