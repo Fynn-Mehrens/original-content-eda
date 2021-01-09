@@ -4067,7 +4067,7 @@ summary(linear_regression)
 plot(linear_regression)
 ```
 
-### Change in content origin over the years
+### Change in Netflix content origin over the years
 
 ```{r}
 netflix_origin_change <- content %>% 
@@ -4077,6 +4077,58 @@ netflix_origin_change <- content %>%
   mutate(percentage = n / sum(n))
 
 ggplot(netflix_origin_change, mapping = aes(x = Year, y = percentage, fill = factor(Origin))) +
+  geom_area()
+```
+
+### Change in Amazon Prime Video content origin over the years
+
+```{r}
+amazon_origin_change <- content %>% 
+  filter(Year >= 2006, `Prime Video` = TRUE) %>% 
+  group_by(Year, Origin) %>% 
+  summarise(n = n()) %>% 
+  mutate(Percentage = n / sum(n))
+
+ggplot(amazon_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
+  geom_area()
+```
+
+### Change in Hulu content origin over the years
+
+```{r}
+hulu_origin_change <- content %>% 
+  filter(Year >= 2007, `Hulu` = TRUE) %>% 
+  group_by(Year, Origin) %>% 
+  summarise(n = n()) %>% 
+  mutate(Percentage = n / sum(n))
+
+ggplot(hulu_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
+  geom_area()
+```
+
+### Change in Disney+ content origin over the years
+
+```{r}
+disney_origin_change <- content %>% 
+  filter(Year >= 2019, `Disney+` = TRUE) %>% 
+  group_by(Year, Origin) %>% 
+  summarise(n = n()) %>% 
+  mutate(Percentage = n / sum(n))
+
+ggplot(disney_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
+  geom_area()
+```
+
+### Change in Apple TV+ content origin over the years
+
+```{r}
+apple_origin_change <- content %>% 
+  filter(Year >= 2019, `Apple TV+` = TRUE) %>% 
+  group_by(Year, Origin) %>% 
+  summarise(n = n()) %>% 
+  mutate(Percentage = n / sum(n))
+
+ggplot(apple_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
   geom_area()
 ```
 
