@@ -3785,9 +3785,9 @@ The goal now is to combine the results from the transmutation into one large dat
 
 ```{r}
 original_content <- rbind(netflix, amazon)
-original_content <- rbind(original_content, hulu)
-original_content <- rbind(original_content, disney)
-(original_content <- rbind(original_content, apple))
+original_content %<>% rbind(hulu)
+original_content %<>% rbind(disney)
+(original_content %<>% rbind(apple))
 ```
 
 ## Join with Movies
@@ -3795,17 +3795,17 @@ original_content <- rbind(original_content, disney)
 ```{r}
 natural_joined <- full_join(movies, original_content, by = "Title")
 
-natural_joined <- mutate(natural_joined, `Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
-natural_joined <- mutate(natural_joined, `Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
-natural_joined <- mutate(natural_joined, `Format.x` = ifelse(is.na(`Format.x`), `Format.y`, `Format.x`))
-natural_joined <- mutate(natural_joined, `Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
-natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
-natural_joined <- mutate(natural_joined, Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
-natural_joined <- mutate(natural_joined, Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
+natural_joined %<>% mutate(`Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
+natural_joined %<>% mutate(`Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
+natural_joined %<>% mutate(`Format.x` = ifelse(is.na(`Format.x`), `Format.y`, `Format.x`))
+natural_joined %<>% mutate(`Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
+natural_joined %<>% mutate(Country = ifelse(is.na(Country), Region, Country))
+natural_joined %<>% mutate(Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
+natural_joined %<>% mutate(Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
 
 natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y", "Runtime"))]
 
-(natural_joined <- rename(natural_joined, Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
+(natural_joined %<>% rename(Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
 ```
 
 ## Join with Shows
@@ -3813,34 +3813,30 @@ natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "La
 ```{r}
 content <- full_join(shows, natural_joined, by = "Title")
 
-content <- mutate(content, `Year.x` = as.integer(ifelse(is.na(`Year.x`), `Year.y`, `Year.x`)))
-content <- mutate(content, `Age.x` = ifelse(is.na(`Age.x`), `Age.y`, `Age.x`))
-content <- mutate(content, `IMDb.x` = ifelse(is.na(`IMDb.x`), `IMDb.y`, `IMDb.x`))
-content <- mutate(content, `Rotten Tomatoes.x` = ifelse(is.na(`Rotten Tomatoes.x`), `Rotten Tomatoes.y`, `Rotten Tomatoes.x`))
-content <- mutate(content, `Netflix.x` = ifelse(is.na(`Netflix.x`), `Netflix.y`, `Netflix.x`))
-content <- mutate(content, `Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
-content <- mutate(content, `Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
-content <- mutate(content, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
-content <- mutate(content, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
-content <- mutate(content, `Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
-content <- mutate(content, `Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
+content %<>% mutate(`Year.x` = as.integer(ifelse(is.na(`Year.x`), `Year.y`, `Year.x`)))
+content %<>% mutate(`Age.x` = ifelse(is.na(`Age.x`), `Age.y`, `Age.x`))
+content %<>% mutate(`IMDb.x` = ifelse(is.na(`IMDb.x`), `IMDb.y`, `IMDb.x`))
+content %<>% mutate(`Rotten Tomatoes.x` = ifelse(is.na(`Rotten Tomatoes.x`), `Rotten Tomatoes.y`, `Rotten Tomatoes.x`))
+content %<>% mutate(`Netflix.x` = ifelse(is.na(`Netflix.x`), `Netflix.y`, `Netflix.x`))
+content %<>% mutate(`Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
+content %<>% mutate(`Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
+content %<>% mutate(`Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
+content %<>% mutate(`Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
+content %<>% mutate(`Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
+content %<>% mutate(`Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
 
 content <- content[, !(names(content) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
 
-content <- rename(content, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
+content %<>% rename(Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
 
-content <- mutate(content, Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
-content <- mutate(content, Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
-
-content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
-content <- mutate(content, Origin = parse_factor(origins[ifelse(is.na(Origin), parse_factor("Distribution", levels = origins), Origin)], levels = origins))
-
-content <- mutate(content, Format = parse_factor(formats[Format], levels = formats))
-content <- mutate(content, Status = parse_factor(statuses[Status], levels = statuses))
-
-content <- mutate(content, `Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
-
-content <- mutate(content, Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
+content %<>% mutate(Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
+content %<>% mutate(Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
+content %<>% mutate(Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
+content %<>% mutate(Origin = parse_factor(origins[ifelse(is.na(Origin), parse_factor("Distribution", levels = origins), Origin)], levels = origins))
+content %<>% mutate(Format = parse_factor(formats[Format], levels = formats))
+content %<>% mutate(Status = parse_factor(statuses[Status], levels = statuses))
+content %<>% mutate(`Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
+content %<>% mutate(Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
 
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
