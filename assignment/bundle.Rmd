@@ -1,7 +1,7 @@
 ---
 title: "The future of Original Content Programming"
-author: "David Aimé Greven "
-date: "4 1 2021"
+author: "David Aimé Greven, Fynn Mehrens"
+date: "12-1-2021"
 output: html_document
 ---
 
@@ -45,11 +45,14 @@ For the **Apple TV+** sub data set these web pages have been scraped:
 
 * [List of Apple TV+ Original Programming](https://en.wikipedia.org/wiki/List_of_Apple_TV%2B_original_programming)
 
-## Bundle
-
-The first code chunk makes sure, that all the required libraries are installed. The "forcats" library is included with the "tidyverse" but does not open all its functionality to the developer, so it needed to be required specifically as well. To ensure correct parsing of the dates during the original content transmutation the locale is set to an english one.
+## Disclaimer
 
 If you run into any problems (can be recognized by missing Premiere values on the first page of the data frame called "netflix"), please make sure to contact us, because there are various options for unix-based operating systems and we did not want to include them all for the case that they might conflict with each other.
+
+
+## Installing required libraries
+
+The first code chunk makes sure, that all the required libraries are installed. The "**forcats**" library is included with the "**tidyverse**" but does not open all its functionality to the developer, so it needed to be required specifically as well. To ensure correct parsing of the dates during the original content transmutation the locale is set to an english one.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -61,67 +64,24 @@ Sys.setlocale("LC_TIME", "English") #Windows
 Sys.setlocale("LC_TIME", "en_GB.UTF-8") #Linux & Unix
 ```
 
-## Shared
+## Dataset Import
+
+The upcoming chapter deals with the import of the scraped and downloaded CSVs into tibbles. Due to the huge amount and inconsistencies of the CSV files the importing process was very tedious and every single csv file needed to be inspected and merged manually. This is performed for all of the streaming services.
+
+### Custom functions for Import Phase
+
+To exclude specific rows that
 
 ```{r}
-anycharacter <- "([a-zA-Z]|-+)"
-
-genre_to_uppercase_unique <- function(genre) {
-  if (length(genre) == 0 | genre == "" | is.na(genre)) {
-    return(NA)
-  }
-  
-  curr <- ""
-  genre_vector <- c()
-  c <- strsplit(genre, "")[[1]]
-  
-  for (i in 1:length(c)) {
-    if (grepl(anycharacter, c[i])) {
-      curr <- gsub(" ", "", str_squish(paste(curr, c[i])))
-    }
-    if (!grepl(anycharacter, c[i]) | i == length(c)) {
-      if (i > 1 & grepl(anycharacter, c[i-1])) {
-        whole_word = strsplit(curr, "")[[1]]
-        single_genre <- ""
-        
-        for (j in 1:length(whole_word)) {
-          if (j == 1) {
-            single_genre <- gsub(" ", "", str_squish(toupper(whole_word[j])))
-          } else {
-            single_genre <- gsub(" ", "", str_squish(paste(single_genre, whole_word[j])))
-          }
-        }
-        
-        if (is.na(match(single_genre, genre_vector))) {
-          genre_vector <- c(genre_vector, single_genre)
-        }
-      }
-      curr <- ""
-    }
-  }
-  
-  all_genres <- ""
-  for (i in 1:length(genre_vector)) {
-    if (i != length(genre_vector)) {
-      all_genres <- str_squish(paste(all_genres, genre_vector[i], "/"))
-    } else {
-      all_genres <- paste(all_genres, genre_vector[i])
-    }
-  }
-  return(all_genres)
+only_keep <- function(row, regex, factor) {
+  return(parse_factor(str_match(row, regex)[,2], levels = factor))
 }
 
-genres_to_uppercase_unique <- function(genres) {
-  genres_vector <- c()
-  for (genre in genres) {
-    genres_vector <- c(genres_vector, c(genre_to_uppercase_unique(genre)))
-  }
-  return(genres_vector)
-}
+status_regex <- "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"
 
-only_keep <- function(row, regex) {
-  return(ifelse(!is.na(str_match(row, regex)[,2]), str_match(row, regex)[,2], str_match(row, regex)[,2]))
-}
+format_regex <- "(Series|Miniseries|Film|Special)"
+
+origin_regex <- "(Continuation|Distribution|Original)"
 
 statuses <- c("Renewed", "Pending", "Miniseries", "Awaiting release", "Event", "Development", "Ended", "Film", "Special", "Distribution")
 
@@ -1876,10 +1836,10 @@ netflix_originals <- transmute(netflix_originals,
                                Seasons = Seasons,
                                Runtime = Runtime,
                                Language = Language,
-                               Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                               Status = only_keep(Status, status_regex, statuses),
                                Service = parse_factor("Netflix", levels = services),
-                               Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
-                               Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                               Format = only_keep(Format, format_regex, formats),
+                               Origin = only_keep(Origin, origin_regex, origins),
                                Network = Network,
                                Region = Region)
 
@@ -2348,10 +2308,10 @@ amazon_originals <- transmute(amazon_originals,
                               Seasons = Seasons,
                               Runtime = Runtime,
                               Language = Language,
-                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                              Status = only_keep(Status, status_regex, statuses),
                               Service = parse_factor("Amazon Prime Video", levels = services),
-                              Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
-                              Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                              Format = only_keep(Format, format_regex, formats),
+                              Origin = only_keep(Origin, origin_regex, origins),
                               Network = Network,
                               Region = Region)
 
@@ -2808,10 +2768,10 @@ hulu_originals <- transmute(hulu_originals,
                             Seasons = Seasons,
                             Runtime = Runtime,
                             Language = Language,
-                            Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                            Status = only_keep(Status, status_regex, statuses),
                             Service = parse_factor("Hulu", levels = services),
-                            Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
-                            Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                            Format = only_keep(Format, format_regex, formats),
+                            Origin = only_keep(Origin, origin_regex, origins),
                             Network = Network,
                             Region = Region)
 
@@ -3241,10 +3201,10 @@ disney_originals <- transmute(disney_originals,
                               Seasons = Seasons,
                               Runtime = Runtime,
                               Language = Language,
-                              Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                              Status = only_keep(Status, status_regex, statuses),
                               Service = parse_factor("Disney+", levels = services),
-                              Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
-                              Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                              Format = only_keep(Format, format_regex, formats),
+                              Origin = only_keep(Origin, origin_regex, origins),
                               Network = Network,
                               Region = Region)
 
@@ -3580,10 +3540,10 @@ apple_originals <- transmute(apple_originals,
                              Seasons = Seasons,
                              Runtime = Runtime,
                              Language = Language,
-                             Status = parse_factor(only_keep(Status, "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"), levels = statuses),
+                             Status = only_keep(Status, status_regex, statuses),
                              Service = parse_factor("Apple TV+", levels = services),
-                             Format = parse_factor(only_keep(Format, "(Series|Miniseries|Film|Special)"), levels = formats),
-                             Origin = parse_factor(only_keep(Origin, "(Continuation|Distribution|Original)"), levels = origins),
+                             Format = only_keep(Format, format_regex, formats),
+                             Origin = only_keep(Origin, origin_regex, origins),
                              Network = Network,
                              Region = Region)
 
@@ -3640,6 +3600,68 @@ shows <- transmute(shows,
 
 shows
 ```
+
+## Dataset Transmutation
+
+### Custom transmutation functions
+
+```{r}
+anycharacter <- "([a-zA-Z]|-+)"
+
+genre_to_uppercase_unique <- function(genre) {
+  if (length(genre) == 0 | genre == "" | is.na(genre)) {
+    return(NA)
+  }
+  
+  curr <- ""
+  genre_vector <- c()
+  c <- strsplit(genre, "")[[1]]
+  
+  for (i in 1:length(c)) {
+    if (grepl(anycharacter, c[i])) {
+      curr <- gsub(" ", "", str_squish(paste(curr, c[i])))
+    }
+    if (!grepl(anycharacter, c[i]) | i == length(c)) {
+      if (i > 1 & grepl(anycharacter, c[i-1])) {
+        whole_word = strsplit(curr, "")[[1]]
+        single_genre <- ""
+        
+        for (j in 1:length(whole_word)) {
+          if (j == 1) {
+            single_genre <- gsub(" ", "", str_squish(toupper(whole_word[j])))
+          } else {
+            single_genre <- gsub(" ", "", str_squish(paste(single_genre, whole_word[j])))
+          }
+        }
+        
+        if (is.na(match(single_genre, genre_vector))) {
+          genre_vector <- c(genre_vector, single_genre)
+        }
+      }
+      curr <- ""
+    }
+  }
+  
+  all_genres <- ""
+  for (i in 1:length(genre_vector)) {
+    if (i != length(genre_vector)) {
+      all_genres <- str_squish(paste(all_genres, genre_vector[i], "/"))
+    } else {
+      all_genres <- paste(all_genres, genre_vector[i])
+    }
+  }
+  return(all_genres)
+}
+
+genres_to_uppercase_unique <- function(genres) {
+  genres_vector <- c()
+  for (genre in genres) {
+    genres_vector <- c(genres_vector, c(genre_to_uppercase_unique(genre)))
+  }
+  return(genres_vector)
+}
+```
+
 
 ## Transmute Netflix
 
