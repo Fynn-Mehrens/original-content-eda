@@ -3342,33 +3342,31 @@ apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv") %>%
             Network = NA,
             Region = NA)
 
-apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv")
-apple_originals_10 <- transmute(apple_originals_10,
-                                Title = Title,
-                                Genre = paste(Genre, " Family Children Animation"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Family Children Animation"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv")
-apple_originals_11 <- transmute(apple_originals_11,
-                                Title = Title,
-                                Genre = paste(Genre, " Docuseries Unscripted"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Docuseries Unscripted"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
 apple_originals_12 <- read_csv("../datasets/apple/shows/table-12.csv")
 apple_originals_12 <- transmute(apple_originals_12,
