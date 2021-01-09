@@ -136,7 +136,7 @@ ages <- c("4+", "5+", "6+", "7+", "8+", "10+", "11+", "12+", "13+", "14+", "15+"
 
 ## Import Netflix
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv")
 netflix_originals_1 <- transmute(netflix_originals_1,
                                  Title = Title,
@@ -1890,7 +1890,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 
 ## Import Amazon Prime Video
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv")
 amazon_originals_1 <- transmute(amazon_originals_1,
                                 Title = Title,
@@ -2362,7 +2362,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 
 ## Import Hulu
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv")
 hulu_originals_1 <- transmute(hulu_originals_1,
                               Title = Title,
@@ -2822,7 +2822,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 
 ## Disney+
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
 disney_originals_1 <- transmute(disney_originals_1,
                                 Title = Title,
@@ -3255,7 +3255,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 
 ## Import Apple TV+
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv")
 apple_originals_1 <- transmute(apple_originals_1,
                                Title = Title,
