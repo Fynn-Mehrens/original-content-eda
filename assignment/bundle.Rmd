@@ -1,5 +1,5 @@
 ---
-title: "The future of Original Content Programming"
+title: "The Future of Original Content Programming"
 author: "David Aimé Greven, Fynn Mehrens"
 date: "11-1-2021"
 output: html_document
