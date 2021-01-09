@@ -100,19 +100,18 @@ ages <- c("0+", "6+", "7+", "12+", "13+", "16+", "18+", "all", "unknown")
 ## Import Netflix
 
 ```{r message=FALSE, warning=FALSE}
-netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv")
-netflix_originals_1 <- transmute(netflix_originals_1,
-                                 Title = Title,
-                                 Genre = paste(Genre, " Drama"),
-                                 Premiere = Premiere,
-                                 Seasons = Seasons,
-                                 Runtime = Runtime,
-                                 Language = NA,
-                                 Status = Status,
-                                 Format = "Series",
-                                 Origin = "Original",
-                                 Network = NA,
-                                 Region = NA)
+netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -1834,21 +1833,19 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_113)
 netflix_originals <- rbind(netflix_originals, netflix_originals_114)
 netflix_originals <- rbind(netflix_originals, netflix_originals_115)
 
-netflix_originals <- transmute(netflix_originals, 
-                               Title = Title,
-                               Genre = Genre,
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = Language,
-                               Status = only_keep(Status, status_regex, statuses),
-                               Service = parse_factor("Netflix", levels = services),
-                               Format = only_keep(Format, format_regex, formats),
-                               Origin = only_keep(Origin, origin_regex, origins),
-                               Network = Network,
-                               Region = Region)
-
-netflix_originals
+(netflix_originals %<>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = Language,
+            Status = only_keep(Status, status_regex, statuses),
+            Service = parse_factor("Netflix", levels = services),
+            Format = only_keep(Format, format_regex, formats),
+            Origin = only_keep(Origin, origin_regex, origins),
+            Network = Network,
+            Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
@@ -1856,19 +1853,18 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 ## Import Amazon Prime Video
 
 ```{r message=FALSE, warning=FALSE}
-amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv")
-amazon_originals_1 <- transmute(amazon_originals_1,
-                                Title = Title,
-                                Genre = paste(Genre, " Drama"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = NA,
-                                Language = NA,
-                                Status = Status,
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = NA,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -2308,21 +2304,19 @@ amazon_originals <- rbind(amazon_originals, amazon_originals_28)
 amazon_originals <- rbind(amazon_originals, amazon_originals_29)
 amazon_originals <- rbind(amazon_originals, amazon_originals_30)
 
-amazon_originals <- transmute(amazon_originals, 
-                              Title = Title,
-                              Genre = Genre,
-                              Premiere = Premiere,
-                              Seasons = Seasons,
-                              Runtime = Runtime,
-                              Language = Language,
-                              Status = only_keep(Status, status_regex, statuses),
-                              Service = parse_factor("Amazon Prime Video", levels = services),
-                              Format = only_keep(Format, format_regex, formats),
-                              Origin = only_keep(Origin, origin_regex, origins),
-                              Network = Network,
-                              Region = Region)
-
-amazon_originals
+(amazon_originals %<>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = Language,
+            Status = only_keep(Status, status_regex, statuses),
+            Service = parse_factor("Amazon Prime Video", levels = services),
+            Format = only_keep(Format, format_regex, formats),
+            Origin = only_keep(Origin, origin_regex, origins),
+            Network = Network,
+            Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
@@ -2330,19 +2324,18 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 ## Import Hulu
 
 ```{r message=FALSE, warning=FALSE}
-hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv")
-hulu_originals_1 <- transmute(hulu_originals_1,
-                              Title = Title,
-                              Genre = paste(Genre, " Drama"),
-                              Premiere = Premiere,
-                              Seasons = Seasons,
-                              Runtime = Length,
-                              Language = NA,
-                              Status = Status,
-                              Format = "Series",
-                              Origin = "Original",
-                              Network = NA,
-                              Region = NA)
+hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Length,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -2768,21 +2761,19 @@ hulu_originals <- rbind(hulu_originals, hulu_originals_27)
 hulu_originals <- rbind(hulu_originals, hulu_originals_28)
 hulu_originals <- rbind(hulu_originals, hulu_originals_29)
 
-hulu_originals <- transmute(hulu_originals, 
-                            Title = Title,
-                            Genre = Genre,
-                            Premiere = Premiere,
-                            Seasons = Seasons,
-                            Runtime = Runtime,
-                            Language = Language,
-                            Status = only_keep(Status, status_regex, statuses),
-                            Service = parse_factor("Hulu", levels = services),
-                            Format = only_keep(Format, format_regex, formats),
-                            Origin = only_keep(Origin, origin_regex, origins),
-                            Network = Network,
-                            Region = Region)
-
-hulu_originals
+(hulu_originals %<>% 
+    transmute(Title = Title,
+              Genre = Genre,
+              Premiere = Premiere,
+              Seasons = Seasons,
+              Runtime = Runtime,
+              Language = Language,
+              Status = only_keep(Status, status_regex, statuses),
+              Service = parse_factor("Hulu", levels = services),
+              Format = only_keep(Format, format_regex, formats),
+              Origin = only_keep(Origin, origin_regex, origins),
+              Network = Network,
+              Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
@@ -2790,19 +2781,18 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 ## Disney+
 
 ```{r message=FALSE, warning=FALSE}
-disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
-disney_originals_1 <- transmute(disney_originals_1,
-                                Title = Title,
-                                Genre = paste(Genre, " Drama"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = Status,
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -3201,21 +3191,19 @@ disney_originals <- rbind(disney_originals, disney_originals_26)
 disney_originals <- rbind(disney_originals, disney_originals_27)
 disney_originals <- rbind(disney_originals, disney_originals_28)
 
-disney_originals <- transmute(disney_originals, 
-                              Title = Title,
-                              Genre = Genre,
-                              Premiere = Premiere,
-                              Seasons = Seasons,
-                              Runtime = Runtime,
-                              Language = Language,
-                              Status = only_keep(Status, status_regex, statuses),
-                              Service = parse_factor("Disney+", levels = services),
-                              Format = only_keep(Format, format_regex, formats),
-                              Origin = only_keep(Origin, origin_regex, origins),
-                              Network = Network,
-                              Region = Region)
-
-disney_originals
+(disney_originals %<>% 
+    transmute(Title = Title,
+              Genre = Genre,
+              Premiere = Premiere,
+              Seasons = Seasons,
+              Runtime = Runtime,
+              Language = Language,
+              Status = only_keep(Status, status_regex, statuses),
+              Service = parse_factor("Disney+", levels = services),
+              Format = only_keep(Format, format_regex, formats),
+              Origin = only_keep(Origin, origin_regex, origins),
+              Network = Network,
+              Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
@@ -3519,18 +3507,19 @@ apple_originals %<>% rbind(apple_originals_19)
 apple_originals %<>% rbind(apple_originals_20)
 apple_originals %<>% rbind(apple_originals_21)
 
-(apple_originals %<>% transmute(Title = Title,
-                               Genre = Genre,
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = Language,
-                               Status = only_keep(Status, status_regex, statuses),
-                               Service = parse_factor("Apple TV+", levels = services),
-                               Format = only_keep(Format, format_regex, formats),
-                               Origin = only_keep(Origin, origin_regex, origins),
-                               Network = Network,
-                               Region = Region))
+(apple_originals %<>% 
+    transmute(Title = Title,
+              Genre = Genre,
+              Premiere = Premiere,
+              Seasons = Seasons,
+              Runtime = Runtime,
+              Language = Language,
+              Status = only_keep(Status, status_regex, statuses),
+              Service = parse_factor("Apple TV+", levels = services),
+              Format = only_keep(Format, format_regex, formats),
+              Origin = only_keep(Origin, origin_regex, origins),
+              Network = Network,
+              Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
