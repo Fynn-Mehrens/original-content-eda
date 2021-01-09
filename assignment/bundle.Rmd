@@ -5,7 +5,29 @@ date: "4 1 2021"
 output: html_document
 ---
 
+## Introduction
+
+As the market for original content from various streaming services has grown throughout the years, the question why these companies are following this route arises. We want to statistically check whether the route of more and more original content instead of licensed content is promising or not.
+
+To do this analysis, we are using scraped data from various Wikipedia pages. For this purpose we have been using an external web scraper that scrapes all the <table> elements from the web page and converts them into a CSV format.
+
+The web scraping tool can be found here: 
+
+For the Netflix sub data set these web pages have been scraped:
+
+For the Amazon Prime Video sub data set these web pages have been scraped:
+
+
+For the Disney+ sub data set these web pages have been scraped:
+
+For the Apple TV+ sub data set these web pages have been scraped:
+
+
 ## Bundle
+
+The first code chunk makes sure, that all the required libraries are installed. The "forcats" library is included with the "tidyverse" but does not open all its functionality to the developer, so it needed to be required specifically as well. To ensure correct parsing of the dates during the original content transmutation the locale is set to an english one.
+
+If you run into any problems (can be recognized by missing Premiere values on the first page of the data frame called "netflix"), please make sure to contact us, because there are various options for unix-based operating systems and we did not want to include them all for the case that they might conflict with each other.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
