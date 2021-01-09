@@ -4018,7 +4018,7 @@ apple_ages <- read_csv("../datasets/apple_ages.csv")
 apple_ages <- mutate(apple_ages, Age = parse_factor(Age, levels = ages))
 
 content <- full_join(content, apple_ages, by = "Title")
-content <- mutate(content, `Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`), `Age.y`, `Age.x`)], levels = ages))
+content <- mutate(content, `Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`) | `Age.x` == "unknown", parse_factor(ifelse(is.na(`Age.y`), "unknown", `Age.y`)), `Age.x`)], levels = ages))
 content <- content[, !(names(content) %in% c("Age.y"))]
 (content <- rename(content, Age = `Age.x`))
 
@@ -4071,7 +4071,7 @@ plot(linear_regression)
 
 ```{r}
 netflix_origin_change <- content %>% 
-  filter(Year >= 2007, Netflix = TRUE) %>% 
+  filter(Year >= 2007, Netflix == TRUE) %>% 
   group_by(Year, Origin) %>% 
   summarise(n = n()) %>% 
   mutate(percentage = n / sum(n))
@@ -4084,7 +4084,7 @@ ggplot(netflix_origin_change, mapping = aes(x = Year, y = percentage, fill = fac
 
 ```{r}
 amazon_origin_change <- content %>% 
-  filter(Year >= 2006, `Prime Video` = TRUE) %>% 
+  filter(Year >= 2006, `Prime Video` == TRUE) %>% 
   group_by(Year, Origin) %>% 
   summarise(n = n()) %>% 
   mutate(Percentage = n / sum(n))
@@ -4097,7 +4097,7 @@ ggplot(amazon_origin_change, mapping = aes(x = Year, y = Percentage, fill = fact
 
 ```{r}
 hulu_origin_change <- content %>% 
-  filter(Year >= 2007, `Hulu` = TRUE) %>% 
+  filter(Year >= 2007, `Hulu` == TRUE) %>% 
   group_by(Year, Origin) %>% 
   summarise(n = n()) %>% 
   mutate(Percentage = n / sum(n))
@@ -4110,7 +4110,7 @@ ggplot(hulu_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor
 
 ```{r}
 disney_origin_change <- content %>% 
-  filter(Year >= 2019, `Disney+` = TRUE) %>% 
+  filter(Year >= 2019, `Disney+` == TRUE) %>% 
   group_by(Year, Origin) %>% 
   summarise(n = n()) %>% 
   mutate(Percentage = n / sum(n))
@@ -4123,7 +4123,7 @@ ggplot(disney_origin_change, mapping = aes(x = Year, y = Percentage, fill = fact
 
 ```{r}
 apple_origin_change <- content %>% 
-  filter(Year >= 2019, `Apple TV+` = TRUE) %>% 
+  filter(Year >= 2019, `Apple TV+` == TRUE) %>% 
   group_by(Year, Origin) %>% 
   summarise(n = n()) %>% 
   mutate(Percentage = n / sum(n))
