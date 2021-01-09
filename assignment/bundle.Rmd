@@ -3666,6 +3666,56 @@ genres_to_uppercase_unique <- function(genres) {
   }
   return(genres_vector)
 }
+
+filter_originals <- function(originals) {
+  return(originals %>%
+           filter(!grepl("Pending|pending", Title),
+              Title != "Awaiting release",
+              !grepl("Miniseries|miniseries", Title),
+              !grepl("Renewed|renewed", Title),
+              !grepl("due to premiere", Title)
+           ))
+}
+
+transmute_originals <- function(originals) {
+  return(transmute(originals, 
+                   Title = Title,
+                   Genre = genres_to_uppercase_unique(str_replace_all(
+                      str_squish(
+                                            str_replace_all(
+                                              str_replace_all(
+                                                str_replace_all(
+                                                  str_replace_all(
+                                                    str_replace_all(Genre, "series|procedural", ""),
+                                                  "Science fiction", "Science-Fiction"),
+                                                "(C|c)oming-of-age ", ""),
+                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
+                                            "(Docu|docu).*", "Documentary")
+                                          ),
+                                        "/| ", " / ")),
+                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
+                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
+                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
+                                                  NA)),
+                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
+                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
+                                                  NA)),
+                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Language = Language,
+                                Status = Status,
+                                Service = Service,
+                                Format = as.factor(Format),
+                                Origin = as.factor(Origin),
+                                Network = as.factor(Network),
+                                Region = as.factor(Region)
+                               ))
+}
+
 ```
 
 
@@ -3678,53 +3728,8 @@ After the data has been imported into the correct columns in the "netflix_origin
 After the function has been defined, we can start converting the columns of the data frame into their respective data types, so that it is easier to deal with them during the plotting process. This means, that the premiere is being converted into a Date object and the Seasons column as well as the Runtime column are converted and split up, so that there are only integer values left. The rest of the columns is just carried over.
 
 ```{r}
-netflix_originals <- filter(netflix_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-netflix_originals
-
-netflix <- transmute(netflix_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-netflix
+(netflix_originals <- filter_originals(netflix_originals))
+(netflix <- transmute_originals(netflix_originals))
 
 rm("netflix_originals")
 ```
@@ -3734,53 +3739,8 @@ rm("netflix_originals")
 ### Transmutation of the given Amazon Prime series and movie table
 
 ```{r}
-amazon_originals <- filter(amazon_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-amazon_originals
-
-amazon <- transmute(amazon_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-amazon
+(amazon_originals <- filter_originals(amazon_originals))
+(amazon <- transmute_originals(amazon_originals))
 
 rm("amazon_originals")
 ```
@@ -3790,53 +3750,8 @@ rm("amazon_originals")
 ### Transmutation of the given Hulu series and movie table
 
 ```{r}
-hulu_originals <- filter(hulu_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-hulu_originals
-
-hulu <- transmute(hulu_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-hulu
+(hulu_originals <- filter_originals(hulu_originals))
+(hulu <- transmute_originals(hulu_originals))
 
 rm("hulu_originals")
 ```
@@ -3846,53 +3761,8 @@ rm("hulu_originals")
 ### Transmutation of the given Disney+ series and movie table
 
 ```{r}
-disney_originals <- filter(disney_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-disney_originals
-
-disney <- transmute(disney_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-disney
+(disney_originals <- filter_originals(disney_originals))
+(disney <- transmute_originals(disney_originals))
 
 rm("disney_originals")
 ```
@@ -3902,53 +3772,8 @@ rm("disney_originals")
 ### Transmutation of the given Apple TV+ series and movie table
 
 ```{r}
-apple_originals <- filter(apple_originals,
-                          !grepl("Pending|pending", Title),
-                          Title != "Awaiting release",
-                          !grepl("Miniseries|miniseries", Title),
-                          !grepl("Renewed|renewed", Title),
-                          !grepl("due to premiere", Title))
-
-apple_originals
-
-apple <- transmute(apple_originals, 
-                   Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-apple
+(apple_originals <- filter_originals(apple_originals))
+(apple <- transmute_originals(apple_originals))
 
 rm("apple_originals")
 ```
