@@ -3316,33 +3316,31 @@ apple_originals_7 <- read_csv("../datasets/apple/shows/table-7.csv") %>%
             Network = `Partner/Country`,
             Region = `Partner/Country`)
 
-apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv")
-apple_originals_8 <- transmute(apple_originals_8,
-                               Title = Title,
-                               Genre = paste(Genre, " Drama"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = "Pending",
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv")
-apple_originals_9 <- transmute(apple_originals_9,
-                               Title = Title,
-                               Genre = paste(Genre, " Comedy"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = "Pending",
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Comedy"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
 apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv")
 apple_originals_10 <- transmute(apple_originals_10,
