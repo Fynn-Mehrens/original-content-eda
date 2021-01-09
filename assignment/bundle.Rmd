@@ -57,8 +57,8 @@ library(tidyverse)
 library(forcats)
 library(readxl)
 library(knitr)
-Sys.setlocale("LC_TIME", "English")
-Sys.setlocale("LC_TIME", "en_GB.UTF-8")
+Sys.setlocale("LC_TIME", "English") #Windows
+Sys.setlocale("LC_TIME", "en_GB.UTF-8") #Linux & Unix
 ```
 
 ## Shared
@@ -131,7 +131,7 @@ origins <- c("Continuation", "Distribution", "Original")
 
 services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
 
-ages <- c("4+", "5+", "6+", "7+", "8+", "10+", "11+", "12+", "13+", "14+", "15+",	"16+", "18+", "all", "unknown")
+ages <- c("0+", "6+", "7+", "12+", "13+", "16+", "18+", "all", "unknown")
 ```
 
 ## Import Netflix
@@ -3989,6 +3989,20 @@ content <- mutate(content, `Rotten Tomatoes` = as.integer(str_replace(`Rotten To
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
 
+## Add missing Apple TV+ original ratings
+
+```{r}
+apple_ages <- read_csv("../datasets/apple_ages.csv")
+apple_ages <- mutate(apple_ages, Age = parse_factor(Age, levels = ages))
+
+content <- full_join(content, apple_ages, by = "Title")
+content <- mutate(content, `Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`), `Age.y`, `Age.x`)], levels = ages))
+content <- content[, !(names(content) %in% c("Age.y"))]
+(content <- rename(content, Age = `Age.x`))
+
+rm("apple_ages")
+```
+
 ## Data Exploration
 
 ### Production of original content thorughout the years
@@ -4194,6 +4208,102 @@ ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Series
   labs(fill = "Age")
 
 ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Film", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all Hulu content
+
+```{r}
+ggplot(data = filter(content, Hulu = TRUE)) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Hulu = TRUE, Format == "Series")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Hulu = TRUE, Format == "Film")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all original Hulu content
+
+```{r}
+ggplot(data = filter(content, Service == "Hulu", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Hulu", Format == "Series", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Hulu", Format == "Film", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all Disney+ content
+
+```{r}
+ggplot(data = filter(content, `Disney+` = TRUE)) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, `Disney+` = TRUE, Format == "Series")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, `Disney+` = TRUE, Format == "Film")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all original Disney+ content
+
+```{r}
+ggplot(data = filter(content, Service == "Disney+", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Disney+", Format == "Series", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Disney+", Format == "Film", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all Apple TV+ content
+
+```{r}
+ggplot(data = filter(content, `Apple TV+` = TRUE)) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, `Apple TV+` = TRUE, Format == "Series")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, `Apple TV+` = TRUE, Format == "Film")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+```
+
+### Age rating for all original Apple TV+ content
+
+```{r}
+ggplot(data = filter(content, Service == "Apple TV+", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Apple TV+", Format == "Series", Origin == "Original")) +
+  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+  labs(fill = "Age")
+
+ggplot(data = filter(content, Service == "Apple TV+", Format == "Film", Origin == "Original")) +
   geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
   labs(fill = "Age")
 ```
