@@ -4008,6 +4008,8 @@ content <- mutate(content, Status = parse_factor(statuses[Status], levels = stat
 
 content <- mutate(content, `Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
 
+content <- mutate(content, Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
+
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
 
