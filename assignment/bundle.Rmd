@@ -4139,12 +4139,20 @@ content <- mutate(content, `Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`
 ### Data exploration functions
 
 ```{r}
+age_histogram_colors <- c(
+      rgb(131/255, 138/255, 141/255, 1),
+      rgb(255/255, 230/255, 0/255, 1),
+      rgb(13/255, 177/255, 75/255, 1),
+      rgb(0/255, 164/255, 224/255, 1),
+      rgb(237/255, 28/255, 36/255, 1))
+
 age_histogram_original <- function(year, service) {
   content %>% 
   filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age")
+    labs(fill = "Age") +
+    scale_fill_manual(values = age_histogram_colors)
 }
 
 age_histogram <- function(format) {
@@ -4152,7 +4160,8 @@ age_histogram <- function(format) {
   filter(between(Year, 2006, 2020), Format == format) %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age")
+    labs(fill = "Age") +
+    scale_fill_manual(values = age_histogram_colors)
 }
 
 origin_change <- function(year, service) {
@@ -4238,15 +4247,6 @@ origin_change_area(origin_change(2019, "Disney+"))
 ### Change in Apple TV+ content origin over the years
 
 ```{r}
-apple_origin_change <- content %>% 
-  filter(Year >= 2019, `Apple TV+` == TRUE) %>% 
-  group_by(Year, Origin) %>% 
-  summarise(n = n()) %>% 
-  mutate(Percentage = n / sum(n))
-
-ggplot(apple_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
-  geom_area()
-
 origin_change_area(origin_change(2019, "Apple TV+"))
 ```
 
@@ -4346,7 +4346,8 @@ content %>%
   filter(between(Year, 2006, 2020)) %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age")
+    labs(fill = "Age") +
+    scale_fill_manual(values = age_histogram_colors)
 
 age_histogram("Series")
 age_histogram("Film")
