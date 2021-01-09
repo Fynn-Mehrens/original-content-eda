@@ -17,6 +17,7 @@ For the Netflix sub data set these web pages have been scraped:
 
 For the Amazon Prime Video sub data set these web pages have been scraped:
 
+For the Hulu sub data set these web pages have been scraped:
 
 For the Disney+ sub data set these web pages have been scraped:
 
