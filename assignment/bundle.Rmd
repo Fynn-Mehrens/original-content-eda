@@ -548,7 +548,6 @@ netflix_originals_32 <- transmute(netflix_originals_32,
                                   Origin = "Original",
                                   Network = NA,
                                   Region = NA)
-# split Partner/Country
 
 netflix_originals_33 <- read_csv("../datasets/netflix/shows/table-33.csv")
 netflix_originals_33 <- transmute(netflix_originals_33,
@@ -561,8 +560,8 @@ netflix_originals_33 <- transmute(netflix_originals_33,
                                   Status = "Development",
                                   Format = "Series",
                                   Origin = "Original",
-                                  Network = Partner,
-                                  Region = NA)
+                                  Network = str_split(`Partner`, "/")[[1]][1],
+                                  Region = str_split(`Partner`, "/")[[1]][2])
 
 netflix_originals_34 <- read_csv("../datasets/netflix/shows/table-34.csv")
 netflix_originals_34 <- transmute(netflix_originals_34,
@@ -1027,8 +1026,6 @@ netflix_originals_66 <- transmute(netflix_originals_66,
                                   Network = NA,
                                   Region = NA)
 
-# Break awaiting release into new rows
-
 netflix_originals_67 <- read_csv("../datasets/netflix/films/table-4.csv")
 netflix_originals_67 <- transmute(netflix_originals_67,
                                   Title = Title,
@@ -1042,8 +1039,6 @@ netflix_originals_67 <- transmute(netflix_originals_67,
                                   Origin = "Original",
                                   Network = NA,
                                   Region = NA)
-
-# ...
 
 netflix_originals_68 <- read_csv("../datasets/netflix/films/table-5.csv")
 netflix_originals_68 <- transmute(netflix_originals_68,
@@ -2434,8 +2429,8 @@ hulu_originals_8 <- transmute(hulu_originals_8,
                               Status = Status,
                               Format = "Series",
                               Origin = "Original",
-                              Network = `Partner / Country`,
-                              Region = `Partner / Country`)
+                              Network = str_split(`Partner / Country`, "/")[[1]][1],
+                              Region = str_split(`Partner / Country`, "/")[[1]][2])
 
 hulu_originals_9 <- read_csv("../datasets/hulu/shows/table-9.csv")
 hulu_originals_9 <- transmute(hulu_originals_9,
@@ -2588,8 +2583,8 @@ hulu_originals_19 <- transmute(hulu_originals_19,
                               Status = "Pending",
                               Format = "Series",
                               Origin = "Original",
-                              Network = `Partner/Country`,
-                              Region = `Partner/Country`)
+                              Network = str_split(`Partner/Country`, "/")[[1]][1],
+                              Region = str_split(`Partner/Country`, "/")[[1]][2])
 
 
 hulu_originals_20 <- read_csv("../datasets/hulu/shows/table-20.csv")
@@ -2893,9 +2888,6 @@ disney_originals_8 <- transmute(disney_originals_8,
                                 Origin = "Original",
                                 Network = NA,
                                 Region = NA)
-
-# missing exclusives
-# missing table-9 content on wiki
 
 disney_originals_10 <- read_csv("../datasets/disney/shows/table-10.csv")
 disney_originals_10 <- transmute(disney_originals_10,
@@ -3301,8 +3293,8 @@ apple_originals_7 <- read_csv("../datasets/apple/shows/table-7.csv") %>%
             Status = Status,
             Format = "Series",
             Origin = "Original",
-            Network = `Partner/Country`,
-            Region = `Partner/Country`)
+            Network = str_split(`Partner/Country`, "/")[[1]][1],
+            Region = str_split(`Partner/Country`, "/")[[1]][2])
 
 apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv") %>%
   transmute(Title = Title,
@@ -3392,8 +3384,8 @@ apple_originals_14 <- read_csv("../datasets/apple/shows/table-14.csv") %>%
             Status = "Pending",
             Format = "Series",
             Origin = "Original",
-            Network = `Partner/Country`,
-            Region = `Partner/Country`)
+            Network = str_split(`Partner/Country`, "/")[[1]][1],
+            Region = str_split(`Partner/Country`, "/")[[1]][2])
 
 apple_originals_15 <- read_csv("../datasets/apple/shows/table-15.csv") %>%
   transmute(Title = Title,
