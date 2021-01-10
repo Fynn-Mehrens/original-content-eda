@@ -61,7 +61,6 @@ library(forcats)
 library(magrittr)
 library(readxl)
 library(knitr)
-install.packages("lazyeval")
 library(lazyeval)
 Sys.setlocale("LC_TIME", "English") #Windows
 Sys.setlocale("LC_TIME", "en_GB.UTF-8") #Linux & Unix
@@ -1864,6 +1863,8 @@ The import procedure is also applied to the following streaming services:
 * Disney+ (28 CSVs)
 * Apple TV+ (21 CSVs)
 
+This adds up to a total of 223 files, that have been imported from the web scraping results.
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv") %>%
@@ -3529,7 +3530,14 @@ apple_originals %<>% rbind(apple_originals_21)
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Import Movies
+## Import large Movies and Shows data set
+
+Since the goal is to point out the unique trademarks of original content, there is need for importing large data sets for movies and shows, that are available on streaming services, but not necessarily original content.
+
+For this purpose we are using datasets provided by [Ruchi Bhatia](https://www.kaggle.com/ruchi798) which can be found on the following pages:
+
+* [Movies on Netflix, Prime Video, Hulu and Disney+](https://www.kaggle.com/ruchi798/movies-on-netflix-prime-video-hulu-and-disney)
+* [TV shows on Netflix, Prime Video, Hulu and Disney+](https://www.kaggle.com/ruchi798/tv-shows-on-netflix-prime-video-hulu-and-disney)
 
 ```{r}
 movies <- read_csv("../datasets/movies.csv")
@@ -3825,13 +3833,6 @@ content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("1
 ```
 
 ## Dataset Documentation
-
-```{r}
-unique(select(content, Origin))
-
-filter(content, !is.na(Service))
-```
-
 
 Now that the data set is fully combined, we should add documentation to the columns, to describe what they are representing.
 
