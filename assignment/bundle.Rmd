@@ -96,7 +96,9 @@ ages <- c("0+", "6+", "7+", "12+", "13+", "16+", "18+", "all", "unknown")
 
 ## Import Netflix
 
-```{r message=FALSE, warning=FALSE}
+To import all the required data, all 115 csv files need to be imported and in some cases values have to be added, e.g. because the entry was found in a table for specific genres, but the genre was not further specified in the actual cells of the rows.
+
+```{r netflix_displayed_import, message=FALSE, warning=FALSE}
 netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv")
 netflix_originals_1 <- transmute(netflix_originals_1,
                                  Title = Title,
@@ -112,7 +114,9 @@ netflix_originals_1 <- transmute(netflix_originals_1,
                                  Region = NA)
 ```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+After importing the data into 115 individual data frames, the tables now need to me merged horizontally using the **rbind()** function. This function requires the tables to have NA values for the columns that were not originally specified in the CSV files, thus the large amount of NA transmutes.
+
+```{r netflix_hidden_import, echo=FALSE, message=FALSE, warning=FALSE}
 netflix_originals_2 <- read_csv("../datasets/netflix/shows/table-2.csv")
 netflix_originals_2 <- transmute(netflix_originals_2,
                                  Title = Title,
@@ -1829,6 +1833,10 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_111)
 netflix_originals <- rbind(netflix_originals, netflix_originals_112)
 netflix_originals <- rbind(netflix_originals, netflix_originals_113)
 netflix_originals <- rbind(netflix_originals, netflix_originals_114)
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 netflix_originals <- rbind(netflix_originals, netflix_originals_115)
 
 netflix_originals <- transmute(netflix_originals, 
@@ -1850,9 +1858,18 @@ netflix_originals
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Import Amazon Prime Video
+After the data frames named netflix_originals_1 to netflix_originals_115 have been horizontally merged, we make sure that the individual data frames are not accessible as global variables, so we make sure, that they are deleted from the R session. This also helps to improve the performance of further actions, since it reduces the RAM usage of the system by a lot.
 
-```{r message=FALSE, warning=FALSE}
+## Import Amazon Prime Video, Hulu, Disney+ and Apple TV+
+
+The import procedure is also applied to the following streaming services:
+
+* Amazon Prime Video (30 CSVs)
+* Hulu (29 CSVs)
+* Disney+ (28 CSVs)
+* Apple TV+ (21 CSVs)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv")
 amazon_originals_1 <- transmute(amazon_originals_1,
                                 Title = Title,
@@ -2324,9 +2341,7 @@ amazon_originals
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Import Hulu
-
-```{r message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv")
 hulu_originals_1 <- transmute(hulu_originals_1,
                               Title = Title,
@@ -2784,9 +2799,7 @@ hulu_originals
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Disney+
-
-```{r message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
 disney_originals_1 <- transmute(disney_originals_1,
                                 Title = Title,
@@ -3217,9 +3230,7 @@ disney_originals
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Import Apple TV+
-
-```{r message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv")
 apple_originals_1 <- transmute(apple_originals_1,
                                Title = Title,
