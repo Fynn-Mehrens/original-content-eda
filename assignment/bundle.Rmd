@@ -3775,7 +3775,7 @@ age_histogram_original <- function(year, service) {
   filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age") +
+    labs(title = "Age Ratings - Original Content", x = "Year", fill = "Age") +
     scale_fill_manual(values = age_histogram_colors)
 }
 
@@ -3784,7 +3784,7 @@ age_histogram <- function(format) {
   filter(between(Year, 2006, 2020), Format == format) %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age") +
+    labs(title = paste("Age Ratings -",format,"Content"), x = "Year", fill = "Age") +
     scale_fill_manual(values = age_histogram_colors)
 }
 
@@ -3970,7 +3970,7 @@ content %>%
   filter(between(Year, 2006, 2020)) %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age") +
+    labs(title = "Age Ratings - All Content", x = "Year", fill = "Age") +
     scale_fill_manual(values = age_histogram_colors)
 
 age_histogram("Series")
