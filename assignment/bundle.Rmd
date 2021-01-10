@@ -3539,6 +3539,10 @@ For this purpose we are using datasets provided by [Ruchi Bhatia](https://www.ka
 * [Movies on Netflix, Prime Video, Hulu and Disney+](https://www.kaggle.com/ruchi798/movies-on-netflix-prime-video-hulu-and-disney)
 * [TV shows on Netflix, Prime Video, Hulu and Disney+](https://www.kaggle.com/ruchi798/tv-shows-on-netflix-prime-video-hulu-and-disney)
 
+### Importing Movies
+
+The movies data set originally has 17 columns, of which 14 are interesting to us. The columns we are eliminating hold the index and an individual identifier, which is nothing more than a one-based index instead of a zero-based index, like the first column. The third column we don't make use of is "Type", since the same information is stored within our column "Format".
+
 ```{r}
 movies <- read_csv("../datasets/movies.csv")
 
@@ -3561,7 +3565,9 @@ movies <- read_csv("../datasets/movies.csv")
                      Status = parse_factor("Ended", levels = statuses)))
 ```
 
-## Import Shows
+### Importing Shows
+
+The show data set comes, in comparison to the movies data set, with a lot less columns, only eleven to be precise. We are not making use of the same three columns that we did not make use of with the movies data set.
 
 ```{r}
 shows <- read_csv("../datasets/shows.csv")
