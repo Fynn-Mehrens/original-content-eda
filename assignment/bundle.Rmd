@@ -58,8 +58,11 @@ The first code chunk makes sure, that all the required libraries are installed. 
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(forcats)
+library(magrittr)
 library(readxl)
 library(knitr)
+install.packages("lazyeval")
+library(lazyeval)
 Sys.setlocale("LC_TIME", "English") #Windows
 Sys.setlocale("LC_TIME", "en_GB.UTF-8") #Linux & Unix
 ```
@@ -99,19 +102,18 @@ ages <- c("0+", "6+", "7+", "12+", "13+", "16+", "18+", "all", "unknown")
 To import all the required data, all 115 csv files need to be imported and in some cases values have to be added, e.g. because the entry was found in a table for specific genres, but the genre was not further specified in the actual cells of the rows.
 
 ```{r netflix_displayed_import, message=FALSE, warning=FALSE}
-netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv")
-netflix_originals_1 <- transmute(netflix_originals_1,
-                                 Title = Title,
-                                 Genre = paste(Genre, " Drama"),
-                                 Premiere = Premiere,
-                                 Seasons = Seasons,
-                                 Runtime = Runtime,
-                                 Language = NA,
-                                 Status = Status,
-                                 Format = "Series",
-                                 Origin = "Original",
-                                 Network = NA,
-                                 Region = NA)
+netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 After importing the data into 115 individual data frames, the tables now need to me merged horizontally using the **rbind()** function. This function requires the tables to have NA values for the columns that were not originally specified in the CSV files, thus the large amount of NA transmutes.
@@ -550,7 +552,6 @@ netflix_originals_32 <- transmute(netflix_originals_32,
                                   Origin = "Original",
                                   Network = NA,
                                   Region = NA)
-# split Partner/Country
 
 netflix_originals_33 <- read_csv("../datasets/netflix/shows/table-33.csv")
 netflix_originals_33 <- transmute(netflix_originals_33,
@@ -563,8 +564,8 @@ netflix_originals_33 <- transmute(netflix_originals_33,
                                   Status = "Development",
                                   Format = "Series",
                                   Origin = "Original",
-                                  Network = Partner,
-                                  Region = NA)
+                                  Network = str_split(`Partner`, "/")[[1]][1],
+                                  Region = str_split(`Partner`, "/")[[1]][2])
 
 netflix_originals_34 <- read_csv("../datasets/netflix/shows/table-34.csv")
 netflix_originals_34 <- transmute(netflix_originals_34,
@@ -1029,8 +1030,6 @@ netflix_originals_66 <- transmute(netflix_originals_66,
                                   Network = NA,
                                   Region = NA)
 
-# Break awaiting release into new rows
-
 netflix_originals_67 <- read_csv("../datasets/netflix/films/table-4.csv")
 netflix_originals_67 <- transmute(netflix_originals_67,
                                   Title = Title,
@@ -1044,8 +1043,6 @@ netflix_originals_67 <- transmute(netflix_originals_67,
                                   Origin = "Original",
                                   Network = NA,
                                   Region = NA)
-
-# ...
 
 netflix_originals_68 <- read_csv("../datasets/netflix/films/table-5.csv")
 netflix_originals_68 <- transmute(netflix_originals_68,
@@ -1839,21 +1836,19 @@ netflix_originals <- rbind(netflix_originals, netflix_originals_114)
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 netflix_originals <- rbind(netflix_originals, netflix_originals_115)
 
-netflix_originals <- transmute(netflix_originals, 
-                               Title = Title,
-                               Genre = Genre,
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = Language,
-                               Status = only_keep(Status, status_regex, statuses),
-                               Service = parse_factor("Netflix", levels = services),
-                               Format = only_keep(Format, format_regex, formats),
-                               Origin = only_keep(Origin, origin_regex, origins),
-                               Network = Network,
-                               Region = Region)
-
-netflix_originals
+(netflix_originals %<>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = Language,
+            Status = only_keep(Status, status_regex, statuses),
+            Service = parse_factor("Netflix", levels = services),
+            Format = only_keep(Format, format_regex, formats),
+            Origin = only_keep(Origin, origin_regex, origins),
+            Network = Network,
+            Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
@@ -1870,19 +1865,19 @@ The import procedure is also applied to the following streaming services:
 * Apple TV+ (21 CSVs)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv")
-amazon_originals_1 <- transmute(amazon_originals_1,
-                                Title = Title,
-                                Genre = paste(Genre, " Drama"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = NA,
-                                Language = NA,
-                                Status = Status,
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+
+amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = NA,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -2322,39 +2317,36 @@ amazon_originals <- rbind(amazon_originals, amazon_originals_28)
 amazon_originals <- rbind(amazon_originals, amazon_originals_29)
 amazon_originals <- rbind(amazon_originals, amazon_originals_30)
 
-amazon_originals <- transmute(amazon_originals, 
-                              Title = Title,
-                              Genre = Genre,
-                              Premiere = Premiere,
-                              Seasons = Seasons,
-                              Runtime = Runtime,
-                              Language = Language,
-                              Status = only_keep(Status, status_regex, statuses),
-                              Service = parse_factor("Amazon Prime Video", levels = services),
-                              Format = only_keep(Format, format_regex, formats),
-                              Origin = only_keep(Origin, origin_regex, origins),
-                              Network = Network,
-                              Region = Region)
-
-amazon_originals
+(amazon_originals %<>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = Language,
+            Status = only_keep(Status, status_regex, statuses),
+            Service = parse_factor("Amazon Prime Video", levels = services),
+            Format = only_keep(Format, format_regex, formats),
+            Origin = only_keep(Origin, origin_regex, origins),
+            Network = Network,
+            Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv")
-hulu_originals_1 <- transmute(hulu_originals_1,
-                              Title = Title,
-                              Genre = paste(Genre, " Drama"),
-                              Premiere = Premiere,
-                              Seasons = Seasons,
-                              Runtime = Length,
-                              Language = NA,
-                              Status = Status,
-                              Format = "Series",
-                              Origin = "Original",
-                              Network = NA,
-                              Region = NA)
+hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Length,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -2453,8 +2445,8 @@ hulu_originals_8 <- transmute(hulu_originals_8,
                               Status = Status,
                               Format = "Series",
                               Origin = "Original",
-                              Network = `Partner / Country`,
-                              Region = `Partner / Country`)
+                              Network = str_split(`Partner / Country`, "/")[[1]][1],
+                              Region = str_split(`Partner / Country`, "/")[[1]][2])
 
 hulu_originals_9 <- read_csv("../datasets/hulu/shows/table-9.csv")
 hulu_originals_9 <- transmute(hulu_originals_9,
@@ -2607,8 +2599,8 @@ hulu_originals_19 <- transmute(hulu_originals_19,
                               Status = "Pending",
                               Format = "Series",
                               Origin = "Original",
-                              Network = `Partner/Country`,
-                              Region = `Partner/Country`)
+                              Network = str_split(`Partner/Country`, "/")[[1]][1],
+                              Region = str_split(`Partner/Country`, "/")[[1]][2])
 
 
 hulu_originals_20 <- read_csv("../datasets/hulu/shows/table-20.csv")
@@ -2780,39 +2772,37 @@ hulu_originals <- rbind(hulu_originals, hulu_originals_27)
 hulu_originals <- rbind(hulu_originals, hulu_originals_28)
 hulu_originals <- rbind(hulu_originals, hulu_originals_29)
 
-hulu_originals <- transmute(hulu_originals, 
-                            Title = Title,
-                            Genre = Genre,
-                            Premiere = Premiere,
-                            Seasons = Seasons,
-                            Runtime = Runtime,
-                            Language = Language,
-                            Status = only_keep(Status, status_regex, statuses),
-                            Service = parse_factor("Hulu", levels = services),
-                            Format = only_keep(Format, format_regex, formats),
-                            Origin = only_keep(Origin, origin_regex, origins),
-                            Network = Network,
-                            Region = Region)
-
-hulu_originals
+(hulu_originals %<>% 
+    transmute(Title = Title,
+              Genre = Genre,
+              Premiere = Premiere,
+              Seasons = Seasons,
+              Runtime = Runtime,
+              Language = Language,
+              Status = only_keep(Status, status_regex, statuses),
+              Service = parse_factor("Hulu", levels = services),
+              Format = only_keep(Format, format_regex, formats),
+              Origin = only_keep(Origin, origin_regex, origins),
+              Network = Network,
+              Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv")
-disney_originals_1 <- transmute(disney_originals_1,
-                                Title = Title,
-                                Genre = paste(Genre, " Drama"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = Status,
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+
+disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -2913,9 +2903,6 @@ disney_originals_8 <- transmute(disney_originals_8,
                                 Origin = "Original",
                                 Network = NA,
                                 Region = NA)
-
-# missing exclusives
-# missing table-9 content on wiki
 
 disney_originals_10 <- read_csv("../datasets/disney/shows/table-10.csv")
 disney_originals_10 <- transmute(disney_originals_10,
@@ -3211,358 +3198,333 @@ disney_originals <- rbind(disney_originals, disney_originals_26)
 disney_originals <- rbind(disney_originals, disney_originals_27)
 disney_originals <- rbind(disney_originals, disney_originals_28)
 
-disney_originals <- transmute(disney_originals, 
-                              Title = Title,
-                              Genre = Genre,
-                              Premiere = Premiere,
-                              Seasons = Seasons,
-                              Runtime = Runtime,
-                              Language = Language,
-                              Status = only_keep(Status, status_regex, statuses),
-                              Service = parse_factor("Disney+", levels = services),
-                              Format = only_keep(Format, format_regex, formats),
-                              Origin = only_keep(Origin, origin_regex, origins),
-                              Network = Network,
-                              Region = Region)
-
-disney_originals
+(disney_originals %<>% 
+    transmute(Title = Title,
+              Genre = Genre,
+              Premiere = Premiere,
+              Seasons = Seasons,
+              Runtime = Runtime,
+              Language = Language,
+              Status = only_keep(Status, status_regex, statuses),
+              Service = parse_factor("Disney+", levels = services),
+              Format = only_keep(Format, format_regex, formats),
+              Origin = only_keep(Origin, origin_regex, origins),
+              Network = Network,
+              Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv")
-apple_originals_1 <- transmute(apple_originals_1,
-                               Title = Title,
-                               Genre = paste(Genre, " Drama"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv")
-apple_originals_2 <- transmute(apple_originals_2,
-                               Title = Title,
-                               Genre = paste(Genre, " Comedy"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Comedy"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_3 <- read_csv("../datasets/apple/shows/table-3.csv")
-apple_originals_3 <- transmute(apple_originals_3,
-                               Title = Title,
-                               Genre = paste(Genre, " Adult Animation"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_3 <- read_csv("../datasets/apple/shows/table-3.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Adult Animation"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_4 <- read_csv("../datasets/apple/shows/table-4.csv")
-apple_originals_4 <- transmute(apple_originals_4,
-                               Title = Title,
-                               Genre = paste(Genre, " Family Children"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_4 <- read_csv("../datasets/apple/shows/table-4.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Family Children"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_5 <- read_csv("../datasets/apple/shows/table-5.csv")
-apple_originals_5 <- transmute(apple_originals_5,
-                               Title = Title,
-                               Genre = paste(Genre, " Docuseries Unscripted"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_5 <- read_csv("../datasets/apple/shows/table-5.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Docuseries Unscripted"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_6 <- read_csv("../datasets/apple/shows/table-6.csv")
-apple_originals_6 <- transmute(apple_originals_6,
-                               Title = Title,
-                               Genre = paste(Genre, " Variety Unscripted"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_6 <- read_csv("../datasets/apple/shows/table-6.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Variety Unscripted"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_7 <- read_csv("../datasets/apple/shows/table-7.csv")
-apple_originals_7 <- transmute(apple_originals_7,
-                               Title = Title,
-                               Genre = Genre,
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = Status,
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = `Partner/Country`,
-                               Region = `Partner/Country`)
+apple_originals_7 <- read_csv("../datasets/apple/shows/table-7.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = Status,
+            Format = "Series",
+            Origin = "Original",
+            Network = str_split(`Partner/Country`, "/")[[1]][1],
+            Region = str_split(`Partner/Country`, "/")[[1]][2])
 
-apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv")
-apple_originals_8 <- transmute(apple_originals_8,
-                               Title = Title,
-                               Genre = paste(Genre, " Drama"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = "Pending",
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Drama"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv")
-apple_originals_9 <- transmute(apple_originals_9,
-                               Title = Title,
-                               Genre = paste(Genre, " Comedy"),
-                               Premiere = Premiere,
-                               Seasons = Seasons,
-                               Runtime = Runtime,
-                               Language = NA,
-                               Status = "Pending",
-                               Format = "Series",
-                               Origin = "Original",
-                               Network = NA,
-                               Region = NA)
+apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Comedy"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv")
-apple_originals_10 <- transmute(apple_originals_10,
-                                Title = Title,
-                                Genre = paste(Genre, " Family Children Animation"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Family Children Animation"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv")
-apple_originals_11 <- transmute(apple_originals_11,
-                                Title = Title,
-                                Genre = paste(Genre, " Docuseries Unscripted"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Docuseries Unscripted"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_12 <- read_csv("../datasets/apple/shows/table-12.csv")
-apple_originals_12 <- transmute(apple_originals_12,
-                                Title = Title,
-                                Genre = paste(Genre, " Reality Unscripted"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_12 <- read_csv("../datasets/apple/shows/table-12.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Reality Unscripted"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_13 <- read_csv("../datasets/apple/shows/table-13.csv")
-apple_originals_13 <- transmute(apple_originals_13,
-                                Title = Title,
-                                Genre = paste(Genre, " Variety Unscripted"),
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_13 <- read_csv("../datasets/apple/shows/table-13.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Variety Unscripted"),
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_14 <- read_csv("../datasets/apple/shows/table-14.csv")
-apple_originals_14 <- transmute(apple_originals_14,
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Premiere,
-                                Seasons = Seasons,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = `Partner/Country`,
-                                Region = `Partner/Country`)
+apple_originals_14 <- read_csv("../datasets/apple/shows/table-14.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Premiere,
+            Seasons = Seasons,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Series",
+            Origin = "Original",
+            Network = str_split(`Partner/Country`, "/")[[1]][1],
+            Region = str_split(`Partner/Country`, "/")[[1]][2])
 
-apple_originals_15 <- read_csv("../datasets/apple/shows/table-15.csv")
-apple_originals_15 <- transmute(apple_originals_15,
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = NA,
-                                Seasons = NA,
-                                Runtime = NA,
-                                Language = NA,
-                                Status = "Development",
-                                Format = "Series",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_15 <- read_csv("../datasets/apple/shows/table-15.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = NA,
+            Seasons = NA,
+            Runtime = NA,
+            Language = NA,
+            Status = "Development",
+            Format = "Series",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_16 <- read_csv("../datasets/apple/films/table-1.csv")
-apple_originals_16 <- transmute(apple_originals_16,
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Release,
-                                Seasons = NA,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Ended",
-                                Format = "Film",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_16 <- read_csv("../datasets/apple/films/table-1.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Release,
+            Seasons = NA,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Ended",
+            Format = "Film",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_17 <- read_csv("../datasets/apple/films/table-2.csv")
-apple_originals_17 <- transmute(apple_originals_17,
-                                Title = Title,
-                                Genre = paste(Genre, " Documentary"),
-                                Premiere = Release,
-                                Seasons = NA,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
-                                Format = "Film",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_17 <- read_csv("../datasets/apple/films/table-2.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Documentary"),
+            Premiere = Release,
+            Seasons = NA,
+            Runtime = Runtime,
+            Language = NA,
+            Status = ifelse(str_detect(Runtime, "TBA"), "Pending", "Ended"),
+            Format = "Film",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_18 <- read_csv("../datasets/apple/films/table-3.csv")
-apple_originals_18 <- transmute(apple_originals_18,
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Release,
-                                Seasons = NA,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Ended",
-                                Format = "Special",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_18 <- read_csv("../datasets/apple/films/table-3.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Release,
+            Seasons = NA,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Ended",
+            Format = "Special",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_19 <- read_csv("../datasets/apple/films/table-4.csv")
-apple_originals_19 <- transmute(apple_originals_19,
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Release,
-                                Seasons = NA,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Film",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_19 <- read_csv("../datasets/apple/films/table-4.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Release,
+            Seasons = NA,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Film",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_20 <- read_csv("../datasets/apple/films/table-5.csv")
-apple_originals_20 <- transmute(apple_originals_20,
-                                Title = Title,
-                                Genre = paste(Genre, " Documentary"),
-                                Premiere = Release,
-                                Seasons = NA,
-                                Runtime = Runtime,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Film",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_20 <- read_csv("../datasets/apple/films/table-5.csv") %>%
+  transmute(Title = Title,
+            Genre = paste(Genre, " Documentary"),
+            Premiere = Release,
+            Seasons = NA,
+            Runtime = Runtime,
+            Language = NA,
+            Status = "Pending",
+            Format = "Film",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
-apple_originals_21 <- read_csv("../datasets/apple/films/table-6.csv")
-apple_originals_21 <- transmute(apple_originals_21,
-                                Title = Title,
-                                Genre = Genre,
-                                Premiere = Release,
-                                Seasons = NA,
-                                Runtime = Length,
-                                Language = NA,
-                                Status = "Pending",
-                                Format = "Special",
-                                Origin = "Original",
-                                Network = NA,
-                                Region = NA)
+apple_originals_21 <- read_csv("../datasets/apple/films/table-6.csv") %>%
+  transmute(Title = Title,
+            Genre = Genre,
+            Premiere = Release,
+            Seasons = NA,
+            Runtime = Length,
+            Language = NA,
+            Status = "Pending",
+            Format = "Special",
+            Origin = "Original",
+            Network = NA,
+            Region = NA)
 
 apple_originals <- rbind(apple_originals_1, apple_originals_2)
-apple_originals <- rbind(apple_originals, apple_originals_3)
-apple_originals <- rbind(apple_originals, apple_originals_4)
-apple_originals <- rbind(apple_originals, apple_originals_5)
-apple_originals <- rbind(apple_originals, apple_originals_6)
-apple_originals <- rbind(apple_originals, apple_originals_7)
-apple_originals <- rbind(apple_originals, apple_originals_8)
-apple_originals <- rbind(apple_originals, apple_originals_9)
-apple_originals <- rbind(apple_originals, apple_originals_10)
-apple_originals <- rbind(apple_originals, apple_originals_11)
-apple_originals <- rbind(apple_originals, apple_originals_12)
-apple_originals <- rbind(apple_originals, apple_originals_13)
-apple_originals <- rbind(apple_originals, apple_originals_14)
-apple_originals <- rbind(apple_originals, apple_originals_15)
-apple_originals <- rbind(apple_originals, apple_originals_16)
-apple_originals <- rbind(apple_originals, apple_originals_17)
-apple_originals <- rbind(apple_originals, apple_originals_18)
-apple_originals <- rbind(apple_originals, apple_originals_19)
-apple_originals <- rbind(apple_originals, apple_originals_20)
-apple_originals <- rbind(apple_originals, apple_originals_21)
+apple_originals %<>% rbind(apple_originals_3)
+apple_originals %<>% rbind(apple_originals_4)
+apple_originals %<>% rbind(apple_originals_5)
+apple_originals %<>% rbind(apple_originals_6)
+apple_originals %<>% rbind(apple_originals_7)
+apple_originals %<>% rbind(apple_originals_8)
+apple_originals %<>% rbind(apple_originals_9)
+apple_originals %<>% rbind(apple_originals_10)
+apple_originals %<>% rbind(apple_originals_11)
+apple_originals %<>% rbind(apple_originals_12)
+apple_originals %<>% rbind(apple_originals_13)
+apple_originals %<>% rbind(apple_originals_14)
+apple_originals %<>% rbind(apple_originals_15)
+apple_originals %<>% rbind(apple_originals_16)
+apple_originals %<>% rbind(apple_originals_17)
+apple_originals %<>% rbind(apple_originals_18)
+apple_originals %<>% rbind(apple_originals_19)
+apple_originals %<>% rbind(apple_originals_20)
+apple_originals %<>% rbind(apple_originals_21)
 
-apple_originals <- transmute(apple_originals, 
-                             Title = Title,
-                             Genre = Genre,
-                             Premiere = Premiere,
-                             Seasons = Seasons,
-                             Runtime = Runtime,
-                             Language = Language,
-                             Status = only_keep(Status, status_regex, statuses),
-                             Service = parse_factor("Apple TV+", levels = services),
-                             Format = only_keep(Format, format_regex, formats),
-                             Origin = only_keep(Origin, origin_regex, origins),
-                             Network = Network,
-                             Region = Region)
-
-apple_originals
+(apple_originals %<>% 
+    transmute(Title = Title,
+              Genre = Genre,
+              Premiere = Premiere,
+              Seasons = Seasons,
+              Runtime = Runtime,
+              Language = Language,
+              Status = only_keep(Status, status_regex, statuses),
+              Service = parse_factor("Apple TV+", levels = services),
+              Format = only_keep(Format, format_regex, formats),
+              Origin = only_keep(Origin, origin_regex, origins),
+              Network = Network,
+              Region = Region))
 
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
@@ -3572,26 +3534,23 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 ```{r}
 movies <- read_csv("../datasets/movies.csv")
 
-movies <- transmute(movies,
-                    Title = Title,
-                    Genre = str_replace_all(Genres, ",", " / "),
-                    Year = Year,
-                    Age = Age,
-                    Runtime = Runtime,
-                    IMDb = IMDb,
-                    `Rotten Tomatoes` = `Rotten Tomatoes`,
-                    Netflix = Netflix > 0,
-                    Hulu = Hulu > 0,
-                    `Prime Video` = `Prime Video` > 0,
-                    `Disney+` = `Disney+` > 0,
-                    `Apple TV+` = FALSE,
-                    Director = str_replace_all(Directors, ",", " / "),
-                    Country = str_replace_all(Country, ",", " / "),
-                    Language = str_replace_all(Language, ",", " / "),
-                    Format = parse_factor("Film", levels = formats),
-                    Status = parse_factor("Ended", levels = statuses))
-
-movies
+(movies %<>% transmute(Title = Title,
+                     Genre = str_replace_all(Genres, ",", " / "),
+                     Year = Year,
+                     Age = Age,
+                     Runtime = Runtime,
+                     IMDb = IMDb,
+                     `Rotten Tomatoes` = `Rotten Tomatoes`,
+                     Netflix = Netflix > 0,
+                     Hulu = Hulu > 0,
+                     `Prime Video` = `Prime Video` > 0,
+                     `Disney+` = `Disney+` > 0,
+                     `Apple TV+` = FALSE,
+                     Director = str_replace_all(Directors, ",", " / "),
+                     Country = str_replace_all(Country, ",", " / "),
+                     Language = str_replace_all(Language, ",", " / "),
+                     Format = parse_factor("Film", levels = formats),
+                     Status = parse_factor("Ended", levels = statuses)))
 ```
 
 ## Import Shows
@@ -3599,21 +3558,18 @@ movies
 ```{r}
 shows <- read_csv("../datasets/shows.csv")
 
-shows <- transmute(shows,
-                   Title = Title,
-                   Year = Year,
-                   Age = Age,
-                   IMDb = IMDb,
-                   `Rotten Tomatoes` = `Rotten Tomatoes`,
-                   Netflix = Netflix > 0,
-                   Hulu = Hulu > 0,
-                   `Prime Video` = `Prime Video` > 0,
-                   `Disney+` = `Disney+` > 0,
-                   `Apple TV+` = FALSE,
-                   Format = parse_factor("Series", levels = formats),
-                   Status = parse_factor("Ended", levels = statuses))
-
-shows
+(shows %<>% transmute(Title = Title,
+                    Year = Year,
+                    Age = Age,
+                    IMDb = IMDb,
+                    `Rotten Tomatoes` = `Rotten Tomatoes`,
+                    Netflix = Netflix > 0,
+                    Hulu = Hulu > 0,
+                    `Prime Video` = `Prime Video` > 0,
+                    `Disney+` = `Disney+` > 0,
+                    `Apple TV+` = FALSE,
+                    Format = parse_factor("Series", levels = formats),
+                    Status = parse_factor("Ended", levels = statuses)))
 ```
 
 ## Dataset Transmutation
@@ -3675,6 +3631,56 @@ genres_to_uppercase_unique <- function(genres) {
   }
   return(genres_vector)
 }
+
+filter_originals <- function(originals) {
+  return(originals %>%
+           filter(!grepl("Pending|pending", Title),
+              Title != "Awaiting release",
+              !grepl("Miniseries|miniseries", Title),
+              !grepl("Renewed|renewed", Title),
+              !grepl("due to premiere", Title)
+           ))
+}
+
+transmute_originals <- function(originals) {
+  return(transmute(originals, 
+                   Title = Title,
+                   Genre = genres_to_uppercase_unique(str_replace_all(
+                      str_squish(
+                                            str_replace_all(
+                                              str_replace_all(
+                                                str_replace_all(
+                                                  str_replace_all(
+                                                    str_replace_all(Genre, "series|procedural", ""),
+                                                  "Science fiction", "Science-Fiction"),
+                                                "(C|c)oming-of-age ", ""),
+                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
+                                            "(Docu|docu).*", "Documentary")
+                                          ),
+                                        "/| ", " / ")),
+                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
+                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
+                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
+                                                  NA)),
+                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
+                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
+                                                  NA)),
+                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                                                  str_match(Runtime, "([0-9]+)")[,2])),
+                                Language = Language,
+                                Status = Status,
+                                Service = Service,
+                                Format = as.factor(Format),
+                                Origin = as.factor(Origin),
+                                Network = as.factor(Network),
+                                Region = as.factor(Region)
+                               ))
+}
+
 ```
 
 
@@ -3687,53 +3693,8 @@ After the data has been imported into the correct columns in the "netflix_origin
 After the function has been defined, we can start converting the columns of the data frame into their respective data types, so that it is easier to deal with them during the plotting process. This means, that the premiere is being converted into a Date object and the Seasons column as well as the Runtime column are converted and split up, so that there are only integer values left. The rest of the columns is just carried over.
 
 ```{r}
-netflix_originals <- filter(netflix_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-netflix_originals
-
-netflix <- transmute(netflix_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-netflix
+(netflix_originals %<>% filter_originals())
+(netflix <- transmute_originals(netflix_originals))
 
 rm("netflix_originals")
 ```
@@ -3743,53 +3704,8 @@ rm("netflix_originals")
 ### Transmutation of the given Amazon Prime series and movie table
 
 ```{r}
-amazon_originals <- filter(amazon_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-amazon_originals
-
-amazon <- transmute(amazon_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-amazon
+(amazon_originals %<>% filter_originals())
+(amazon <- transmute_originals(amazon_originals))
 
 rm("amazon_originals")
 ```
@@ -3799,53 +3715,8 @@ rm("amazon_originals")
 ### Transmutation of the given Hulu series and movie table
 
 ```{r}
-hulu_originals <- filter(hulu_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-hulu_originals
-
-hulu <- transmute(hulu_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-hulu
+(hulu_originals %<>% filter_originals())
+(hulu <- transmute_originals(hulu_originals))
 
 rm("hulu_originals")
 ```
@@ -3855,53 +3726,8 @@ rm("hulu_originals")
 ### Transmutation of the given Disney+ series and movie table
 
 ```{r}
-disney_originals <- filter(disney_originals,
-                            !grepl("Pending|pending", Title),
-                            Title != "Awaiting release",
-                            !grepl("Miniseries|miniseries", Title),
-                            !grepl("Renewed|renewed", Title),
-                            !grepl("due to premiere", Title))
-
-disney_originals
-
-disney <- transmute(disney_originals, 
-                                Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-disney
+(disney_originals %<>% filter_originals())
+(disney <- transmute_originals(disney_originals))
 
 rm("disney_originals")
 ```
@@ -3911,53 +3737,8 @@ rm("disney_originals")
 ### Transmutation of the given Apple TV+ series and movie table
 
 ```{r}
-apple_originals <- filter(apple_originals,
-                          !grepl("Pending|pending", Title),
-                          Title != "Awaiting release",
-                          !grepl("Miniseries|miniseries", Title),
-                          !grepl("Renewed|renewed", Title),
-                          !grepl("due to premiere", Title))
-
-apple_originals
-
-apple <- transmute(apple_originals, 
-                   Title = Title,
-                                Genre = genres_to_uppercase_unique(str_replace_all(
-                                          str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               )
-
-apple
+(apple_originals %<>% filter_originals())
+(apple <- transmute_originals(apple_originals))
 
 rm("apple_originals")
 ```
@@ -3968,9 +3749,9 @@ The goal now is to combine the results from the transmutation into one large dat
 
 ```{r}
 original_content <- rbind(netflix, amazon)
-original_content <- rbind(original_content, hulu)
-original_content <- rbind(original_content, disney)
-(original_content <- rbind(original_content, apple))
+original_content %<>% rbind(hulu)
+original_content %<>% rbind(disney)
+(original_content %<>% rbind(apple))
 ```
 
 ## Join with Movies
@@ -3978,17 +3759,17 @@ original_content <- rbind(original_content, disney)
 ```{r}
 natural_joined <- full_join(movies, original_content, by = "Title")
 
-natural_joined <- mutate(natural_joined, `Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
-natural_joined <- mutate(natural_joined, `Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
-natural_joined <- mutate(natural_joined, `Format.x` = ifelse(is.na(`Format.x`), `Format.y`, `Format.x`))
-natural_joined <- mutate(natural_joined, `Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
-natural_joined <- mutate(natural_joined, Country = ifelse(is.na(Country), Region, Country))
-natural_joined <- mutate(natural_joined, Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
-natural_joined <- mutate(natural_joined, Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
+natural_joined %<>% mutate(`Genre.x` = ifelse(is.na(`Genre.x`), `Genre.y`, `Genre.x`))
+natural_joined %<>% mutate(`Language.x` = ifelse(is.na(`Language.x`), `Language.y`, `Language.x`))
+natural_joined %<>% mutate(`Format.x` = ifelse(is.na(`Format.x`), `Format.y`, `Format.x`))
+natural_joined %<>% mutate(`Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `Status.x`))
+natural_joined %<>% mutate(Country = ifelse(is.na(Country), Region, Country))
+natural_joined %<>% mutate(Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
+natural_joined %<>% mutate(Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
 
 natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y", "Runtime"))]
 
-(natural_joined <- rename(natural_joined, Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
+(natural_joined %<>% rename(Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
 ```
 
 ## Join with Shows
@@ -3996,34 +3777,31 @@ natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "La
 ```{r}
 content <- full_join(shows, natural_joined, by = "Title")
 
-content <- mutate(content, `Year.x` = as.integer(ifelse(is.na(`Year.x`), `Year.y`, `Year.x`)))
-content <- mutate(content, `Age.x` = ifelse(is.na(`Age.x`), `Age.y`, `Age.x`))
-content <- mutate(content, `IMDb.x` = ifelse(is.na(`IMDb.x`), `IMDb.y`, `IMDb.x`))
-content <- mutate(content, `Rotten Tomatoes.x` = ifelse(is.na(`Rotten Tomatoes.x`), `Rotten Tomatoes.y`, `Rotten Tomatoes.x`))
-content <- mutate(content, `Netflix.x` = ifelse(is.na(`Netflix.x`), `Netflix.y`, `Netflix.x`))
-content <- mutate(content, `Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
-content <- mutate(content, `Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
-content <- mutate(content, `Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
-content <- mutate(content, `Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
-content <- mutate(content, `Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
-content <- mutate(content, `Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
+content %<>% mutate(`Year.x` = as.integer(ifelse(is.na(`Year.x`), `Year.y`, `Year.x`)))
+content %<>% mutate(`Age.x` = ifelse(is.na(`Age.x`), `Age.y`, `Age.x`))
+content %<>% mutate(`IMDb.x` = ifelse(is.na(`IMDb.x`), `IMDb.y`, `IMDb.x`))
+content %<>% mutate(`Rotten Tomatoes.x` = ifelse(is.na(`Rotten Tomatoes.x`), `Rotten Tomatoes.y`, `Rotten Tomatoes.x`))
+content %<>% mutate(`Netflix.x` = ifelse(is.na(`Netflix.x`), `Netflix.y`, `Netflix.x`))
+content %<>% mutate(`Hulu.x` = ifelse(is.na(`Hulu.x`), `Hulu.y`, `Hulu.x`))
+content %<>% mutate(`Prime Video.x` = ifelse(is.na(`Prime Video.x`), `Prime Video.y`, `Prime Video.x`))
+content %<>% mutate(`Disney+.x` = ifelse(is.na(`Disney+.x`), `Disney+.y`, `Disney+.x`))
+content %<>% mutate(`Apple TV+.x` = ifelse(is.na(`Apple TV+.x`), `Apple TV+.y`, `Apple TV+.x`))
+content %<>% mutate(`Format.x` = as.integer(ifelse(is.na(`Format.x`), `Format.y`, `Format.x`)))
+content %<>% mutate(`Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`, `Status.x`)))
 
 content <- content[, !(names(content) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
 
-content <- rename(content, Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
+content %<>% rename(Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
 
-content <- mutate(content, Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
-content <- mutate(content, Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
-
-content <- mutate(content, Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
-content <- mutate(content, Origin = parse_factor(origins[ifelse(is.na(Origin), parse_factor("Distribution", levels = origins), Origin)], levels = origins))
-
-content <- mutate(content, Format = parse_factor(formats[Format], levels = formats))
-content <- mutate(content, Status = parse_factor(statuses[Status], levels = statuses))
-
-content <- mutate(content, `Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
-
-content <- mutate(content, Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
+content %<>% mutate(Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
+content %<>% mutate(Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
+content %<>% mutate(Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
+content %<>% mutate(Origin = parse_factor(origins[ifelse(is.na(Origin), parse_factor("Distribution", levels = origins), Origin)], levels = origins))
+content %<>% mutate(Format = parse_factor(formats[Format], levels = formats))
+content %<>% mutate(Status = parse_factor(statuses[Status], levels = statuses))
+content %<>% mutate(`Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`, "%", "")))
+content %<>% mutate(Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
+content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Seasons, 1), Seasons))
 
 (content <- content[, !(names(content) %in% c("Premiere"))])
 ```
@@ -4032,18 +3810,18 @@ content <- mutate(content, Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA
 
 ```{r}
 apple_ages <- read_csv("../datasets/apple_ages.csv")
-apple_ages <- mutate(apple_ages, Age = parse_factor(Age, levels = ages))
+apple_ages %<>% mutate(Age = parse_factor(Age, levels = ages))
 
-content <- full_join(content, apple_ages, by = "Title")
-content <- mutate(content, `Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`) | `Age.x` == "unknown", parse_factor(ifelse(is.na(`Age.y`), "unknown", `Age.y`)), `Age.x`)], levels = ages))
+content %<>% full_join(apple_ages, by = "Title")
+content %<>% mutate(`Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`) | `Age.x` == "unknown", parse_factor(ifelse(is.na(`Age.y`), "unknown", `Age.y`)), `Age.x`)], levels = ages))
 content <- content[, !(names(content) %in% c("Age.y"))]
-content <- rename(content, Age = `Age.x`)
+content %<>% rename(Age = `Age.x`)
 
 rm("apple_ages")
 
-content <- mutate(content, Age = parse_factor(ages[ifelse(Age == "7+", parse_factor("6+", levels = ages), Age)], levels = ages))
-content <- mutate(content, Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("12+", levels = ages), Age)], levels = ages))
-(content <- mutate(content, Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
+content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "7+", parse_factor("6+", levels = ages), Age)], levels = ages))
+content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("12+", levels = ages), Age)], levels = ages))
+(content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
 ```
 
 ## Dataset Documentation
@@ -4136,14 +3914,58 @@ Now that the data set is fully combined, we should add documentation to the colu
 ## Add other missing Apple TV+ values
 
 ```{r}
-content <- mutate(content, Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
-content <- mutate(content, Hulu = ifelse(is.na(Hulu), FALSE, Hulu))
-content <- mutate(content, `Prime Video` = ifelse(is.na(`Prime Video`), FALSE, `Prime Video`))
-content <- mutate(content, `Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
-(content <- mutate(content, `Apple TV+` = ifelse(Service == "Apple TV+", TRUE, `Apple TV+`)))
+content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
+content %<>% mutate(Hulu = ifelse(is.na(Hulu), FALSE, Hulu))
+content %<>% mutate(`Prime Video` = ifelse(is.na(`Prime Video`), FALSE, `Prime Video`))
+content %<>% mutate(`Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
+(content %<>% mutate(`Apple TV+` = ifelse(Service == "Apple TV+", TRUE, `Apple TV+`)))
 ```
 
 ## Data Exploration
+
+### Data exploration functions
+
+```{r}
+age_histogram_colors <- c(
+      rgb(131/255, 138/255, 141/255, 1),
+      rgb(255/255, 230/255, 0/255, 1),
+      rgb(13/255, 177/255, 75/255, 1),
+      rgb(0/255, 164/255, 224/255, 1),
+      rgb(237/255, 28/255, 36/255, 1))
+
+age_histogram_original <- function(year, service) {
+  content %>% 
+  filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+    labs(fill = "Age") +
+    scale_fill_manual(values = age_histogram_colors)
+}
+
+age_histogram <- function(format) {
+  content %>% 
+  filter(between(Year, 2006, 2020), Format == format) %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+    labs(fill = "Age") +
+    scale_fill_manual(values = age_histogram_colors)
+}
+
+origin_change <- function(year, service) {
+  return(content %>% 
+           filter(between(Year, year, 2020)) %>%
+           filter_(lazyeval::interp(quote(x == y), x = as.name(service), y = TRUE)) %>%
+           group_by(Year, Origin) %>% 
+           summarise(n = n()) %>%
+           mutate(Percentage = n / sum(n)))
+}
+
+origin_change_area <- function(change) {
+  change %>% 
+    ggplot(aes(x = Year, y = Percentage, fill = factor(Origin))) +
+    geom_area()
+}
+```
 
 ### Production of original content throughout the years
 
@@ -4188,67 +4010,31 @@ plot(linear_regression)
 ### Change in Netflix content origin over the years
 
 ```{r}
-netflix_origin_change <- content %>% 
-  filter(Year >= 2007, Netflix == TRUE) %>% 
-  group_by(Year, Origin) %>% 
-  summarise(n = n()) %>% 
-  mutate(percentage = n / sum(n))
-
-ggplot(netflix_origin_change, mapping = aes(x = Year, y = percentage, fill = factor(Origin))) +
-  geom_area()
+origin_change_area(origin_change(2007, "Netflix"))
 ```
 
 ### Change in Amazon Prime Video content origin over the years
 
 ```{r}
-amazon_origin_change <- content %>% 
-  filter(Year >= 2006, `Prime Video` == TRUE) %>% 
-  group_by(Year, Origin) %>% 
-  summarise(n = n()) %>% 
-  mutate(Percentage = n / sum(n))
-
-ggplot(amazon_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
-  geom_area()
+origin_change_area(origin_change(2006, "Prime Video"))
 ```
 
 ### Change in Hulu content origin over the years
 
 ```{r}
-hulu_origin_change <- content %>% 
-  filter(Year >= 2007, `Hulu` == TRUE) %>% 
-  group_by(Year, Origin) %>% 
-  summarise(n = n()) %>% 
-  mutate(Percentage = n / sum(n))
-
-ggplot(hulu_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
-  geom_area()
+origin_change_area(origin_change(2007, "Hulu"))
 ```
 
 ### Change in Disney+ content origin over the years
 
 ```{r}
-disney_origin_change <- content %>% 
-  filter(Year >= 2019, `Disney+` == TRUE) %>% 
-  group_by(Year, Origin) %>% 
-  summarise(n = n()) %>% 
-  mutate(Percentage = n / sum(n))
-
-ggplot(disney_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
-  geom_area()
-  #scale_x_discrete("Year", limits = c(2019.00, 2019.25, 2019.50, 2019.75, 2020.00), labels = c("2019 Q1", "2019 Q2", "2019 Q3", "2019 Q4", "2020 Q1"))
+origin_change_area(origin_change(2019, "Disney+"))
 ```
 
 ### Change in Apple TV+ content origin over the years
 
 ```{r}
-apple_origin_change <- content %>% 
-  filter(Year >= 2019, `Apple TV+` == TRUE) %>% 
-  group_by(Year, Origin) %>% 
-  summarise(n = n()) %>% 
-  mutate(Percentage = n / sum(n))
-
-ggplot(apple_origin_change, mapping = aes(x = Year, y = Percentage, fill = factor(Origin))) +
-  geom_area()
+origin_change_area(origin_change(2019, "Apple TV+"))
 ```
 
 ### Production of original content grouped by months
@@ -4343,176 +4129,45 @@ ggplot(data = genre_count) +
 ### Age rating for all content
 
 ```{r}
-ggplot(data = content) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+content %>% 
+  filter(between(Year, 2006, 2020)) %>% 
+  ggplot() +
+    geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
+    labs(fill = "Age") +
+    scale_fill_manual(values = age_histogram_colors)
 
-ggplot(data = filter(content, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-### Age rating for all Netflix content
-
-```{r}
-ggplot(data = filter(content, Netflix == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Netflix == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Netflix == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram("Series")
+age_histogram("Film")
 ```
 
 ### Age rating for all original Netflix content
 
 ```{r}
-ggplot(data = filter(content, Service == "Netflix", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Netflix", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Netflix", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Amazon Prime Video content
-
-```{r}
-ggplot(data = filter(content, `Prime Video` == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Prime Video` == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Prime Video` == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2007, "Netflix")
 ```
 
 ### Age rating for all original Amazon Prime Video content
 
 ```{r}
-ggplot(data = filter(content, Service == "Amazon Prime Video", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Amazon Prime Video", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Hulu content
-
-```{r}
-ggplot(data = filter(content, Hulu == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Hulu == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Hulu == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2006, "Amazon Prime Video")
 ```
 
 ### Age rating for all original Hulu content
 
 ```{r}
-ggplot(data = filter(content, Service == "Hulu", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Hulu", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Hulu", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Disney+ content
-
-```{r}
-ggplot(data = filter(content, `Disney+` == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Disney+` == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Disney+` == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2007, "Hulu")
 ```
 
 ### Age rating for all original Disney+ content
 
 ```{r}
-ggplot(data = filter(content, Service == "Disney+", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Disney+", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Disney+", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-```
-
-### Age rating for all Apple TV+ content
-
-```{r}
-ggplot(data = filter(content, `Apple TV+` == TRUE)) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Apple TV+` == TRUE, Format == "Series")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, `Apple TV+` == TRUE, Format == "Film")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2019, "Disney+")
 ```
 
 ### Age rating for all original Apple TV+ content
 
 ```{r}
-ggplot(data = filter(content, Service == "Apple TV+", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Apple TV+", Format == "Series", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
-
-ggplot(data = filter(content, Service == "Apple TV+", Format == "Film", Origin == "Original")) +
-  geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-  labs(fill = "Age")
+age_histogram_original(2019, "Apple TV+")
 ```
 
 ### Exporting the data frame to CSV
