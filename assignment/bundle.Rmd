@@ -9,9 +9,9 @@ output: html_document
 
 As the market for original content from various streaming services has grown throughout the years, the question why these companies are following this route arises. We want to statistically check whether the route of more and more original content instead of licensed content is promising or not.
 
-To do this analysis, we are using scraped data from various Wikipedia pages. For this purpose we have been using an external web scraper that scrapes all the <table> elements from the web page and converts them into a CSV format.
+To do this analysis, we are using scraped data from various Wikipedia pages. For this purpose we have been using an external web scraper that scrapes all the **\<table\>** elements from the web page and converts them into a CSV format.
 
-The web scraping tool can be found here:
+The **web scraping tool** can be found here:
 
 * [Wiki Table to CSV online converter](https://wikitable2csv.ggor.de/)
 
@@ -61,7 +61,6 @@ library(forcats)
 library(magrittr)
 library(readxl)
 library(knitr)
-install.packages("lazyeval")
 library(lazyeval)
 Sys.setlocale("LC_TIME", "English") #Windows
 Sys.setlocale("LC_TIME", "en_GB.UTF-8") #Linux & Unix
@@ -1770,6 +1769,8 @@ The import procedure is also applied to the following streaming services:
 * Disney+ (28 CSVs)
 * Apple TV+ (21 CSVs)
 
+This adds up to a total of 223 files, that have been imported from the web scraping results.
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv") %>%
@@ -3341,9 +3342,20 @@ apple_originals <- bind_originals(apple_originals, 21)
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Import Movies
+## Import large Movies and Shows data set
 
-```{r}
+Since the goal is to point out the unique trademarks of original content, there is need for importing large data sets for movies and shows, that are available on streaming services, but not necessarily original content.
+
+For this purpose we are using datasets provided by [Ruchi Bhatia](https://www.kaggle.com/ruchi798) which can be found on the following pages:
+
+* [Movies on Netflix, Prime Video, Hulu and Disney+](https://www.kaggle.com/ruchi798/movies-on-netflix-prime-video-hulu-and-disney)
+* [TV shows on Netflix, Prime Video, Hulu and Disney+](https://www.kaggle.com/ruchi798/tv-shows-on-netflix-prime-video-hulu-and-disney)
+
+### Importing Movies
+
+The movies data set originally has 17 columns, of which 14 are interesting to us. The columns we are eliminating hold the index and an individual identifier, which is nothing more than a one-based index instead of a zero-based index, like the first column. The third column we don't make use of is "Type", since the same information is stored within our column "Format".
+
+```{r message=FALSE, warning=FALSE}
 movies <- read_csv("../datasets/movies.csv")
 
 (movies %<>% transmute(Title = Title,
@@ -3365,9 +3377,11 @@ movies <- read_csv("../datasets/movies.csv")
                      Status = parse_factor("Ended", levels = statuses)))
 ```
 
-## Import Shows
+### Importing Shows
 
-```{r}
+The show data set comes, in comparison to the movies data set, with a lot less columns, only eleven to be precise. We are not making use of the same three columns that we did not make use of with the movies data set.
+
+```{r message=FALSE, warning=FALSE}
 shows <- read_csv("../datasets/shows.csv")
 
 (shows %<>% transmute(Title = Title,
@@ -3386,9 +3400,15 @@ shows <- read_csv("../datasets/shows.csv")
 
 ## Dataset Transmutation
 
+Since the data is now imported into six individual tables and the combination, as well as the conversion process to correct and usable data types is the last hurdle keeping us from exploring the data, the data frames are now going to be combined into one large data frame with columns that are easier to deal with because of the correct conversions (e.g. numeric values to int or dbl, the premiere column is split up into three individual columns: day, month and year etc.)
+
 ### Custom transmutation functions
 
-```{r}
+For the transformation process, we were in need of writing functions that are capable of handling the input we are given in the exact manner we want it to be handled, since we could not find any base R function or any package that would be capable of doing the same thing.
+
+the **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
+
+```{r genres_to_uppercase_unique}
 anycharacter <- "([a-zA-Z]|-+)"
 
 genre_to_uppercase_unique <- function(genre) {
@@ -3443,7 +3463,11 @@ genres_to_uppercase_unique <- function(genres) {
   }
   return(genres_vector)
 }
+```
 
+The **filter_originals()** function has been introduced with the thought in mind that there are certain rows that contain ambiguous data that we would not want to keep, which is why we are matching against the RegExs that can be found in the scope of the **filter()** within the body of the function.
+
+```{r filter_originals}
 filter_originals <- function(originals) {
   return(originals %>%
            filter(!grepl("Pending|pending", Title),
@@ -3453,111 +3477,82 @@ filter_originals <- function(originals) {
               !grepl("due to premiere", Title)
            ))
 }
+```
 
+When converting the data into the correct data type and columns that are easy to deal with, we started off by testing our **transmute()** function usage against the results of the **netflix_originals** data frame and adapted for each time where we found an unwanted result with any of the other streaming services. This lead to the **transmute_originals()** function that can now be seen.
+
+```{r transmute_originals}
 transmute_originals <- function(originals) {
-  return(transmute(originals, 
-                   Title = Title,
-                   Genre = genres_to_uppercase_unique(str_replace_all(
-                      str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               ))
+  return(transmute(
+          originals, 
+          Title = Title,
+          Genre = genres_to_uppercase_unique(str_replace_all(
+                    str_squish(
+                      str_replace_all(
+                        str_replace_all(
+                          str_replace_all(
+                            str_replace_all(
+                              str_replace_all(Genre, "series|procedural", ""),
+                                "Science fiction", "Science-Fiction"),
+                              "(C|c)oming-of-age ", ""),
+                            "(C|c)omedy-(D|d)rama", "Dramedy"),
+                          "(Docu|docu).*", "Documentary")
+                        ),
+                      "/| ", " / ")),
+            Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
+            Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
+                              str_match(Seasons, "([0-9]+) (episode*)")[,2],
+                              NA)),
+            Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
+                              str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
+                              NA)),
+            Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                              str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
+                              str_match(Runtime, "([0-9]+)")[,2])),
+            Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                              str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                              str_match(Runtime, "([0-9]+)")[,2])),
+            Language = Language,
+            Status = Status,
+            Service = Service,
+            Format = as.factor(Format),
+            Origin = as.factor(Origin),
+            Network = as.factor(Network),
+            Region = as.factor(Region)
+            ))
 }
-
 ```
 
+## Performing transmutations
 
-## Transmute Netflix
-
-### Transmutation of the given Netflix series and movie table
-
-After the data has been imported into the correct columns in the "netflix_originals.Rmd" file, we are now going to transmute the data into the proper data types and into readable formats, as it is needed with multi-value cells like the Genre. For this, we needed a function that parses the value of the cells for the Genre and unifies the content, so that we can be sure that it is in a format that can be properly plotted afterwards.
-
-After the function has been defined, we can start converting the columns of the data frame into their respective data types, so that it is easier to deal with them during the plotting process. This means, that the premiere is being converted into a Date object and the Seasons column as well as the Runtime column are converted and split up, so that there are only integer values left. The rest of the columns is just carried over.
+The filtering and transmutation process is now applied to all of the individual original content data frames, which leads to the results that are shown below.
 
 ```{r}
-(netflix_originals %<>% filter_originals())
+netflix_originals %<>% filter_originals()
 (netflix <- transmute_originals(netflix_originals))
-
-rm("netflix_originals")
-```
-
-## Transmute Amazon Prime Video
-
-### Transmutation of the given Amazon Prime series and movie table
-
-```{r}
-(amazon_originals %<>% filter_originals())
+amazon_originals %<>% filter_originals()
 (amazon <- transmute_originals(amazon_originals))
-
-rm("amazon_originals")
-```
-
-## Transmute Hulu
-
-### Transmutation of the given Hulu series and movie table
-
-```{r}
-(hulu_originals %<>% filter_originals())
+hulu_originals %<>% filter_originals()
 (hulu <- transmute_originals(hulu_originals))
-
-rm("hulu_originals")
-```
-
-## Transmute Disney+
-
-### Transmutation of the given Disney+ series and movie table
-
-```{r}
-(disney_originals %<>% filter_originals())
+disney_originals %<>% filter_originals()
 (disney <- transmute_originals(disney_originals))
-
-rm("disney_originals")
+apple_originals %<>% filter_originals()
+(apple <- transmute_originals(apple_originals))
 ```
 
-## Transmute Apple TV+
-
-### Transmutation of the given Apple TV+ series and movie table
+To ensure that the data frames that hold the original content can not be confused with the data frames that originally hold the non-transmuted content, they are removed from the pool of global variables.
 
 ```{r}
-(apple_originals %<>% filter_originals())
-(apple <- transmute_originals(apple_originals))
-
+rm("netflix_originals")
+rm("amazon_originals")
+rm("hulu_originals")
+rm("disney_originals")
 rm("apple_originals")
 ```
 
 ## Combine Services
 
-The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
+The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from five of the largest streaming services. The result is a data frame with 3979 rows.
 
 ```{r}
 original_content <- rbind(netflix, amazon)
@@ -3637,13 +3632,6 @@ content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("1
 ```
 
 ## Dataset Documentation
-
-```{r}
-unique(select(content, Origin))
-
-filter(content, !is.na(Service))
-```
-
 
 Now that the data set is fully combined, we should add documentation to the columns, to describe what they are representing.
 
