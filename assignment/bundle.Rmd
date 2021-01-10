@@ -3553,6 +3553,16 @@ original_content %<>% rbind(disney)
 
 ## Join with Movies
 
+The combination of the **original_content** data frame with the movies data set is not as easy, since it is not a horizontal join similar to the ones that were executed during the import process. Some of the columns are duplicates of the values that are already captured from the scraped data, some duplicate columns are more, some are less accurate than the original content ones. This means that after **full joining** via the **Title** we needed to combine the following columns into new ones:
+
+* Genre
+* Language
+* Format
+* Status
+* Country (was combined with Region from the original content data frame)
+* Min_Time
+* Max_Time
+
 ```{r}
 natural_joined <- full_join(movies, original_content, by = "Title")
 
@@ -3563,13 +3573,33 @@ natural_joined %<>% mutate(`Status.x` = ifelse(is.na(`Status.x`), `Status.y`, `S
 natural_joined %<>% mutate(Country = ifelse(is.na(Country), Region, Country))
 natural_joined %<>% mutate(Min_Time = as.integer(ifelse(is.na(Min_Time), Runtime, Min_Time)))
 natural_joined %<>% mutate(Max_Time = as.integer(ifelse(is.na(Max_Time), Runtime, Max_Time)))
+```
 
+After the mutation of the columns, the columns that are not needed anymore are deleted and the columns that carry incorrect names due to the joining process are being renamed.
+
+```{r}
 natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "Language.y", "Region", "Format.y", "Status.y", "Runtime"))]
 
 (natural_joined %<>% rename(Genre = `Genre.x`, Language = `Language.x`, Format = `Format.x`, Status = `Status.x`))
 ```
 
 ## Join with Shows
+
+Joining the now larger data frame with the imported shows puts up some more issues since the previously merged movies data frame contained a lot of columns that are also known to the shows data frame, but can never hold intersecting data, since an entry can never be a film and a series at the same time. Therefore the following columns are merged accordingly:
+
+* Year
+* Age
+* IMDb
+* Rotten Tomatoes
+* Netflix
+* Hulu
+* Prime Video
+* Disney+
+* Apple TV+
+* Format
+* Status
+
+After that the join columns are renamed and removed accordingly again.
 
 ```{r}
 content <- full_join(shows, natural_joined, by = "Title")
@@ -3589,7 +3619,21 @@ content %<>% mutate(`Status.x` = as.integer(ifelse(is.na(`Status.x`), `Status.y`
 content <- content[, !(names(content) %in% c("Year.y", "Age.y", "IMDb.y", "Rotten Tomatoes.y", "Netflix.y", "Hulu.y", "Prime Video.y", "Disney+.y", "Apple TV+.y", "Format.y", "Status.y"))]
 
 content %<>% rename(Year = `Year.x`, Age = `Age.x`, IMDb = `IMDb.x`, `Rotten Tomatoes` = `Rotten Tomatoes.x`, Netflix = `Netflix.x`, Hulu = `Hulu.x`, `Prime Video` = `Prime Video.x`, `Disney+` = `Disney+.x`, `Apple TV+` = `Apple TV+.x`, Format = `Format.x`, Status = `Status.x`)
+```
 
+Now that the data frames are all combined, the data type of the following columns needs to be restored:
+
+* Age
+* Origin
+* Format
+* Status
+* Rotten Tomatoes
+* Year
+* Seasons
+
+The columns for Month, Day and Year are also converted into integers or the Year is extracted from the Premiere using the **lubridate** package.
+
+```{r}
 content %<>% mutate(Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
 content %<>% mutate(Day = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%d")))))
 content %<>% mutate(Age = parse_factor(ifelse(is.na(Age), "unknown", Age), levels = ages))
@@ -3603,7 +3647,9 @@ content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Sea
 (content <- distinct(content[, !(names(content) %in% c("Premiere", "Country"))], Title, .keep_all = TRUE))
 ```
 
-## Add missing Apple TV+ original age ratings
+## Add missing Apple TV+ values
+
+Because Apple TV+ only holds original content, there is no need to worry about us including it, although it is not mentioned in the movies or shows data set. One important piece of information we are lacking with this approach is the age restriction of the productions. Therefore we scraped the age restrictions from the [IMDb page](https://www.imdb.com/search/title/?companies=co0546168) and combined them with the data we have.
 
 ```{r}
 apple_ages <- read_csv("../datasets/apple_ages.csv")
@@ -3613,12 +3659,26 @@ content %<>% full_join(apple_ages, by = "Title")
 content %<>% mutate(`Age.x` = parse_factor(ages[ifelse(is.na(`Age.x`) | `Age.x` == "unknown", parse_factor(ifelse(is.na(`Age.y`), "unknown", `Age.y`)), `Age.x`)], levels = ages))
 content <- content[, !(names(content) %in% c("Age.y"))]
 content %<>% rename(Age = `Age.x`)
+```
 
+After that we remove the data frame from the pool of global variables again. We also convert the **7+** and **13+** entries to conform with the FSK age restrictions we were using beforehand to make it easier to compare them with the other streaming services.
+
+```{r}
 rm("apple_ages")
 
 content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "7+", parse_factor("6+", levels = ages), Age)], levels = ages))
 content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("12+", levels = ages), Age)], levels = ages))
 (content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
+```
+
+After looking at the outcome of the merging process, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them as well.
+
+```{r}
+content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
+content %<>% mutate(Hulu = ifelse(is.na(Hulu), FALSE, Hulu))
+content %<>% mutate(`Prime Video` = ifelse(is.na(`Prime Video`), FALSE, `Prime Video`))
+content %<>% mutate(`Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
+(content %<>% mutate(`Apple TV+` = ifelse(Service == "Apple TV+", TRUE, `Apple TV+`)))
 ```
 
 ## Dataset Documentation
@@ -3697,16 +3757,6 @@ Now that the data set is fully combined, we should add documentation to the colu
 * Day
   * Data type: int
   * Description: The day on which the series or movie originally premiered
-
-## Add other missing Apple TV+ values
-
-```{r}
-content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
-content %<>% mutate(Hulu = ifelse(is.na(Hulu), FALSE, Hulu))
-content %<>% mutate(`Prime Video` = ifelse(is.na(`Prime Video`), FALSE, `Prime Video`))
-content %<>% mutate(`Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
-(content %<>% mutate(`Apple TV+` = ifelse(Service == "Apple TV+", TRUE, `Apple TV+`)))
-```
 
 ## Data Exploration
 
