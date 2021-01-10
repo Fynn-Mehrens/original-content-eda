@@ -3811,7 +3811,7 @@ content %<>% mutate(`Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`
 content %<>% mutate(Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
 content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Seasons, 1), Seasons))
 
-(content <- content[, !(names(content) %in% c("Premiere"))])
+(content <- content[, !(names(content) %in% c("Premiere", "Country"))])
 ```
 
 ## Add missing Apple TV+ original age ratings
@@ -3878,9 +3878,6 @@ Now that the data set is fully combined, we should add documentation to the colu
 * Director
   * Data type: chr
   * Description: List of the names of directors of the series or movie (separated by " / ")
-* Country
-  * Data type: chr
-  * Description: List of the countries of the series or movie (separated by " / ")
 * Language
   * Data type: chr
   * Description: List of the languages the series or movie was originally released in (separated by " / ")
