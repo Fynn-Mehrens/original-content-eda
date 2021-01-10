@@ -3770,6 +3770,13 @@ age_histogram_colors <- c(
       rgb(0/255, 164/255, 224/255, 1),
       rgb(237/255, 28/255, 36/255, 1))
 
+original_colors <- c(
+  rgb(229/255, 9/255, 20/255, 1),
+  rgb(0/255, 163/255, 218/255, 1),
+  rgb(28/255, 231/255, 131/255, 1),
+  rgb(148/255, 31/255, 138/255, 1),
+  rgb(0, 0, 0, 1))
+
 age_histogram_original <- function(year, service) {
   content %>% 
   filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
@@ -3812,13 +3819,7 @@ To make the following plots easier to read, we picked colors from the streaming 
 
 ```{r}
 # Adding a column to sort by, will be used as a categorical variable later on
-prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), Premiere_Year != 2021, !is.na(Premiere_Year))
-
-original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
-                     rgb(0/255, 163/255, 218/255, 1),
-                     rgb(28/255, 231/255, 131/255, 1),
-                     rgb(148/255, 31/255, 138/255, 1),
-                     rgb(0, 0, 0, 1))
+prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), Premiere_Year <= 2020, !is.na(Premiere_Year))
 
 ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
   geom_bar() +
@@ -3829,6 +3830,7 @@ ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Servi
 Linear regression model for the amount of original content until 2050
 
 ```{r}
+options(scipen = 999)
 years <- c(2005:2020)
 
 productions <- function(years, dataframe) {
@@ -3838,6 +3840,8 @@ productions <- function(years, dataframe) {
   }
   return(productions)
 }
+
+productions(years, prem_year)
 
 linear_regression <- lm(years ~ productions(years, prem_year), data = filter(prem_year, is.na(match(Premiere_Year, years))))
 summary(linear_regression)
@@ -4005,6 +4009,53 @@ age_histogram_original(2019, "Disney+")
 
 ```{r}
 age_histogram_original(2019, "Apple TV+")
+```
+
+### Multilinear regression model
+
+Insert description here
+
+```{r message=FALSE}
+options(scipen = 999)
+
+relevant_years <- c(2017:2020)
+revenue <- read.csv("../datasets/yearly_revenue.csv")
+users <- read.csv("../datasets/yearly_users.csv")
+
+regression_df <- data_frame()
+
+for (year in relevant_years) {
+  regression_df %<>% rbind(data_frame(Year = year, Productions = nrow(filter(content, Year == year))))
+}
+
+(regression_df %<>% mutate(Revenue = revenue$Revenue, Users = users$Users))
+
+regression_model <- lm(regression_df$Productions ~ regression_df$Users + regression_df$Revenue, data = regression_df)
+
+summary(regression_model)
+
+cor(regression_df$Productions, regression_df$Users)
+cor(regression_df$Productions, regression_df$Revenue)
+
+cor(regression_df$Users, regression_df$Revenue)
+
+plot(regression_model)
+```
+
+```{r fig.height=8, fig.width=15}
+regression <- lm((content$IMDb * 10) ~ content$`Rotten Tomatoes`)
+summary(regression)
+```
+
+```{r fig.height=8, fig.width=15}
+par(mfrow=c(2,2))
+plot(regression)
+par(mfrow=c(1,1))
+```
+```{r}
+age_regression <- lm(Seasons ~ IMDb, data = filter(content, Format == "Series", Service == "Netflix"))
+summary(age_regression)
+plot(age_regression)
 ```
 
 ### Exporting the data frame to CSV
