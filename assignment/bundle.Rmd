@@ -81,16 +81,6 @@ only_keep <- function(row, regex, factor) {
 
 bind_originals <- function(originals, count) {
   name <- deparse(substitute(originals))
-  #temp <- originals
-
-  #for(i in 3:count) {
-  #  column <- str_replace_all(paste(name, "_", i), " ", "")
-  #  print({{column}})
-  #  (temp %<>% rbind({{column}}))
-  #  print(temp)
-  #}
-  
-  # sprintf("raster[%s]",seq(1:99))
   
   for(temp in map(sprintf(str_replace_all(paste(name, "_%s"), " ", ""), seq(3:count)), ~get(.))) {
     originals %<>% rbind(temp)
