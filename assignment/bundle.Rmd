@@ -3711,68 +3711,36 @@ transmute_originals <- function(originals) {
 }
 ```
 
-## Transmute Netflix
+## Performing transmutations
 
-### Transmutation of the given Netflix series and movie table
-
-After the data has been imported into the correct columns in the "netflix_originals.Rmd" file, we are now going to transmute the data into the proper data types and into readable formats, as it is needed with multi-value cells like the Genre. For this, we needed a function that parses the value of the cells for the Genre and unifies the content, so that we can be sure that it is in a format that can be properly plotted afterwards.
-
-After the function has been defined, we can start converting the columns of the data frame into their respective data types, so that it is easier to deal with them during the plotting process. This means, that the premiere is being converted into a Date object and the Seasons column as well as the Runtime column are converted and split up, so that there are only integer values left. The rest of the columns is just carried over.
+The filtering and transmutation process is now applied to all of the individual original content data frames, which leads to the results that are shown below.
 
 ```{r}
-(netflix_originals %<>% filter_originals())
+netflix_originals %<>% filter_originals()
 (netflix <- transmute_originals(netflix_originals))
-
-rm("netflix_originals")
-```
-
-## Transmute Amazon Prime Video
-
-### Transmutation of the given Amazon Prime series and movie table
-
-```{r}
-(amazon_originals %<>% filter_originals())
+amazon_originals %<>% filter_originals()
 (amazon <- transmute_originals(amazon_originals))
-
-rm("amazon_originals")
-```
-
-## Transmute Hulu
-
-### Transmutation of the given Hulu series and movie table
-
-```{r}
-(hulu_originals %<>% filter_originals())
+hulu_originals %<>% filter_originals()
 (hulu <- transmute_originals(hulu_originals))
-
-rm("hulu_originals")
-```
-
-## Transmute Disney+
-
-### Transmutation of the given Disney+ series and movie table
-
-```{r}
-(disney_originals %<>% filter_originals())
+disney_originals %<>% filter_originals()
 (disney <- transmute_originals(disney_originals))
-
-rm("disney_originals")
+apple_originals %<>% filter_originals()
+(apple <- transmute_originals(apple_originals))
 ```
 
-## Transmute Apple TV+
-
-### Transmutation of the given Apple TV+ series and movie table
+To ensure that the data frames that hold the original content can not be confused with the data frames that originally hold the non-transmuted content, they are removed from the pool of global variables.
 
 ```{r}
-(apple_originals %<>% filter_originals())
-(apple <- transmute_originals(apple_originals))
-
+rm("netflix_originals")
+rm("amazon_originals")
+rm("hulu_originals")
+rm("disney_originals")
 rm("apple_originals")
 ```
 
 ## Combine Services
 
-The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
+The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from five of the largest streaming services. The result is a data frame with 3979 rows.
 
 ```{r}
 original_content <- rbind(netflix, amazon)
