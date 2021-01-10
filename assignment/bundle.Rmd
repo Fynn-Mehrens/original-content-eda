@@ -79,6 +79,26 @@ only_keep <- function(row, regex, factor) {
   return(parse_factor(str_match(row, regex)[,2], levels = factor))
 }
 
+bind_originals <- function(originals, count) {
+  name <- deparse(substitute(originals))
+  #temp <- originals
+
+  #for(i in 3:count) {
+  #  column <- str_replace_all(paste(name, "_", i), " ", "")
+  #  print({{column}})
+  #  (temp %<>% rbind({{column}}))
+  #  print(temp)
+  #}
+  
+  # sprintf("raster[%s]",seq(1:99))
+  
+  for(temp in map(sprintf(str_replace_all(paste(name, "_%s"), " ", ""), seq(3:count)), ~get(.))) {
+    originals %<>% rbind(temp)
+  }
+  
+  return(originals)
+}
+
 status_regex <- "(Renewed|Pending|Miniseries|Awaiting release|Event|Development|Ended|Film|Special|Distribution)"
 
 format_regex <- "(Series|Miniseries|Film|Special)"
@@ -103,7 +123,7 @@ To import all the required data, all 115 csv files need to be imported and in so
 ```{r netflix_displayed_import, message=FALSE, warning=FALSE}
 netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Drama"),
+            Genre = paste(Genre, "Drama"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -135,7 +155,7 @@ netflix_originals_2 <- transmute(netflix_originals_2,
 netflix_originals_3 <- read_csv("../datasets/netflix/shows/table-3.csv")
 netflix_originals_3 <- transmute(netflix_originals_3,
                                  Title = Title,
-                                 Genre = paste(Genre, " Adult Animation"),
+                                 Genre = paste(Genre, "Adult Animation"),
                                  Premiere = Premiere,
                                  Seasons = Seasons,
                                  Runtime = Runtime,
@@ -149,7 +169,7 @@ netflix_originals_3 <- transmute(netflix_originals_3,
 netflix_originals_4 <- read_csv("../datasets/netflix/shows/table-4.csv")
 netflix_originals_4 <- transmute(netflix_originals_4,
                                  Title = Title,
-                                 Genre = paste(Genre, " Anime"),
+                                 Genre = paste(Genre, "Anime"),
                                  Premiere = Premiere,
                                  Seasons = Seasons,
                                  Runtime = Runtime,
@@ -345,7 +365,7 @@ netflix_originals_17 <- transmute(netflix_originals_17,
 netflix_originals_18 <- read_csv("../datasets/netflix/shows/table-18.csv")
 netflix_originals_18 <- transmute(netflix_originals_18,
                                   Title = Title,
-                                  Genre = paste(Genre, " Docuseries Unscripted"),
+                                  Genre = paste(Genre, "Docuseries Unscripted"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -359,7 +379,7 @@ netflix_originals_18 <- transmute(netflix_originals_18,
 netflix_originals_19 <- read_csv("../datasets/netflix/shows/table-19.csv")
 netflix_originals_19 <- transmute(netflix_originals_19,
                                   Title = Title,
-                                  Genre = paste(Genre, " Reality Unscripted"),
+                                  Genre = paste(Genre, "Reality Unscripted"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -373,7 +393,7 @@ netflix_originals_19 <- transmute(netflix_originals_19,
 netflix_originals_20 <- read_csv("../datasets/netflix/shows/table-20.csv")
 netflix_originals_20 <- transmute(netflix_originals_20,
                                   Title = Title,
-                                  Genre = paste(Genre, " Variety Unscripted"),
+                                  Genre = paste(Genre, "Variety Unscripted"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -429,7 +449,7 @@ netflix_originals_23 <- transmute(netflix_originals_23,
 netflix_originals_24 <- read_csv("../datasets/netflix/shows/table-24.csv")
 netflix_originals_24 <- transmute(netflix_originals_24,
                                   Title = Title,
-                                  Genre = paste(Genre, " Drama"),
+                                  Genre = paste(Genre, "Drama"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -443,7 +463,7 @@ netflix_originals_24 <- transmute(netflix_originals_24,
 netflix_originals_25 <- read_csv("../datasets/netflix/shows/table-25.csv")
 netflix_originals_25 <- transmute(netflix_originals_25,
                                   Title = Title,
-                                  Genre = paste(Genre, " Comedy"),
+                                  Genre = paste(Genre, "Comedy"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -457,7 +477,7 @@ netflix_originals_25 <- transmute(netflix_originals_25,
 netflix_originals_26 <- read_csv("../datasets/netflix/shows/table-26.csv")
 netflix_originals_26 <- transmute(netflix_originals_26,
                                   Title = Title,
-                                  Genre = paste(Genre, " Adult Animation"),
+                                  Genre = paste(Genre, "Adult Animation"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -485,7 +505,7 @@ netflix_originals_27 <- transmute(netflix_originals_27,
 netflix_originals_28 <- read_csv("../datasets/netflix/shows/table-28.csv")
 netflix_originals_28 <- transmute(netflix_originals_28,
                                   Title = Title,
-                                  Genre = paste(Genre, " Children Family"),
+                                  Genre = paste(Genre, "Children Family"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -513,7 +533,7 @@ netflix_originals_29 <- transmute(netflix_originals_29,
 netflix_originals_30 <- read_csv("../datasets/netflix/shows/table-30.csv")
 netflix_originals_30 <- transmute(netflix_originals_30,
                                   Title = Title,
-                                  Genre = paste(Genre, " Docuseries"),
+                                  Genre = paste(Genre, "Docuseries"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -527,7 +547,7 @@ netflix_originals_30 <- transmute(netflix_originals_30,
 netflix_originals_31 <- read_csv("../datasets/netflix/shows/table-31.csv")
 netflix_originals_31 <- transmute(netflix_originals_31,
                                   Title = Title,
-                                  Genre = paste(Genre, " Reality"),
+                                  Genre = paste(Genre, "Reality"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -541,7 +561,7 @@ netflix_originals_31 <- transmute(netflix_originals_31,
 netflix_originals_32 <- read_csv("../datasets/netflix/shows/table-32.csv")
 netflix_originals_32 <- transmute(netflix_originals_32,
                                   Title = Title,
-                                  Genre = paste(Genre, " Variety"),
+                                  Genre = paste(Genre, "Variety"),
                                   Premiere = Premiere,
                                   Seasons = NA,
                                   Runtime = NA,
@@ -571,7 +591,7 @@ netflix_originals_34 <- transmute(netflix_originals_34,
                                   Title = Title,
                                   Genre = Genre,
                                   Premiere = Premiere,
-                                  Seasons = paste(Seasons, " seasons"),
+                                  Seasons = paste(Seasons, "seasons"),
                                   Runtime = Runtime,
                                   Language = NA,
                                   Status = "Development",
@@ -611,7 +631,7 @@ netflix_originals_36 <- transmute(netflix_originals_36,
 netflix_originals_37 <- read_csv("../datasets/netflix/shows/table-37.csv")
 netflix_originals_37 <- transmute(netflix_originals_37,
                                   Title = Title,
-                                  Genre = paste(Genre, " Drama"),
+                                  Genre = paste(Genre, "Drama"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -625,7 +645,7 @@ netflix_originals_37 <- transmute(netflix_originals_37,
 netflix_originals_38 <- read_csv("../datasets/netflix/shows/table-38.csv")
 netflix_originals_38 <- transmute(netflix_originals_38,
                                   Title = Title,
-                                  Genre = paste(Genre, " Comedy"),
+                                  Genre = paste(Genre, "Comedy"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -653,7 +673,7 @@ netflix_originals_39 <- transmute(netflix_originals_39,
 netflix_originals_40 <- read_csv("../datasets/netflix/shows/table-40.csv")
 netflix_originals_40 <- transmute(netflix_originals_40,
                                   Title = Title,
-                                  Genre = paste(Genre, " Adult Animation"),
+                                  Genre = paste(Genre, "Adult Animation"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -667,7 +687,7 @@ netflix_originals_40 <- transmute(netflix_originals_40,
 netflix_originals_41 <- read_csv("../datasets/netflix/shows/table-41.csv")
 netflix_originals_41 <- transmute(netflix_originals_41,
                                   Title = Title,
-                                  Genre = paste(Genre, " Anime"),
+                                  Genre = paste(Genre, "Anime"),
                                   Premiere = Premiere,
                                   Seasons = Seasons,
                                   Runtime = Runtime,
@@ -1172,7 +1192,7 @@ netflix_originals_76 <- transmute(netflix_originals_76,
 netflix_originals_77 <- read_csv("../datasets/netflix/exclusives/table-1.csv")
 netflix_originals_77 <- transmute(netflix_originals_77,
                                   Title = Title,
-                                  Genre = paste(Genre, " Drama"),
+                                  Genre = paste(Genre, "Drama"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1186,7 +1206,7 @@ netflix_originals_77 <- transmute(netflix_originals_77,
 netflix_originals_78 <- read_csv("../datasets/netflix/exclusives/table-2.csv")
 netflix_originals_78 <- transmute(netflix_originals_78,
                                   Title = Title,
-                                  Genre = paste(Genre, " Comedy"),
+                                  Genre = paste(Genre, "Comedy"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1201,7 +1221,7 @@ netflix_originals_78 <- transmute(netflix_originals_78,
 netflix_originals_79 <- read_csv("../datasets/netflix/exclusives/table-3.csv")
 netflix_originals_79 <- transmute(netflix_originals_79,
                                   Title = `International title`,
-                                  Genre = paste(Genre, " Adult Animation"),
+                                  Genre = paste(Genre, "Adult Animation"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1229,7 +1249,7 @@ netflix_originals_80 <- transmute(netflix_originals_80,
 netflix_originals_81 <- read_csv("../datasets/netflix/exclusives/table-5.csv")
 netflix_originals_81 <- transmute(netflix_originals_81,
                                   Title = `International title`,
-                                  Genre = paste(Genre, " Children Family"),
+                                  Genre = paste(Genre, "Children Family"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1579,7 +1599,7 @@ netflix_originals_105 <- transmute(netflix_originals_105,
 netflix_originals_106 <- read_csv("../datasets/netflix/exclusives/table-30.csv")
 netflix_originals_106 <- transmute(netflix_originals_106,
                                   Title = `International title`,
-                                  Genre = paste(Genre, " Reality Unscripted"),
+                                  Genre = paste(Genre, "Reality Unscripted"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1593,7 +1613,7 @@ netflix_originals_106 <- transmute(netflix_originals_106,
 netflix_originals_107 <- read_csv("../datasets/netflix/exclusives/table-31.csv")
 netflix_originals_107 <- transmute(netflix_originals_107,
                                   Title = Title,
-                                  Genre = paste(Genre, " Variety Unscripted"),
+                                  Genre = paste(Genre, "Variety Unscripted"),
                                   Premiere = `Original run`,
                                   Seasons = Seasons,
                                   Runtime = NA,
@@ -1715,125 +1735,11 @@ netflix_originals_115 <- transmute(netflix_originals_115,
                                   Origin = "Original",
                                   Network = NA,
                                   Region = NA)
-
-netflix_originals <- rbind(netflix_originals_1, netflix_originals_2)
-netflix_originals <- rbind(netflix_originals, netflix_originals_3)
-netflix_originals <- rbind(netflix_originals, netflix_originals_4)
-netflix_originals <- rbind(netflix_originals, netflix_originals_5)
-netflix_originals <- rbind(netflix_originals, netflix_originals_6)
-netflix_originals <- rbind(netflix_originals, netflix_originals_7)
-netflix_originals <- rbind(netflix_originals, netflix_originals_8)
-netflix_originals <- rbind(netflix_originals, netflix_originals_9)
-netflix_originals <- rbind(netflix_originals, netflix_originals_10)
-netflix_originals <- rbind(netflix_originals, netflix_originals_11)
-netflix_originals <- rbind(netflix_originals, netflix_originals_12)
-netflix_originals <- rbind(netflix_originals, netflix_originals_13)
-netflix_originals <- rbind(netflix_originals, netflix_originals_14)
-netflix_originals <- rbind(netflix_originals, netflix_originals_15)
-netflix_originals <- rbind(netflix_originals, netflix_originals_16)
-netflix_originals <- rbind(netflix_originals, netflix_originals_17)
-netflix_originals <- rbind(netflix_originals, netflix_originals_18)
-netflix_originals <- rbind(netflix_originals, netflix_originals_19)
-netflix_originals <- rbind(netflix_originals, netflix_originals_20)
-netflix_originals <- rbind(netflix_originals, netflix_originals_21)
-netflix_originals <- rbind(netflix_originals, netflix_originals_22)
-netflix_originals <- rbind(netflix_originals, netflix_originals_23)
-netflix_originals <- rbind(netflix_originals, netflix_originals_24)
-netflix_originals <- rbind(netflix_originals, netflix_originals_25)
-netflix_originals <- rbind(netflix_originals, netflix_originals_26)
-netflix_originals <- rbind(netflix_originals, netflix_originals_27)
-netflix_originals <- rbind(netflix_originals, netflix_originals_28)
-netflix_originals <- rbind(netflix_originals, netflix_originals_29)
-netflix_originals <- rbind(netflix_originals, netflix_originals_30)
-netflix_originals <- rbind(netflix_originals, netflix_originals_31)
-netflix_originals <- rbind(netflix_originals, netflix_originals_32)
-netflix_originals <- rbind(netflix_originals, netflix_originals_33)
-netflix_originals <- rbind(netflix_originals, netflix_originals_34)
-netflix_originals <- rbind(netflix_originals, netflix_originals_35)
-netflix_originals <- rbind(netflix_originals, netflix_originals_36)
-netflix_originals <- rbind(netflix_originals, netflix_originals_37)
-netflix_originals <- rbind(netflix_originals, netflix_originals_38)
-netflix_originals <- rbind(netflix_originals, netflix_originals_39)
-netflix_originals <- rbind(netflix_originals, netflix_originals_40)
-netflix_originals <- rbind(netflix_originals, netflix_originals_41)
-netflix_originals <- rbind(netflix_originals, netflix_originals_42)
-netflix_originals <- rbind(netflix_originals, netflix_originals_43)
-netflix_originals <- rbind(netflix_originals, netflix_originals_44)
-netflix_originals <- rbind(netflix_originals, netflix_originals_45)
-netflix_originals <- rbind(netflix_originals, netflix_originals_46)
-netflix_originals <- rbind(netflix_originals, netflix_originals_47)
-netflix_originals <- rbind(netflix_originals, netflix_originals_48)
-netflix_originals <- rbind(netflix_originals, netflix_originals_49)
-netflix_originals <- rbind(netflix_originals, netflix_originals_50)
-netflix_originals <- rbind(netflix_originals, netflix_originals_51)
-netflix_originals <- rbind(netflix_originals, netflix_originals_52)
-netflix_originals <- rbind(netflix_originals, netflix_originals_53)
-netflix_originals <- rbind(netflix_originals, netflix_originals_54)
-netflix_originals <- rbind(netflix_originals, netflix_originals_55)
-netflix_originals <- rbind(netflix_originals, netflix_originals_56)
-netflix_originals <- rbind(netflix_originals, netflix_originals_57)
-netflix_originals <- rbind(netflix_originals, netflix_originals_58)
-netflix_originals <- rbind(netflix_originals, netflix_originals_59)
-netflix_originals <- rbind(netflix_originals, netflix_originals_60)
-netflix_originals <- rbind(netflix_originals, netflix_originals_61)
-netflix_originals <- rbind(netflix_originals, netflix_originals_62)
-netflix_originals <- rbind(netflix_originals, netflix_originals_63)
-netflix_originals <- rbind(netflix_originals, netflix_originals_64)
-netflix_originals <- rbind(netflix_originals, netflix_originals_65)
-netflix_originals <- rbind(netflix_originals, netflix_originals_66)
-netflix_originals <- rbind(netflix_originals, netflix_originals_67)
-netflix_originals <- rbind(netflix_originals, netflix_originals_68)
-netflix_originals <- rbind(netflix_originals, netflix_originals_69)
-netflix_originals <- rbind(netflix_originals, netflix_originals_70)
-netflix_originals <- rbind(netflix_originals, netflix_originals_71)
-netflix_originals <- rbind(netflix_originals, netflix_originals_72)
-netflix_originals <- rbind(netflix_originals, netflix_originals_73)
-netflix_originals <- rbind(netflix_originals, netflix_originals_74)
-netflix_originals <- rbind(netflix_originals, netflix_originals_75)
-netflix_originals <- rbind(netflix_originals, netflix_originals_76)
-netflix_originals <- rbind(netflix_originals, netflix_originals_77)
-netflix_originals <- rbind(netflix_originals, netflix_originals_78)
-netflix_originals <- rbind(netflix_originals, netflix_originals_79)
-netflix_originals <- rbind(netflix_originals, netflix_originals_80)
-netflix_originals <- rbind(netflix_originals, netflix_originals_81)
-netflix_originals <- rbind(netflix_originals, netflix_originals_82)
-netflix_originals <- rbind(netflix_originals, netflix_originals_83)
-netflix_originals <- rbind(netflix_originals, netflix_originals_84)
-netflix_originals <- rbind(netflix_originals, netflix_originals_85)
-netflix_originals <- rbind(netflix_originals, netflix_originals_86)
-netflix_originals <- rbind(netflix_originals, netflix_originals_87)
-netflix_originals <- rbind(netflix_originals, netflix_originals_88)
-netflix_originals <- rbind(netflix_originals, netflix_originals_89)
-netflix_originals <- rbind(netflix_originals, netflix_originals_90)
-netflix_originals <- rbind(netflix_originals, netflix_originals_91)
-netflix_originals <- rbind(netflix_originals, netflix_originals_92)
-netflix_originals <- rbind(netflix_originals, netflix_originals_93)
-netflix_originals <- rbind(netflix_originals, netflix_originals_94)
-netflix_originals <- rbind(netflix_originals, netflix_originals_95)
-netflix_originals <- rbind(netflix_originals, netflix_originals_96)
-netflix_originals <- rbind(netflix_originals, netflix_originals_97)
-netflix_originals <- rbind(netflix_originals, netflix_originals_98)
-netflix_originals <- rbind(netflix_originals, netflix_originals_99)
-netflix_originals <- rbind(netflix_originals, netflix_originals_100)
-netflix_originals <- rbind(netflix_originals, netflix_originals_101)
-netflix_originals <- rbind(netflix_originals, netflix_originals_102)
-netflix_originals <- rbind(netflix_originals, netflix_originals_103)
-netflix_originals <- rbind(netflix_originals, netflix_originals_104)
-netflix_originals <- rbind(netflix_originals, netflix_originals_105)
-netflix_originals <- rbind(netflix_originals, netflix_originals_106)
-netflix_originals <- rbind(netflix_originals, netflix_originals_107)
-netflix_originals <- rbind(netflix_originals, netflix_originals_108)
-netflix_originals <- rbind(netflix_originals, netflix_originals_109)
-netflix_originals <- rbind(netflix_originals, netflix_originals_110)
-netflix_originals <- rbind(netflix_originals, netflix_originals_111)
-netflix_originals <- rbind(netflix_originals, netflix_originals_112)
-netflix_originals <- rbind(netflix_originals, netflix_originals_113)
-netflix_originals <- rbind(netflix_originals, netflix_originals_114)
-
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-netflix_originals <- rbind(netflix_originals, netflix_originals_115)
+netflix_originals <- rbind(netflix_originals_1, netflix_originals_2) 
+netflix_originals <- bind_originals(netflix_originals, 115)
 
 (netflix_originals %<>%
   transmute(Title = Title,
@@ -1869,7 +1775,7 @@ This adds up to a total of 223 files, that have been imported from the web scrap
 
 amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Drama"),
+            Genre = paste(Genre, "Drama"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = NA,
@@ -1885,7 +1791,7 @@ amazon_originals_1 <- read_csv("../datasets/amazon/shows/table-1.csv") %>%
 amazon_originals_2 <- read_csv("../datasets/amazon/shows/table-2.csv")
 amazon_originals_2 <- transmute(amazon_originals_2,
                                 Title = Title,
-                                Genre = paste(Genre, " Comedy"),
+                                Genre = paste(Genre, "Comedy"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = NA,
@@ -1899,7 +1805,7 @@ amazon_originals_2 <- transmute(amazon_originals_2,
 amazon_originals_3 <- read_csv("../datasets/amazon/shows/table-3.csv")
 amazon_originals_3 <- transmute(amazon_originals_3,
                                 Title = Title,
-                                Genre = paste(Genre, " Adult Animation"),
+                                Genre = paste(Genre, "Adult Animation"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = NA,
@@ -1913,7 +1819,7 @@ amazon_originals_3 <- transmute(amazon_originals_3,
 amazon_originals_4 <- read_csv("../datasets/amazon/shows/table-4.csv")
 amazon_originals_4 <- transmute(amazon_originals_4,
                                 Title = Title,
-                                Genre = paste(Genre, " Family Children Animation"),
+                                Genre = paste(Genre, "Family Children Animation"),
                                 Premiere = Premiere,
                                 Seasons = `Seasons/episodes`,
                                 Runtime = NA,
@@ -1927,7 +1833,7 @@ amazon_originals_4 <- transmute(amazon_originals_4,
 amazon_originals_5 <- read_csv("../datasets/amazon/shows/table-5.csv")
 amazon_originals_5 <- transmute(amazon_originals_5,
                                 Title = Title,
-                                Genre = paste(Genre, " Anime Animation"),
+                                Genre = paste(Genre, "Anime Animation"),
                                 Premiere = Premiere,
                                 Seasons = `Seasons/episodes`,
                                 Runtime = NA,
@@ -2011,7 +1917,7 @@ amazon_originals_10 <- transmute(amazon_originals_10,
 amazon_originals_11 <- read_csv("../datasets/amazon/shows/table-11.csv")
 amazon_originals_11 <- transmute(amazon_originals_11,
                                  Title = Title,
-                                 Genre = paste(Genre, " Docuseries Unscripted"),
+                                 Genre = paste(Genre, "Docuseries Unscripted"),
                                  Premiere = Premiere,
                                  Seasons = `Seasons/episodes`,
                                  Runtime = NA,
@@ -2025,7 +1931,7 @@ amazon_originals_11 <- transmute(amazon_originals_11,
 amazon_originals_12 <- read_csv("../datasets/amazon/shows/table-12.csv")
 amazon_originals_12 <- transmute(amazon_originals_12,
                                  Title = Title,
-                                 Genre = paste(Genre, " Reality Unscripted"),
+                                 Genre = paste(Genre, "Reality Unscripted"),
                                  Premiere = Premiere,
                                  Seasons = `Seasons/episodes`,
                                  Runtime = NA,
@@ -2039,7 +1945,7 @@ amazon_originals_12 <- transmute(amazon_originals_12,
 amazon_originals_13 <- read_csv("../datasets/amazon/shows/table-13.csv")
 amazon_originals_13 <- transmute(amazon_originals_13,
                                  Title = Title,
-                                 Genre = paste(Genre, " Variety Unscripted"),
+                                 Genre = paste(Genre, "Variety Unscripted"),
                                  Premiere = Premiere,
                                  Seasons = `Seasons/episodes`,
                                  Runtime = NA,
@@ -2123,7 +2029,7 @@ amazon_originals_18 <- transmute(amazon_originals_18,
 amazon_originals_19 <- read_csv("../datasets/amazon/shows/table-19.csv")
 amazon_originals_19 <- transmute(amazon_originals_19,
                                  Title = Title,
-                                 Genre = paste(Genre, " Drama"),
+                                 Genre = paste(Genre, "Drama"),
                                  Premiere = `Original run`,
                                  Seasons = Seasons,
                                  Runtime = NA,
@@ -2137,7 +2043,7 @@ amazon_originals_19 <- transmute(amazon_originals_19,
 amazon_originals_20 <- read_csv("../datasets/amazon/shows/table-20.csv")
 amazon_originals_20 <- transmute(amazon_originals_20,
                                  Title = Title,
-                                 Genre = paste(Genre, " Comedy"),
+                                 Genre = paste(Genre, "Comedy"),
                                  Premiere = `Original run`,
                                  Seasons = Seasons,
                                  Runtime = NA,
@@ -2151,7 +2057,7 @@ amazon_originals_20 <- transmute(amazon_originals_20,
 amazon_originals_21 <- read_csv("../datasets/amazon/shows/table-21.csv")
 amazon_originals_21 <- transmute(amazon_originals_21,
                                  Title = Title,
-                                 Genre = paste(Genre, " Animation"),
+                                 Genre = paste(Genre, "Animation"),
                                  Premiere = `Original run`,
                                  Seasons = Seasons,
                                  Runtime = NA,
@@ -2165,7 +2071,7 @@ amazon_originals_21 <- transmute(amazon_originals_21,
 amazon_originals_22 <- read_csv("../datasets/amazon/shows/table-22.csv")
 amazon_originals_22 <- transmute(amazon_originals_22,
                                  Title = Title,
-                                 Genre = paste(Genre, " Anime"),
+                                 Genre = paste(Genre, "Anime"),
                                  Premiere = `Original run`,
                                  Seasons = Seasons,
                                  Runtime = NA,
@@ -2289,34 +2195,7 @@ amazon_originals_30 <- transmute(amazon_originals_30,
                                  Region = `Amazon Video exclusive region`)
 
 amazon_originals <- rbind(amazon_originals_1, amazon_originals_2)
-amazon_originals <- rbind(amazon_originals, amazon_originals_3)
-amazon_originals <- rbind(amazon_originals, amazon_originals_4)
-amazon_originals <- rbind(amazon_originals, amazon_originals_5)
-amazon_originals <- rbind(amazon_originals, amazon_originals_6)
-amazon_originals <- rbind(amazon_originals, amazon_originals_7)
-amazon_originals <- rbind(amazon_originals, amazon_originals_8)
-amazon_originals <- rbind(amazon_originals, amazon_originals_9)
-amazon_originals <- rbind(amazon_originals, amazon_originals_10)
-amazon_originals <- rbind(amazon_originals, amazon_originals_11)
-amazon_originals <- rbind(amazon_originals, amazon_originals_12)
-amazon_originals <- rbind(amazon_originals, amazon_originals_13)
-amazon_originals <- rbind(amazon_originals, amazon_originals_14)
-amazon_originals <- rbind(amazon_originals, amazon_originals_15)
-amazon_originals <- rbind(amazon_originals, amazon_originals_16)
-amazon_originals <- rbind(amazon_originals, amazon_originals_17)
-amazon_originals <- rbind(amazon_originals, amazon_originals_18)
-amazon_originals <- rbind(amazon_originals, amazon_originals_19)
-amazon_originals <- rbind(amazon_originals, amazon_originals_20)
-amazon_originals <- rbind(amazon_originals, amazon_originals_21)
-amazon_originals <- rbind(amazon_originals, amazon_originals_22)
-amazon_originals <- rbind(amazon_originals, amazon_originals_23)
-amazon_originals <- rbind(amazon_originals, amazon_originals_24)
-amazon_originals <- rbind(amazon_originals, amazon_originals_25)
-amazon_originals <- rbind(amazon_originals, amazon_originals_26)
-amazon_originals <- rbind(amazon_originals, amazon_originals_27)
-amazon_originals <- rbind(amazon_originals, amazon_originals_28)
-amazon_originals <- rbind(amazon_originals, amazon_originals_29)
-amazon_originals <- rbind(amazon_originals, amazon_originals_30)
+amazon_originals <- bind_originals(amazon_originals, 30)
 
 (amazon_originals %<>%
   transmute(Title = Title,
@@ -2338,7 +2217,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Drama"),
+            Genre = paste(Genre, "Drama"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Length,
@@ -2354,7 +2233,7 @@ hulu_originals_1 <- read_csv("../datasets/hulu/shows/table-1.csv") %>%
 hulu_originals_2 <- read_csv("../datasets/hulu/shows/table-2.csv")
 hulu_originals_2 <- transmute(hulu_originals_2,
                               Title = Title,
-                              Genre = paste(Genre, " Comedy"),
+                              Genre = paste(Genre, "Comedy"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2368,7 +2247,7 @@ hulu_originals_2 <- transmute(hulu_originals_2,
 hulu_originals_3 <- read_csv("../datasets/hulu/shows/table-3.csv")
 hulu_originals_3 <- transmute(hulu_originals_3,
                               Title = Title,
-                              Genre = paste(Genre, " Adult Animation"),
+                              Genre = paste(Genre, "Adult Animation"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2382,7 +2261,7 @@ hulu_originals_3 <- transmute(hulu_originals_3,
 hulu_originals_4 <- read_csv("../datasets/hulu/shows/table-4.csv")
 hulu_originals_4 <- transmute(hulu_originals_4,
                               Title = Title,
-                              Genre = paste(Genre, " Children Family"),
+                              Genre = paste(Genre, "Children Family"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2396,7 +2275,7 @@ hulu_originals_4 <- transmute(hulu_originals_4,
 hulu_originals_5 <- read_csv("../datasets/hulu/shows/table-5.csv")
 hulu_originals_5 <- transmute(hulu_originals_5,
                               Title = Title,
-                              Genre = paste(Genre, " Docu-series Unscripted"),
+                              Genre = paste(Genre, "Docu-series Unscripted"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2410,7 +2289,7 @@ hulu_originals_5 <- transmute(hulu_originals_5,
 hulu_originals_6 <- read_csv("../datasets/hulu/shows/table-6.csv")
 hulu_originals_6 <- transmute(hulu_originals_6,
                               Title = Title,
-                              Genre = paste(Genre, " Reality Unscripted"),
+                              Genre = paste(Genre, "Reality Unscripted"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2424,7 +2303,7 @@ hulu_originals_6 <- transmute(hulu_originals_6,
 hulu_originals_7 <- read_csv("../datasets/hulu/shows/table-7.csv")
 hulu_originals_7 <- transmute(hulu_originals_7,
                               Title = Title,
-                              Genre = paste(Genre, " Variety Unscripted"),
+                              Genre = paste(Genre, "Variety Unscripted"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2508,7 +2387,7 @@ hulu_originals_12 <- transmute(hulu_originals_12,
 hulu_originals_13 <- read_csv("../datasets/hulu/shows/table-13.csv")
 hulu_originals_13 <- transmute(hulu_originals_13,
                               Title = Title,
-                              Genre = paste(Genre, " Drama"),
+                              Genre = paste(Genre, "Drama"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2522,7 +2401,7 @@ hulu_originals_13 <- transmute(hulu_originals_13,
 hulu_originals_14 <- read_csv("../datasets/hulu/shows/table-14.csv")
 hulu_originals_14 <- transmute(hulu_originals_14,
                               Title = Title,
-                              Genre = paste(Genre, " Comedy"),
+                              Genre = paste(Genre, "Comedy"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2536,7 +2415,7 @@ hulu_originals_14 <- transmute(hulu_originals_14,
 hulu_originals_15 <- read_csv("../datasets/hulu/shows/table-15.csv")
 hulu_originals_15 <- transmute(hulu_originals_15,
                               Title = Title,
-                              Genre = paste(Genre, " Adult Animation"),
+                              Genre = paste(Genre, "Adult Animation"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2550,7 +2429,7 @@ hulu_originals_15 <- transmute(hulu_originals_15,
 hulu_originals_16 <- read_csv("../datasets/hulu/shows/table-16.csv")
 hulu_originals_16 <- transmute(hulu_originals_16,
                               Title = Title,
-                              Genre = paste(Genre, " Family"),
+                              Genre = paste(Genre, "Family"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2564,7 +2443,7 @@ hulu_originals_16 <- transmute(hulu_originals_16,
 hulu_originals_17 <- read_csv("../datasets/hulu/shows/table-17.csv")
 hulu_originals_17 <- transmute(hulu_originals_17,
                               Title = Title,
-                              Genre = paste(Genre, " Docuseries Unscripted"),
+                              Genre = paste(Genre, "Docuseries Unscripted"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2578,7 +2457,7 @@ hulu_originals_17 <- transmute(hulu_originals_17,
 hulu_originals_18 <- read_csv("../datasets/hulu/shows/table-18.csv")
 hulu_originals_18 <- transmute(hulu_originals_18,
                               Title = Title,
-                              Genre = paste(Genre, " Reality Unscripted"),
+                              Genre = paste(Genre, "Reality Unscripted"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2677,7 +2556,7 @@ hulu_originals_24 <- transmute(hulu_originals_24,
 hulu_originals_25 <- read_csv("../datasets/hulu/shows/table-25.csv")
 hulu_originals_25 <- transmute(hulu_originals_25,
                               Title = Title,
-                              Genre = paste(Genre, " Drama"),
+                              Genre = paste(Genre, "Drama"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2691,7 +2570,7 @@ hulu_originals_25 <- transmute(hulu_originals_25,
 hulu_originals_26 <- read_csv("../datasets/hulu/shows/table-26.csv")
 hulu_originals_26 <- transmute(hulu_originals_26,
                               Title = Title,
-                              Genre = paste(Genre, " Comedy"),
+                              Genre = paste(Genre, "Comedy"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2705,7 +2584,7 @@ hulu_originals_26 <- transmute(hulu_originals_26,
 hulu_originals_27 <- read_csv("../datasets/hulu/shows/table-27.csv")
 hulu_originals_27 <- transmute(hulu_originals_27,
                               Title = Title,
-                              Genre = paste(Genre, " Animation"),
+                              Genre = paste(Genre, "Animation"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2719,7 +2598,7 @@ hulu_originals_27 <- transmute(hulu_originals_27,
 hulu_originals_28 <- read_csv("../datasets/hulu/shows/table-28.csv")
 hulu_originals_28 <- transmute(hulu_originals_28,
                               Title = Title,
-                              Genre = paste(Genre, " Variety"),
+                              Genre = paste(Genre, "Variety"),
                               Premiere = Premiere,
                               Seasons = Seasons,
                               Runtime = Length,
@@ -2745,33 +2624,7 @@ hulu_originals_29 <- transmute(hulu_originals_29,
                               Region = "Japan")
 
 hulu_originals <- rbind(hulu_originals_1, hulu_originals_2)
-hulu_originals <- rbind(hulu_originals, hulu_originals_3)
-hulu_originals <- rbind(hulu_originals, hulu_originals_4)
-hulu_originals <- rbind(hulu_originals, hulu_originals_5)
-hulu_originals <- rbind(hulu_originals, hulu_originals_6)
-hulu_originals <- rbind(hulu_originals, hulu_originals_7)
-hulu_originals <- rbind(hulu_originals, hulu_originals_8)
-hulu_originals <- rbind(hulu_originals, hulu_originals_9)
-hulu_originals <- rbind(hulu_originals, hulu_originals_10)
-hulu_originals <- rbind(hulu_originals, hulu_originals_11)
-hulu_originals <- rbind(hulu_originals, hulu_originals_12)
-hulu_originals <- rbind(hulu_originals, hulu_originals_13)
-hulu_originals <- rbind(hulu_originals, hulu_originals_14)
-hulu_originals <- rbind(hulu_originals, hulu_originals_15)
-hulu_originals <- rbind(hulu_originals, hulu_originals_16)
-hulu_originals <- rbind(hulu_originals, hulu_originals_17)
-hulu_originals <- rbind(hulu_originals, hulu_originals_18)
-hulu_originals <- rbind(hulu_originals, hulu_originals_19)
-hulu_originals <- rbind(hulu_originals, hulu_originals_20)
-hulu_originals <- rbind(hulu_originals, hulu_originals_21)
-hulu_originals <- rbind(hulu_originals, hulu_originals_22)
-hulu_originals <- rbind(hulu_originals, hulu_originals_23)
-hulu_originals <- rbind(hulu_originals, hulu_originals_24)
-hulu_originals <- rbind(hulu_originals, hulu_originals_25)
-hulu_originals <- rbind(hulu_originals, hulu_originals_26)
-hulu_originals <- rbind(hulu_originals, hulu_originals_27)
-hulu_originals <- rbind(hulu_originals, hulu_originals_28)
-hulu_originals <- rbind(hulu_originals, hulu_originals_29)
+hulu_originals <- bind_originals(hulu_originals, 29)
 
 (hulu_originals %<>% 
     transmute(Title = Title,
@@ -2794,7 +2647,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 
 disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Drama"),
+            Genre = paste(Genre, "Drama"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -2810,7 +2663,7 @@ disney_originals_1 <- read_csv("../datasets/disney/shows/table-1.csv") %>%
 disney_originals_2 <- read_csv("../datasets/disney/shows/table-2.csv")
 disney_originals_2 <- transmute(disney_originals_2,
                                 Title = Title,
-                                Genre = paste(Genre, " Comedy"),
+                                Genre = paste(Genre, "Comedy"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2824,7 +2677,7 @@ disney_originals_2 <- transmute(disney_originals_2,
 disney_originals_3 <- read_csv("../datasets/disney/shows/table-3.csv")
 disney_originals_3 <- transmute(disney_originals_3,
                                 Title = Title,
-                                Genre = paste(Genre, " Shorts"),
+                                Genre = paste(Genre, "Shorts"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2838,7 +2691,7 @@ disney_originals_3 <- transmute(disney_originals_3,
 disney_originals_4 <- read_csv("../datasets/disney/shows/table-4.csv")
 disney_originals_4 <- transmute(disney_originals_4,
                                 Title = Title,
-                                Genre = paste(Genre, " Docuseries Unscripted"),
+                                Genre = paste(Genre, "Docuseries Unscripted"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2852,7 +2705,7 @@ disney_originals_4 <- transmute(disney_originals_4,
 disney_originals_5 <- read_csv("../datasets/disney/shows/table-5.csv")
 disney_originals_5 <- transmute(disney_originals_5,
                                 Title = Title,
-                                Genre = paste(Genre, " Reality Unscripted"),
+                                Genre = paste(Genre, "Reality Unscripted"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2866,7 +2719,7 @@ disney_originals_5 <- transmute(disney_originals_5,
 disney_originals_6 <- read_csv("../datasets/disney/shows/table-6.csv")
 disney_originals_6 <- transmute(disney_originals_6,
                                 Title = Title,
-                                Genre = paste(Genre, " Variety Unscripted"),
+                                Genre = paste(Genre, "Variety Unscripted"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2905,6 +2758,8 @@ disney_originals_8 <- transmute(disney_originals_8,
                                 Network = NA,
                                 Region = NA)
 
+disney_originals_9 <- data_frame()
+
 disney_originals_10 <- read_csv("../datasets/disney/shows/table-10.csv")
 disney_originals_10 <- transmute(disney_originals_10,
                                 Title = Title,
@@ -2922,7 +2777,7 @@ disney_originals_10 <- transmute(disney_originals_10,
 disney_originals_11 <- read_csv("../datasets/disney/shows/table-11.csv")
 disney_originals_11 <- transmute(disney_originals_11,
                                 Title = Title,
-                                Genre = paste(Genre, " Drama"),
+                                Genre = paste(Genre, "Drama"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2936,7 +2791,7 @@ disney_originals_11 <- transmute(disney_originals_11,
 disney_originals_12 <- read_csv("../datasets/disney/shows/table-12.csv")
 disney_originals_12 <- transmute(disney_originals_12,
                                 Title = Title,
-                                Genre = paste(Genre, " Comedy"),
+                                Genre = paste(Genre, "Comedy"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2950,7 +2805,7 @@ disney_originals_12 <- transmute(disney_originals_12,
 disney_originals_13 <- read_csv("../datasets/disney/shows/table-13.csv")
 disney_originals_13 <- transmute(disney_originals_13,
                                 Title = Title,
-                                Genre = paste(Genre, " Animation"),
+                                Genre = paste(Genre, "Animation"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2964,7 +2819,7 @@ disney_originals_13 <- transmute(disney_originals_13,
 disney_originals_14 <- read_csv("../datasets/disney/shows/table-14.csv")
 disney_originals_14 <- transmute(disney_originals_14,
                                 Title = Title,
-                                Genre = paste(Genre, " Docuseries Unscripted"),
+                                Genre = paste(Genre, "Docuseries Unscripted"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -2978,7 +2833,7 @@ disney_originals_14 <- transmute(disney_originals_14,
 disney_originals_15 <- read_csv("../datasets/disney/shows/table-15.csv")
 disney_originals_15 <- transmute(disney_originals_15,
                                 Title = Title,
-                                Genre = paste(Genre, " Reality Unscripted"),
+                                Genre = paste(Genre, "Reality Unscripted"),
                                 Premiere = Premiere,
                                 Seasons = Seasons,
                                 Runtime = Runtime,
@@ -3090,7 +2945,7 @@ disney_originals_22 <- transmute(disney_originals_22,
 disney_originals_23 <- read_csv("../datasets/disney/films/table-6.csv")
 disney_originals_23 <- transmute(disney_originals_23,
                                 Title = Title,
-                                Genre = paste(Genre, " Exclusive"),
+                                Genre = paste(Genre, "Exclusive"),
                                 Premiere = `Release date`,
                                 Seasons = NA,
                                 Runtime = Runtime,
@@ -3118,7 +2973,7 @@ disney_originals_24 <- transmute(disney_originals_24,
 disney_originals_25 <- read_csv("../datasets/disney/films/table-8.csv")
 disney_originals_25 <- transmute(disney_originals_25,
                                 Title = Title,
-                                Genre = paste(Genre, " Documentary"),
+                                Genre = paste(Genre, "Documentary"),
                                 Premiere = `Release date`,
                                 Seasons = NA,
                                 Runtime = Runtime,
@@ -3172,32 +3027,7 @@ disney_originals_28 <- transmute(disney_originals_28,
                                 Region = NA)
 
 disney_originals <- rbind(disney_originals_1, disney_originals_2)
-disney_originals <- rbind(disney_originals, disney_originals_3)
-disney_originals <- rbind(disney_originals, disney_originals_4)
-disney_originals <- rbind(disney_originals, disney_originals_5)
-disney_originals <- rbind(disney_originals, disney_originals_6)
-disney_originals <- rbind(disney_originals, disney_originals_7)
-disney_originals <- rbind(disney_originals, disney_originals_8)
-#disney_originals <- rbind(disney_originals, disney_originals_9)
-disney_originals <- rbind(disney_originals, disney_originals_10)
-disney_originals <- rbind(disney_originals, disney_originals_11)
-disney_originals <- rbind(disney_originals, disney_originals_12)
-disney_originals <- rbind(disney_originals, disney_originals_13)
-disney_originals <- rbind(disney_originals, disney_originals_14)
-disney_originals <- rbind(disney_originals, disney_originals_15)
-disney_originals <- rbind(disney_originals, disney_originals_16)
-disney_originals <- rbind(disney_originals, disney_originals_17)
-disney_originals <- rbind(disney_originals, disney_originals_18)
-disney_originals <- rbind(disney_originals, disney_originals_19)
-disney_originals <- rbind(disney_originals, disney_originals_20)
-disney_originals <- rbind(disney_originals, disney_originals_21)
-disney_originals <- rbind(disney_originals, disney_originals_22)
-disney_originals <- rbind(disney_originals, disney_originals_23)
-disney_originals <- rbind(disney_originals, disney_originals_24)
-disney_originals <- rbind(disney_originals, disney_originals_25)
-disney_originals <- rbind(disney_originals, disney_originals_26)
-disney_originals <- rbind(disney_originals, disney_originals_27)
-disney_originals <- rbind(disney_originals, disney_originals_28)
+disney_originals <- bind_originals(disney_originals, 28)
 
 (disney_originals %<>% 
     transmute(Title = Title,
@@ -3219,7 +3049,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Drama"),
+            Genre = paste(Genre, "Drama"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3234,7 +3064,7 @@ apple_originals_1 <- read_csv("../datasets/apple/shows/table-1.csv") %>%
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Comedy"),
+            Genre = paste(Genre, "Comedy"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3247,7 +3077,7 @@ apple_originals_2 <- read_csv("../datasets/apple/shows/table-2.csv") %>%
 
 apple_originals_3 <- read_csv("../datasets/apple/shows/table-3.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Adult Animation"),
+            Genre = paste(Genre, "Adult Animation"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3260,7 +3090,7 @@ apple_originals_3 <- read_csv("../datasets/apple/shows/table-3.csv") %>%
 
 apple_originals_4 <- read_csv("../datasets/apple/shows/table-4.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Family Children"),
+            Genre = paste(Genre, "Family Children"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3273,7 +3103,7 @@ apple_originals_4 <- read_csv("../datasets/apple/shows/table-4.csv") %>%
 
 apple_originals_5 <- read_csv("../datasets/apple/shows/table-5.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Docuseries Unscripted"),
+            Genre = paste(Genre, "Docuseries Unscripted"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3286,7 +3116,7 @@ apple_originals_5 <- read_csv("../datasets/apple/shows/table-5.csv") %>%
 
 apple_originals_6 <- read_csv("../datasets/apple/shows/table-6.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Variety Unscripted"),
+            Genre = paste(Genre, "Variety Unscripted"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3312,7 +3142,7 @@ apple_originals_7 <- read_csv("../datasets/apple/shows/table-7.csv") %>%
 
 apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Drama"),
+            Genre = paste(Genre, "Drama"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3325,7 +3155,7 @@ apple_originals_8 <- read_csv("../datasets/apple/shows/table-8.csv") %>%
 
 apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Comedy"),
+            Genre = paste(Genre, "Comedy"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3338,7 +3168,7 @@ apple_originals_9 <- read_csv("../datasets/apple/shows/table-9.csv") %>%
 
 apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Family Children Animation"),
+            Genre = paste(Genre, "Family Children Animation"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3351,7 +3181,7 @@ apple_originals_10 <- read_csv("../datasets/apple/shows/table-10.csv") %>%
 
 apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Docuseries Unscripted"),
+            Genre = paste(Genre, "Docuseries Unscripted"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3364,7 +3194,7 @@ apple_originals_11 <- read_csv("../datasets/apple/shows/table-11.csv") %>%
 
 apple_originals_12 <- read_csv("../datasets/apple/shows/table-12.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Reality Unscripted"),
+            Genre = paste(Genre, "Reality Unscripted"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3377,7 +3207,7 @@ apple_originals_12 <- read_csv("../datasets/apple/shows/table-12.csv") %>%
 
 apple_originals_13 <- read_csv("../datasets/apple/shows/table-13.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Variety Unscripted"),
+            Genre = paste(Genre, "Variety Unscripted"),
             Premiere = Premiere,
             Seasons = Seasons,
             Runtime = Runtime,
@@ -3429,7 +3259,7 @@ apple_originals_16 <- read_csv("../datasets/apple/films/table-1.csv") %>%
 
 apple_originals_17 <- read_csv("../datasets/apple/films/table-2.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Documentary"),
+            Genre = paste(Genre, "Documentary"),
             Premiere = Release,
             Seasons = NA,
             Runtime = Runtime,
@@ -3468,7 +3298,7 @@ apple_originals_19 <- read_csv("../datasets/apple/films/table-4.csv") %>%
 
 apple_originals_20 <- read_csv("../datasets/apple/films/table-5.csv") %>%
   transmute(Title = Title,
-            Genre = paste(Genre, " Documentary"),
+            Genre = paste(Genre, "Documentary"),
             Premiere = Release,
             Seasons = NA,
             Runtime = Runtime,
@@ -3493,25 +3323,7 @@ apple_originals_21 <- read_csv("../datasets/apple/films/table-6.csv") %>%
             Region = NA)
 
 apple_originals <- rbind(apple_originals_1, apple_originals_2)
-apple_originals %<>% rbind(apple_originals_3)
-apple_originals %<>% rbind(apple_originals_4)
-apple_originals %<>% rbind(apple_originals_5)
-apple_originals %<>% rbind(apple_originals_6)
-apple_originals %<>% rbind(apple_originals_7)
-apple_originals %<>% rbind(apple_originals_8)
-apple_originals %<>% rbind(apple_originals_9)
-apple_originals %<>% rbind(apple_originals_10)
-apple_originals %<>% rbind(apple_originals_11)
-apple_originals %<>% rbind(apple_originals_12)
-apple_originals %<>% rbind(apple_originals_13)
-apple_originals %<>% rbind(apple_originals_14)
-apple_originals %<>% rbind(apple_originals_15)
-apple_originals %<>% rbind(apple_originals_16)
-apple_originals %<>% rbind(apple_originals_17)
-apple_originals %<>% rbind(apple_originals_18)
-apple_originals %<>% rbind(apple_originals_19)
-apple_originals %<>% rbind(apple_originals_20)
-apple_originals %<>% rbind(apple_originals_21)
+apple_originals <- bind_originals(apple_originals, 21)
 
 (apple_originals %<>% 
     transmute(Title = Title,
@@ -3842,7 +3654,7 @@ content %<>% mutate(`Rotten Tomatoes` = as.integer(str_replace(`Rotten Tomatoes`
 content %<>% mutate(Year = ifelse(is.na(Year), ifelse(is.na(Premiere), NA, lubridate::year(Premiere)), Year))
 content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Seasons, 1), Seasons))
 
-(content <- content[, !(names(content) %in% c("Premiere", "Country"))])
+(content <- distinct(content[, !(names(content) %in% c("Premiere", "Country"))], Title, .keep_all = TRUE))
 ```
 
 ## Add missing Apple TV+ values
