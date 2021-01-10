@@ -3876,7 +3876,7 @@ origin_change_area(origin_change(2019, "Disney+"))
 ### Change in Apple TV+ content origin over the years
 
 ```{r}
-origin_change_area(origin_change(2019, "Apple TV+"))
+origin_change_area(origin_change(2019, "Apple TV+"), colors = rev(origin_change_area_colors))
 ```
 
 ### Production of original content grouped by months
