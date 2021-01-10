@@ -3782,7 +3782,7 @@ age_histogram_original <- function(year, service) {
   filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age") +
+    labs(title = paste(service, "- Age Ratings - Original Content"), x = "Year", fill = "Age") +
     scale_fill_manual(values = age_histogram_colors)
 }
 
@@ -3791,7 +3791,7 @@ age_histogram <- function(format) {
   filter(between(Year, 2006, 2020), Format == format) %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age") +
+    labs(title = paste("Age Ratings -",format,"Content"), x = "Year", fill = "Age") +
     scale_fill_manual(values = age_histogram_colors)
 }
 
@@ -3804,10 +3804,15 @@ origin_change <- function(year, service) {
            mutate(Percentage = n / sum(n)))
 }
 
-origin_change_area <- function(change) {
+origin_change_area_colors <- c(rgb(248/255, 118/255, 109/255, 1),
+                               rgb(0/255, 191/255, 196/255, 1))
+
+origin_change_area <- function(change, colors = origin_change_area_colors) {
   change %>% 
     ggplot(aes(x = Year, y = Percentage, fill = factor(Origin))) +
-    geom_area()
+    geom_area() +
+    labs(fill = "Content Origin", x = "Year", y = "Percentage") +
+    scale_fill_manual(values = colors)
 }
 ```
 
@@ -3875,7 +3880,7 @@ origin_change_area(origin_change(2019, "Disney+"))
 ### Change in Apple TV+ content origin over the years
 
 ```{r}
-origin_change_area(origin_change(2019, "Apple TV+"))
+origin_change_area(origin_change(2019, "Apple TV+"), colors = rev(origin_change_area_colors))
 ```
 
 ### Production of original content grouped by months
@@ -3974,7 +3979,7 @@ content %>%
   filter(between(Year, 2006, 2020)) %>% 
   ggplot() +
     geom_histogram(mapping = aes(x = Year, fill = factor(Age)), binwidth = 1) +
-    labs(fill = "Age") +
+    labs(title = "Age Ratings - All Content", x = "Year", fill = "Age") +
     scale_fill_manual(values = age_histogram_colors)
 
 age_histogram("Series")
