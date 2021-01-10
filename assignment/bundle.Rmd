@@ -3588,9 +3588,15 @@ shows <- read_csv("../datasets/shows.csv")
 
 ## Dataset Transmutation
 
+Since the data is now imported into six individual tables and the combination, as well as the conversion process to correct and usable data types is the last hurdle keeping us from exploring the data, the data frames are now going to be combined into one large data frame with columns that are easier to deal with because of the correct conversions (e.g. numeric values to int or dbl, the premiere column is split up into three individual columns: day, month and year etc.)
+
 ### Custom transmutation functions
 
-```{r}
+For the transformation process, we were in need of writing functions that are capable of handling the input we are given in the exact manner we want it to be handled, since we could not find any base R function or any package that would be capable of doing the same thing.
+
+the **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
+
+```{r genres_to_uppercase_unique}
 anycharacter <- "([a-zA-Z]|-+)"
 
 genre_to_uppercase_unique <- function(genre) {
@@ -3645,7 +3651,11 @@ genres_to_uppercase_unique <- function(genres) {
   }
   return(genres_vector)
 }
+```
 
+The **filter_originals()** function has been introduced with the thought in mind that there are certain rows that contain ambiguous data that we would not want to keep, which is why we are matching against the RegExs that can be found in the scope of the **filter()** within the body of the function.
+
+```{r filter_originals}
 filter_originals <- function(originals) {
   return(originals %>%
            filter(!grepl("Pending|pending", Title),
@@ -3655,48 +3665,50 @@ filter_originals <- function(originals) {
               !grepl("due to premiere", Title)
            ))
 }
+```
 
+When converting the data into the correct data type and columns that are easy to deal with, we started off by testing our **transmute()** function usage against the results of the **netflix_originals** data frame and adapted for each time where we found an unwanted result with any of the other streaming services. This lead to the **transmute_originals()** function that can now be seen.
+
+```{r transmute_originals}
 transmute_originals <- function(originals) {
   return(transmute(originals, 
                    Title = Title,
                    Genre = genres_to_uppercase_unique(str_replace_all(
-                      str_squish(
-                                            str_replace_all(
-                                              str_replace_all(
-                                                str_replace_all(
-                                                  str_replace_all(
-                                                    str_replace_all(Genre, "series|procedural", ""),
-                                                  "Science fiction", "Science-Fiction"),
-                                                "(C|c)oming-of-age ", ""),
-                                              "(C|c)omedy-(D|d)rama", "Dramedy"),
-                                            "(Docu|docu).*", "Documentary")
-                                          ),
-                                        "/| ", " / ")),
-                                Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
-                                Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
-                                                  str_match(Seasons, "([0-9]+) (episode*)")[,2],
-                                                  NA)),
-                                Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
-                                                  str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
-                                                  NA)),
-                                Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
-                                                  str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
-                                                  str_match(Runtime, "([0-9]+)")[,2])),
-                                Language = Language,
-                                Status = Status,
-                                Service = Service,
-                                Format = as.factor(Format),
-                                Origin = as.factor(Origin),
-                                Network = as.factor(Network),
-                                Region = as.factor(Region)
-                               ))
+                            str_squish(
+                              str_replace_all(
+                                str_replace_all(
+                                  str_replace_all(
+                                    str_replace_all(
+                                      str_replace_all(Genre, "series|procedural", ""),
+                                    "Science fiction", "Science-Fiction"),
+                                  "(C|c)oming-of-age ", ""),
+                                "(C|c)omedy-(D|d)rama", "Dramedy"),
+                              "(Docu|docu).*", "Documentary")
+                            ),
+                          "/| ", " / ")),
+                          Premiere = as.Date(str_replace_all(str_replace_all(Premiere, ",", ""), " ", "-"), "%B-%d-%Y"),
+                          Episodes = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]+) (episode*)")[,2]),
+                                            str_match(Seasons, "([0-9]+) (episode*)")[,2],
+                                            NA)),
+                          Seasons = strtoi(ifelse(!is.na(str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2]),
+                                            str_match(Seasons, "([0-9]) (season.*|part.*|volume.*)")[,2],
+                                            NA)),
+                          Min_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,2]),
+                                            str_match(Runtime, "([0-9]+)-([0-9]+)")[,2],
+                                            str_match(Runtime, "([0-9]+)")[,2])),
+                          Max_Time = strtoi(ifelse(!is.na(str_match(Runtime, "([0-9]+)-([0-9]+)")[,3]),
+                                            str_match(Runtime, "([0-9]+)-([0-9]+)")[,3],
+                                            str_match(Runtime, "([0-9]+)")[,2])),
+                          Language = Language,
+                          Status = Status,
+                          Service = Service,
+                          Format = as.factor(Format),
+                          Origin = as.factor(Origin),
+                          Network = as.factor(Network),
+                          Region = as.factor(Region)
+                          ))
 }
-
 ```
-
 
 ## Transmute Netflix
 
