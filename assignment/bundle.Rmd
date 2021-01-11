@@ -3815,11 +3815,7 @@ origin_change <- function(year, service) {
            summarise(n = n()) %>%
            mutate(Percentage = n / sum(n)))
 }
-```
 
-TODO: David?
-
-```{r}
 origin_change_area <- function(change, colors = origin_change_area_colors) {
   change %>% 
     ggplot(aes(x = Year, y = Percentage, fill = factor(Origin))) +
@@ -3924,9 +3920,12 @@ ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::m
   labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series") +
   scale_fill_manual(values = original_colors)
 ```
+<br/>
+We can see that there is indeed a spike for the releases during the autumn period with larger drops right afterwards as well as in the middle of summer. The November spike is artificially increased by the Disney+ releases since they released with a lot of content in November of 2019.
+
+## Is the original content market flooded by movies or series?
+
 From our feeling the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
-We first started off by creating two separate graphs that display us the amount of movies or series grouped by the streaming services, but as you can see, it does not really help the situation since there is a general tendency that the streaming services produce more original content either way.
-This has lead to the approach that is displayed in the last of the three graphs. We set out that 50% is the baseline for the case that there are no movies and series produced. From there on we can determine what the ratio of series produced to the number of produced movies is. For Netflix for example, it is realistic to say that there is trend that can be recognized from the data that has been gathered so far.
 
 ```{r}
 series_and_movies <- as_tibble(filter(prem_year %>%
@@ -3950,7 +3949,11 @@ percentage_of_series <- function(dataframe) {
   return(series_percentages)
 }
 percentage_of_series(series_and_movies)
+```
 
+We first started off by creating two separate graphs that display us the amount of movies or series grouped by the streaming services, but as you can see, it does not really help the situation since there is a general tendency that the streaming services produce more original content either way.
+
+```{r}
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
   labs(colour = "Streaming Services", title = "Amount of released Movies by streaming services", x = "Year", y = "Number of movies") +
@@ -3960,7 +3963,11 @@ ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Series"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
   labs(colour = "Streaming Services", title = "Amount of released Series by streaming services", x = "Year", y = "Number of series") +
   scale_colour_manual(values = original_colors)
-  
+```
+
+This has lead to the approach that is displayed in the last of the three graphs. We set out that 50% is the baseline for the case that there are no movies and series produced. From there on we can determine what the ratio of series produced to the number of produced movies is. For Netflix for example, it is realistic to say that there is trend that can be recognized from the data that has been gathered so far.
+
+```{r}
 ggplot() +
   geom_line(data = percentage_of_series(series_and_movies), mapping = aes(x = Premiere_Year, y = Percentage, colour = as.factor(Service))) +
   theme(title = element_text(size = 14), axis.title = element_text(size = 12), legend.title = element_text(size = 12), legend.text = element_text(size = 10)) +
@@ -3968,7 +3975,11 @@ ggplot() +
   scale_color_manual(values = original_colors)
 ```
 
-Genre counter
+You can see that the streaming services all range from 45 to 75 percent series to movies ratio. This tells us that there is a huge tendency for more series than film productions. On the other hand, the streaming services that were purely producing series now also included movies into their program, so it is hard to tell where the trend is currently going.
+
+## Finding the most produced genres
+
+Finding the most popular genres from our data set is not as easy, since the genre column holds multiple values, but tibbles do not support actual multi-value cells. This is why we need to split the strings by their separators. The result is then put into a table with the frequencies. After converting that result into a tibble, the top x genres (20 in our case) can then be filtered and displayed in a bar chart with flipped axis.
 
 ```{r}
 genre_string <- paste(original_content$Genre, collapse = "/")
@@ -3997,7 +4008,9 @@ ggplot(data = genre_count) +
   coord_flip()
 ```
 
-### Age rating for all content
+## Age Ratings
+
+When looking at the distribution of age ratings it is very well recognizable that there is a lot of content marked with a 0+ age restriction which is probably done to be able to address as many people as possible. You can also see on overall increase in the 18+ category, which seems to be the second largest overall. It is also interesting to note that there are no series with an age rating of 12+.
 
 ```{r}
 content %>% 
@@ -4011,7 +4024,9 @@ age_histogram("Series")
 age_histogram("Film")
 ```
 
-### Age rating for all original Netflix content
+### Age rating for Netflix original content
+
+Netflix does not seem to follow any particular trend on their own, they rather follow the norm.
 
 ```{r}
 age_histogram_original(2007, "Netflix")
@@ -4019,11 +4034,15 @@ age_histogram_original(2007, "Netflix")
 
 ### Age rating for all original Amazon Prime Video content
 
+Besides an unusually large amount of 0+ productions, Amazon Prime Video also seems to follow the norm with variations in every year, but that can obviously be expected. What we can derive from this is that the age restrictions on the original content are rather bound to the image the company or streaming service had beforehand or wants to strive towards.
+
 ```{r}
 age_histogram_original(2006, "Amazon Prime Video")
 ```
 
 ### Age rating for all original Hulu content
+
+For Hulu, we can see an amount of 18+ rated productions that is very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
 
 ```{r}
 age_histogram_original(2007, "Hulu")
@@ -4031,11 +4050,15 @@ age_histogram_original(2007, "Hulu")
 
 ### Age rating for all original Disney+ content
 
+In contrast to the streaming services that could be seen beforehand, Disney+ focuses on producing child oriented content. Even in relation to Apple TV+ (next plot), they are not even "dipping their toes" into the teenage content.
+
 ```{r}
 age_histogram_original(2019, "Disney+")
 ```
 
 ### Age rating for all original Apple TV+ content
+
+Apple TV+, just like Disney+ is focused on being able to publish their content for as many people as possible and tries to avoid any age restrictions in the upper end of the scale.
 
 ```{r}
 age_histogram_original(2019, "Apple TV+")
@@ -4078,9 +4101,8 @@ summary(regression)
 ```
 
 ```{r fig.height=8, fig.width=15}
-par(mfrow=c(2,2))
+par(mfrow = c(2,2))
 plot(regression)
-par(mfrow=c(1,1))
 ```
 ```{r}
 age_regression <- lm(Seasons ~ IMDb, data = filter(content, Format == "Series", Service == "Netflix"))
