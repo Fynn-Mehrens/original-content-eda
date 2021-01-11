@@ -3870,11 +3870,15 @@ plot(linear_regression)
 
 ### Change in Netflix content origin over the years
 
+For Netflix we can see that the ratio between distribution and original content has risen to almost 75% for the year of 2020 which tells us that Netflix tries to avoid the licensing costs of content that they did not produce themselves.
+
 ```{r}
 origin_change_area(origin_change(2007, "Netflix"))
 ```
 
 ### Change in Amazon Prime Video content origin over the years
+
+For Amazon Prime Video we can see that the ratio between distribution and original content has risen to almost 37.5% for the year of 2020. From that we can deduct that Amazon does not produce as much original content as Netflix or Apple TV+ (which will be shown later), but there is a steady rise from 2018 onwards, so there is a chance that Amazon Prime Video is going to follow a similar path.
 
 ```{r}
 origin_change_area(origin_change(2006, "Prime Video"))
@@ -3882,17 +3886,23 @@ origin_change_area(origin_change(2006, "Prime Video"))
 
 ### Change in Hulu content origin over the years
 
+Hulu, just like Amazon Prime is very late to start with mass production of original content as it is sitting at around 25% for the year 2020.
+
 ```{r}
 origin_change_area(origin_change(2007, "Hulu"))
 ```
 
 ### Change in Disney+ content origin over the years
 
+In contrast to the three streaming services shown beforehand Disney entered the market for content streaming very recently, in the October of 2020. They were very aware that the production of original content is one of the major changes in the series and movies industry as of now, which is why they released with over 25% original content  which they brought up to a little over 60% in 2020 already.
+
 ```{r}
 origin_change_area(origin_change(2019, "Disney+"))
 ```
 
 ### Change in Apple TV+ content origin over the years
+
+With Apple TV+ we can see a company that fully embraces the production of original content. From their start in 2019 they have not released any single production that was not produced by them.
 
 ```{r}
 origin_change_area(origin_change(2019, "Apple TV+"), colors = rev(origin_change_area_colors))
