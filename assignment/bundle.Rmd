@@ -3586,7 +3586,7 @@ natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "La
 
 ## Join with Shows
 
-Joining the now larger data frame with the imported shows puts up some more issues since the previously merged movies data frame contained a lot of columns that are also known to the shows data frame, but can never hold intersecting data, since an entry can never be a film and a series at the same time. Therefore the following columns are merged accordingly:
+Joining the now larger data frame with the imported shows puts up some more issues since the previously merged movies data frame contained many columns that are also known to the shows data frame but can never hold intersecting data since an entry can never be a film and a series at the same time. Therefore, the following columns are merged accordingly:
 
 * Year
 * Age
@@ -3600,7 +3600,7 @@ Joining the now larger data frame with the imported shows puts up some more issu
 * Format
 * Status
 
-After that the join columns are renamed and removed accordingly again.
+After that, the join columns are renamed and removed accordingly again.
 
 ```{r}
 content <- full_join(shows, natural_joined, by = "Title")
@@ -3632,7 +3632,7 @@ Now that the data frames are all combined, the data type of the following column
 * Year
 * Seasons
 
-The columns for Month, Day and Year are also converted into integers or the Year is extracted from the Premiere using the **lubridate** package.
+The columns for Month, Day, and Year are also converted into integers, or the Year is extracted from the Premiere using the **lubridate** package.
 
 ```{r}
 content %<>% mutate(Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
@@ -3650,7 +3650,7 @@ content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Sea
 
 ## Add missing Apple TV+ values
 
-Because Apple TV+ only holds original content, there is no need to worry about us including it, although it is not mentioned in the movies or shows data set. One important piece of information we are lacking with this approach is the age restriction of the productions. Therefore we scraped the age restrictions from the [IMDb page](https://www.imdb.com/search/title/?companies=co0546168) and combined them with the data we have.
+Because Apple TV+ only holds original content, there is no need to worry about us including it, although it is not mentioned in the movies or shows data set. One crucial piece of information we are lacking with this approach is the age restriction of the productions. Therefore we scraped the age restrictions from the [IMDb page](https://www.imdb.com/search/title/?companies=co0546168) and combined them with the data we have.
 
 ```{r}
 apple_ages <- read_csv("../datasets/apple_ages.csv")
@@ -3662,7 +3662,7 @@ content <- content[, !(names(content) %in% c("Age.y"))]
 content %<>% rename(Age = `Age.x`)
 ```
 
-After that we remove the data frame from the pool of global variables again. We also convert the **7+** and **13+** entries to conform with the FSK age restrictions we were using beforehand to make it easier to compare them with the other streaming services.
+After that, we remove the data frame from the pool of global variables again. We also convert the **7+** and **13+** entries to conform with the FSK age restrictions we were using beforehand to make it easier to compare them with the other streaming services.
 
 ```{r}
 rm("apple_ages")
@@ -3672,7 +3672,7 @@ content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("1
 (content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
 ```
 
-After looking at the outcome of the merging process, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them as well.
+After looking at the outcome of the merging process, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them.
 
 ```{r}
 content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
