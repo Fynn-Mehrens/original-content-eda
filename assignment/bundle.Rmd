@@ -3859,8 +3859,12 @@ productions <- function(years, dataframe) {
 }
 
 linear_regression <- lm(productions(years, prem_year) ~ years, data = filter(prem_year, is.na(match(Premiere_Year, years))))
+```
+
+Looking at the summary of this linear regression, we can see that the model explains about 66 percent of the varying values, but the degrees of freedom are very low with the value being 14. The standard error on this model is also way to high to make any predictions for the future, even if the x variable was responsible for the change of production numbers.
+
+```{r}
 summary(linear_regression)
-plot(linear_regression)
 ```
 
 ### Change in Netflix content origin over the years
