@@ -3335,7 +3335,7 @@ rm(list = ls(pattern = "_originals_[0-9]+"))
 
 ## Import large Movies and Shows data set
 
-Since the goal is to point out the unique trademarks of original content, there is need for importing large data sets for movies and shows, that are available on streaming services, but not necessarily original content.
+Since the goal is to point out the unique trademarks of original content, there is a need to import large data sets for movies and shows that are available on streaming services, but not necessarily original content.
 
 For this purpose we are using datasets provided by [Ruchi Bhatia](https://www.kaggle.com/ruchi798) which can be found on the following pages:
 
@@ -3370,7 +3370,7 @@ movies <- read_csv("../datasets/movies.csv")
 
 ### Importing Shows
 
-The show data set comes, in comparison to the movies data set, with a lot less columns, only eleven to be precise. We are not making use of the same three columns that we did not make use of with the movies data set.
+The show data set comes, in comparison to the movies data set, with fewer columns, only eleven to be precise. We are not making use of the same three columns that we did not make use of with the movies data set.
 
 ```{r message=FALSE, warning=FALSE}
 shows <- read_csv("../datasets/shows.csv")
@@ -3391,13 +3391,13 @@ shows <- read_csv("../datasets/shows.csv")
 
 ## Dataset Transmutation
 
-Since the data is now imported into six individual tables and the combination, as well as the conversion process to correct and usable data types is the last hurdle keeping us from exploring the data, the data frames are now going to be combined into one large data frame with columns that are easier to deal with because of the correct conversions (e.g. numeric values to int or dbl, the premiere column is split up into three individual columns: day, month and year etc.)
+Since the data is now imported into six individual tables and the combination, as well as the conversion process to correct and usable data types, is the last hurdle keeping us from exploring the data, the data frames are now going to be combined into one large data frame with columns that are easier to deal with because of the correct conversions (e.g. numeric values to int or dbl, the premiere column is split up into three individual columns: day, month and year, etc.)
 
 ### Custom transmutation functions
 
-For the transformation process, we were in need of writing functions that are capable of handling the input we are given in the exact manner we want it to be handled, since we could not find any base R function or any package that would be capable of doing the same thing.
+For the transformation process, we needed to write functions capable of handling the input we are given in the exact manner we want it to be handled since we could not find any base R function or any package capable of doing the same thing.
 
-The **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
+The **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates, and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column, the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
 
 ```{r genres_to_uppercase_unique}
 anycharacter <- "([a-zA-Z]|-+)"
@@ -3456,7 +3456,7 @@ genres_to_uppercase_unique <- function(genres) {
 }
 ```
 
-The **filter_originals()** function has been introduced with the thought in mind that there are certain rows that contain ambiguous data that we would not want to keep, which is why we are matching against the RegExs that can be found in the scope of the **filter()** within the body of the function.
+The **filter_originals()** function has been introduced with the thought in mind that certain rows contain ambiguous data that we would not want to keep, which is why we are matching against the RegExs that can be found in the scope of the **filter()** within the body of the function.
 
 ```{r filter_originals}
 filter_originals <- function(originals) {
@@ -3470,7 +3470,7 @@ filter_originals <- function(originals) {
 }
 ```
 
-When converting the data into the correct data type and columns that are easy to deal with, we started off by testing our **transmute()** function usage against the results of the **netflix_originals** data frame and adapted for each time where we found an unwanted result with any of the other streaming services. This lead to the **transmute_originals()** function that can now be seen.
+When converting the data into the correct data type and columns that are easy to deal with, we started by testing our **transmute()** function usage against the results of the **netflix_originals** data frame and adapted for each time where we found an unwanted result with any of the other streaming services. This lead to the **transmute_originals()** function that can now be seen.
 
 ```{r transmute_originals}
 transmute_originals <- function(originals) {
@@ -3516,7 +3516,7 @@ transmute_originals <- function(originals) {
 
 ## Performing transmutations
 
-The filtering and transmutation process is now applied to all of the individual original content data frames, which leads to the results that are shown below.
+The filtering and transmutation process is now applied to all of the individual original content data frames, leading to the results shown below.
 
 ```{r}
 netflix_originals %<>% filter_originals()
@@ -3531,7 +3531,7 @@ apple_originals %<>% filter_originals()
 (apple <- transmute_originals(apple_originals))
 ```
 
-To ensure that the data frames that hold the original content can not be confused with the data frames that originally hold the non-transmuted content, they are removed from the pool of global variables.
+To ensure that the data frames that hold the original content can not be confused with the data frames that initially hold the non-transmuted content, they are removed from the pool of global variables.
 
 ```{r}
 rm("netflix_originals")
@@ -3543,7 +3543,7 @@ rm("apple_originals")
 
 ## Combine Services
 
-The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from five of the largest streaming services. The result is a data frame with 3979 rows.
+The goal now is to combine the transmutation results into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from five of the largest streaming services. The result is a data frame with 4095 rows.
 
 ```{r}
 original_content <- rbind(netflix, amazon)
@@ -3554,7 +3554,7 @@ original_content %<>% rbind(disney)
 
 ## Join with Movies
 
-The combination of the **original_content** data frame with the movies data set is not as easy, since it is not a horizontal join similar to the ones that were executed during the import process. Some of the columns are duplicates of the values that are already captured from the scraped data, some duplicate columns are more, some are less accurate than the original content ones. This means that after **full joining** via the **Title** we needed to combine the following columns into new ones:
+The combination of the **original_content** data frame with the movies data set is not as easy since it is not a horizontal join similar to those that were executed during the import process. Some of the columns are duplicates of the values that are already captured from the scraped data, and some duplicate columns are more, some are less accurate than the original content ones. This means that after **full joining** via the **Title** we needed to combine the following columns into new ones:
 
 * Genre
 * Language
