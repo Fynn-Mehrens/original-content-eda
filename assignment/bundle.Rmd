@@ -4068,14 +4068,20 @@ Apple TV+, just like Disney+, is focused on being able to publish their content 
 age_histogram_original(2019, "Apple TV+")
 ```
 
-### Multilinear regression model
+### Actual regression model
 
-Insert description here
+To include a regression model, that is accurate in its values we originally wanted to create a model that analyses the invested resources put into the original content and observe the outcome and compare that model with one that only observes content that is not produced by any streaming service. Sadly, there is not enough precise data that we could find or access, but we wanted to include a more precise one either way.
 
-```{r fig.height=8, fig.width=15}
+Since IMDb and Rotten Tomatoes rate movies and series individually, we wanted to observe whether we can find rather strong or weak correlations. For this model we multiplied the IMDb score by ten to map it to the Rotten Tomatoes percentage.
+
+While we can see that the r-squared value is relatively low in comparison to the previous regression model, it is still high enough for our purpose. The residual standard error only lies at around 8.5 percent points which is pretty accurate for what we are observing.
+
+```{r}
 regression <- lm((content$IMDb * 10) ~ content$`Rotten Tomatoes`)
 summary(regression)
 ```
+
+For the plots, we can observe that for the middle to high values the model does not have very strong outliers and the models do not show any obvious patterns that would suggest that a curvilinear approach is more fitting to model the relationship between the two rating services.
 
 ```{r fig.height=8, fig.width=15}
 par(mfrow = c(2,2))
