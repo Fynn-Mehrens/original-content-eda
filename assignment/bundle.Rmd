@@ -3516,7 +3516,7 @@ transmute_originals <- function(originals) {
 
 ## Performing transmutations
 
-The filtering and transmutation process is now applied to all of the individual original content data frames, leading to the results shown below.
+The filtering and transmutation process is now applied to all original content data frames, leading to the results shown below.
 
 ```{r}
 netflix_originals %<>% filter_originals()
@@ -3672,7 +3672,7 @@ content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("1
 (content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
 ```
 
-After looking at the outcome of the merging process, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them.
+After looking at the merging process's outcome, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them.
 
 ```{r}
 content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
@@ -3763,7 +3763,7 @@ Now that the dataset is thoroughly combined, we should add documentation to the 
 
 ### Data exploration functions
 
-For the data exploration portion of the analysis, we are using custom color schemes for the FSK colors and colors from the logos to represent the plots' streaming services accordingly.
+For the data exploration portion of the analysis, we use custom color schemes for the FSK colors and colors from the logos to represent the plots' streaming services accordingly.
 
 ```{r}
 age_histogram_colors <- c(
