@@ -3815,11 +3815,7 @@ origin_change <- function(year, service) {
            summarise(n = n()) %>%
            mutate(Percentage = n / sum(n)))
 }
-```
 
-TODO: David?
-
-```{r}
 origin_change_area <- function(change, colors = origin_change_area_colors) {
   change %>% 
     ggplot(aes(x = Year, y = Percentage, fill = factor(Origin))) +
