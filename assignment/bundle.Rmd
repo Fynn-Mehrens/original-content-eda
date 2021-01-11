@@ -3684,7 +3684,7 @@ content %<>% mutate(`Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
 
 ## Dataset Documentation
 
-Now that the data set is fully combined, we should add documentation to the columns, to describe what they are representing.
+Now that the data set is thoroughly combined, we should add documentation to the columns to describe what they are representing.
 
 * Title
   * Data type: chr
@@ -3730,7 +3730,7 @@ Now that the data set is fully combined, we should add documentation to the colu
   * Description: List of the names of directors of the series or movie (separated by " / ")
 * Language
   * Data type: chr
-  * Description: List of the languages the series or movie was originally released in (separated by " / ")
+  * Description: List of the languages the series or movie was initially released in (separated by " / ")
 * Episodes
   * Data type: int
   * Description: Number of episodes
@@ -3745,10 +3745,10 @@ Now that the data set is fully combined, we should add documentation to the colu
   * Description: The largest runtime that can be found (min and max runtime are equal for movies or productions with only one episode)
 * Service
   * Data type: fctr
-  * Description: The streaming service that originally produced the content (value is NA if the production is no original content), can be of following types: Netflix, Amazon Prime Video, Hulu, Disney+, Apple TV+
+  * Description: The streaming service that initially produced the content (value is NA if the production is no original content) can be of the following types: Netflix, Amazon Prime Video, Hulu, Disney+, Apple TV+
 * Origin
   * Data type: fctr
-  * Description: The origin of the production, can be of following types: Original, Distribution, Continuation, NA (no valid info found)
+  * Description: The origin of the production can be of the following types: Original, Distribution, Continuation, NA (no valid info found)
 * Network
   * Data type: fctr
   * Description: The network that (helped) produce the series or movie, usually mentioned if it is a co-production or distribution
