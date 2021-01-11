@@ -3,7 +3,6 @@ title: "The Future of Original Content Programming"
 author: "David Aimé Greven, Fynn Mehrens"
 date: "11-1-2021"
 output:
-  pdf_document: default
   html_document: default
 ---
 
