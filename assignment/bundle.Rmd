@@ -4042,7 +4042,7 @@ age_histogram_original(2006, "Amazon Prime Video")
 
 ### Age rating for all original Hulu content
 
-For Hulu, we can see 18+ rated productions that are very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
+For Hulu, we can see 18+ productions rates that are very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
 
 ```{r}
 age_histogram_original(2007, "Hulu")
@@ -4058,7 +4058,7 @@ age_histogram_original(2019, "Disney+")
 
 ### Age rating for all original Apple TV+ content
 
-Apple TV+, just like Disney+ is focused on being able to publish their content for as many people as possible and tries to avoid any age restrictions in the upper end of the scale.
+Apple TV+, just like Disney+, is focused on being able to publish their content for as many people as possible and tries to avoid any age restrictions in the upper end of the scale.
 
 ```{r}
 age_histogram_original(2019, "Apple TV+")
@@ -4112,7 +4112,7 @@ plot(age_regression)
 
 ### Exporting the data frame to CSV
 
-In order to make it reusable for other people, we also wanted to export our final data frame for the following usage. After some further tweaks, we are also planning to publish this dataset to Kaggle.
+To make it reusable for other people, we also wanted to export our final data frame for the following usage. After some further tweaks, we are also planning to publish this dataset to Kaggle.
 
 ```{r}
 write.csv(original_content, "../original_content.csv", row.names = TRUE)
