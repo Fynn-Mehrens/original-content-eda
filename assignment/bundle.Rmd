@@ -4010,7 +4010,7 @@ ggplot(data = genre_count) +
 
 ## Age Ratings
 
-When looking at the distribution of age ratings it is very well recognizable that there is a lot of content marked with a 0+ age restriction which is probably done to be able to address as many people as possible. You can also see on overall increase in the 18+ category, which seems to be the second largest overall. It is also interesting to note that there are no series with an age rating of 12+.
+When looking at the distribution of age ratings, it can be very well recognized that there is a lot of content marked with a 0+ age restriction that is probably done to address as many people as possible. You can also see an overall increase in the 18+ category, which seems to be the second-largest overall. It is also interesting to note that there is no series with an age rating of 12+.
 
 ```{r}
 content %>% 
@@ -4026,7 +4026,7 @@ age_histogram("Film")
 
 ### Age rating for Netflix original content
 
-Netflix does not seem to follow any particular trend on their own, they rather follow the norm.
+Netflix does not seem to follow any particular trend on their own. They rather follow the norm.
 
 ```{r}
 age_histogram_original(2007, "Netflix")
