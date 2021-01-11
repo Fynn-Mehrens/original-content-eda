@@ -4006,7 +4006,7 @@ ggplot(data = genre_count) +
   theme(title = element_text(size = 14), axis.title.x = element_text(size = 12), axis.text.y = element_text(size = 11)) +
   labs(title = "Top 20 Genres - Original Content", x = "", y = "No. of original content productions") +
   coord_flip() +
-  scale_fill_gradient(low="pink", high="purple")
+  scale_fill_gradient(low="lightblue", high="turquoise")
 ```
 
 ## Age Ratings
