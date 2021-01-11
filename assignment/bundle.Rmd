@@ -3841,7 +3841,7 @@ ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Servi
 <br/>
 We can see from the development of releases throughout the years that besides Netflix's production in 2005, the original content started its rise in 2010, and the production rate increased exponentially for the first 7-8 years. From there on, content production still experienced a linear increase.
 
-## Linear regression model for the amount of original content until 2050
+## Linear regression model for the amount of original content
 
 We were also interested in finding out whether we could predict the number of productions based on the year even though the year logically can not be the cause of the number of productions. We are also aware that the amount of observations is way too low to create a good regression model, but we wanted to include this nevertheless.
 
@@ -3870,7 +3870,7 @@ summary(linear_regression)
 
 For Netflix, we can see that the ratio between distribution and original content has risen to almost 75% for 2020, which tells us that Netflix tries to avoid the licensing costs of content that they did not produce themselves.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 origin_change_area(origin_change(2007, "Netflix"))
 ```
 
@@ -3878,7 +3878,7 @@ origin_change_area(origin_change(2007, "Netflix"))
 
 For Amazon Prime Video, we can see that the ratio between distribution and original content has risen to almost 37.5% for the year 2020. From that, we can deduct that Amazon does not produce as much original content as Netflix or Apple TV+ (which will be shown later), but there is a steady rise from 2018 onwards, so there is a chance that Amazon Prime Video is going to follow a similar path.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 origin_change_area(origin_change(2006, "Prime Video"))
 ```
 
@@ -3886,7 +3886,7 @@ origin_change_area(origin_change(2006, "Prime Video"))
 
 Like Amazon Prime, Hulu was very late to start with the mass production of original content as it is sitting at around 25% for 2020.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 origin_change_area(origin_change(2007, "Hulu"))
 ```
 
@@ -3894,7 +3894,7 @@ origin_change_area(origin_change(2007, "Hulu"))
 
 In contrast to the three streaming services shown beforehand, Disney entered the market for content streaming very recently, in November of 2019. They were very aware that the production of original content is one of the significant changes in the series and movies industry as of now, which is why they released over 25% original content, which they brought up to a little over 60% in 2020 already.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 origin_change_area(origin_change(2019, "Disney+"))
 ```
 
@@ -3902,7 +3902,7 @@ origin_change_area(origin_change(2019, "Disney+"))
 
 With Apple TV+, we can see a company that fully embraces the production of original content. From their start in 2019, they have not released any single production produced by them.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 origin_change_area(origin_change(2019, "Apple TV+"), colors = rev(origin_change_area_colors))
 ```
 
@@ -3929,11 +3929,10 @@ We can see that there is indeed a spike for the releases during the autumn perio
 
 From our feeling, the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 series_and_movies <- as_tibble(filter(prem_year %>%
   group_by(Service, Premiere_Year = strtoi(Premiere_Year), Format) %>%
   summarise(Entries = length(Service)), Format == "Film" | Format == "Series"))
-series_and_movies
 
 percentage_of_series <- function(dataframe) {
   series_percentages <- data.frame(Service = c(), Premiere_Year = c(), Series_Percentage = c())
@@ -3950,12 +3949,11 @@ percentage_of_series <- function(dataframe) {
   }
   return(series_percentages)
 }
-percentage_of_series(series_and_movies)
 ```
 
 We first started by creating two separate graphs that display the number of movies or series grouped by the streaming services, but as you can see, it does not help the situation since there is a general tendency that the streaming services produce more original content either way.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 ggplot() +
   geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
   labs(colour = "Streaming Services", title = "Amount of released Movies by streaming services", x = "Year", y = "Number of movies") +
@@ -3983,7 +3981,7 @@ You can see that the streaming services all range from 45 to 75 percent series t
 
 Finding the most popular genres from our dataset is not easy since the genre column holds multiple values, but tibbles do not support actual multi-value cells. This is why we need to split the strings by their separators. The result is then put into a table with the frequencies. After converting that result into a tibble, the top x genres (20 in our case) can then be filtered and displayed in a bar chart with a flipped axis.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 genre_string <- paste(original_content$Genre, collapse = "/")
 genre_vector <- strsplit(genre_string, "/")[[1]]
 genre_vector_clean <- gsub(" ", "", genre_vector)
