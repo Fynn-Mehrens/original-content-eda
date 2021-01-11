@@ -1,0 +1,206 @@
+---
+title: "data_exploration"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(knitr)
+read_chunk('shared_functions.R')
+install.packages("viridis")
+library(viridis)
+```
+
+## Importing the transmuted data frames
+
+In the following four code chunks the transmutation files are being executed. The transmutation files themselves rely on their respective "<name>_originals" file which uses data that is scraped from Wikipedia to identify the original creations from the streaming services.
+
+```{r child = 'netflix_transmutation.Rmd'}
+netflix
+```
+
+```{r child = 'amazon_prime_transmutation.Rmd'}
+amazon
+```
+
+```{r child = 'disney_transmutation.Rmd'}
+disney
+```
+
+```{r child = 'hulu_transmutation.Rmd'}
+hulu
+```
+
+```{r child = 'apple_transmutation.Rmd'}
+apple
+```
+
+The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from four of the largest streaming services.
+
+```{r}
+original_content <- rbind(netflix, amazon)
+original_content <- rbind(original_content, hulu)
+original_content <- rbind(original_content, disney)
+original_content <- rbind(original_content, apple)
+
+original_content
+```
+
+## Data Exploration
+
+### Production of original content thorughout the years
+
+To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
+
+To make the following plots easier to read, we picked colors from the streaming services' logos, so that the readers can identify the streaming services more naturally.
+
+```{r}
+# Adding a column to sort by, will be used as a categorical variable later on
+prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), Premiere_Year != 2021, !is.na(Premiere_Year))
+
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(148 / 255, 31 / 255, 138 / 255, 1),
+                     rgb(0, 0, 0, 1)
+                     )
+
+ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Service))) +
+  geom_bar() +
+  labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series") +
+  scale_fill_manual(values = original_colors)
+```
+Linear regression model for the amount of original content until 2050
+
+```{r}
+years <- c(2005:2020)
+
+productions <- function(years, dataframe) {
+  productions <- c()
+  for (year in years) {
+    productions <- c(productions, nrow(filter(select(dataframe, Premiere_Year), Premiere_Year == year)))
+  }
+  return(productions)
+}
+
+linear_regression <- lm(years ~ productions(years, prem_year), data = filter(prem_year, is.na(match(Premiere_Year, years))))
+summary(linear_regression)
+plot(linear_regression)
+```
+
+### Production of original content grouped by months
+
+In society there is a common agreement, that most of the interesting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
+
+```{r}
+prem_month <- filter(mutate(original_content,
+                              Premiere_Month = as.character(lubridate::month(lubridate::ymd(010101) +
+                                                                               months(lubridate::month(Premiere) - 1), label = TRUE, abbr = TRUE))),
+                              lubridate::year(Premiere) != 2021, !is.na(lubridate::year(Premiere)))
+
+ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::month(Premiere)),
+                                                fill = as.factor(Service))) +
+  geom_bar(width = 0.85) +
+  labs(fill = "Premiere Month", title = "Release Months", x = "Release Month", y = "Number of movies and series") +
+  scale_fill_manual(values = original_colors)
+```
+From our feeling the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
+We first started off by creating two separate graphs that display us the amount of movies or series grouped by the streaming services, but as you can see, it does not really help the situation since there is a general tendency that the streaming services produce more original content either way.
+This has lead to the approach that is displayed in the last of the three graphs. We set out that 50% is the baseline for the case that there are no movies and series produced. From there on we can determine what the ratio of series produced to the number of produced movies is. For Netflix for example, it is realistic to say that there is trend that can be recognized from the data that has been gathered so far.
+
+```{r}
+series_and_movies <- as_tibble(filter(prem_year %>%
+  group_by(Service, Premiere_Year = strtoi(Premiere_Year), Format) %>%
+  summarise(Entries = length(Service)), Format == "Film" | Format == "Series"))
+series_and_movies
+
+percentage_of_series <- function(dataframe) {
+  series_percentages <- data.frame(Service = c(), Premiere_Year = c(), Series_Percentage = c())
+  services <- c("Netflix", "Amazon Prime Video", "Hulu", "Disney+", "Apple TV+")
+  years <- c(2000:2020)
+  for (service in services) {
+    service_rows <- filter(dataframe, Service == service)
+    for (year in years) {
+      nr_series <- sum(pull(filter(service_rows, Format == "Series", Premiere_Year == year), Entries))
+      nr_films <- sum(pull(filter(service_rows, Format == "Film", Premiere_Year == year), Entries))
+      series_percentages <- rbind(series_percentages,
+                                  data.frame(Service = as.factor(c(service)), Premiere_Year = c(year), Percentage = c(ifelse(nr_series == 0,
+                                    ifelse(nr_films == 0, 50, 0), ifelse(nr_films == 0, 100, nr_series / (nr_series + nr_films) * 100)))))
+    }
+  }
+  return(series_percentages)
+}
+percentage_of_series(series_and_movies)
+
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(148 / 255, 31 / 255, 138 / 255, 1),
+                     rgb(0, 0, 0, 1)
+                     )
+
+ggplot() +
+  geom_line(data = filter(series_and_movies, Format == "Film"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
+  labs(colour = "Streaming Services", title = "Amount of released Movies by streaming services", x = "Year", y = "Number of movies") +
+  scale_colour_manual(values = original_colors)
+
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(148 / 255, 31 / 255, 138 / 255, 1),
+                     rgb(0, 0, 0, 1)
+                     )
+  
+ggplot() +
+  geom_line(data = filter(series_and_movies, Format == "Series"), mapping = aes(x = Premiere_Year, y = Entries, colour = as.factor(Service)), label = "Movie") +
+  labs(colour = "Streaming Services", title = "Amount of released Series by streaming services", x = "Year", y = "Number of series") +
+  scale_colour_manual(values = original_colors)
+
+original_colors <- c(rgb(229/255, 9/255, 20/255, 1),
+                     rgb(0/255, 163/255, 218/255, 1),
+                     rgb(28/255, 231/255, 131/255, 1),
+                     rgb(148 / 255, 31 / 255, 138 / 255, 1),
+                     rgb(0, 0, 0, 1)
+                     )
+  
+ggplot() +
+  geom_line(data = percentage_of_series(series_and_movies), mapping = aes(x = Premiere_Year, y = Percentage, colour = as.factor(Service))) +
+  labs(colour = "Streaming Services", title = "Ratio of series to movies", x = "Year", y = "% of series") +
+  scale_color_manual(values = original_colors)
+```
+
+Genre counter
+
+```{r}
+genre_string <- paste(original_content$Genre, collapse = "/")
+genre_vector <- strsplit(genre_string, "/")[[1]]
+genre_vector_clean <- gsub(" ", "", genre_vector)
+
+genre_frame = transmute(data.frame(table(genre_vector_clean)),
+          Genre = genre_vector_clean,
+          Count = Freq)
+
+top_eight_genres <- function(dataframe) {
+  arranged_df <- data.frame(Genre = arrange(dataframe, desc(Count))$Genre, Entries = arrange(dataframe, desc(Count))$Count)
+  top_eight <- data.frame(Genre = c(), Entries = c())
+  for (i in 1:8) {
+    top_eight <- rbind(top_eight, arranged_df[i, ])
+  }
+  return(top_eight)
+}
+
+ggplot(data = as.tibble(top_eight_genres(genre_frame) %>% group_by(Genre) %>% summarise(Entries = strtoi(Entries)))) +
+  geom_bar(mapping = aes(x = reorder(Genre, Entries), y = Entries), stat = "identity") +
+  labs(title = "Top 8 most popular genres of all streaming services", x = "Genres", y = "No. of series and movies")
+```
+
+### Exporting the data frame to CSV
+
+In order to make it reusable for other people, we also wanted to export our final data frame for following usage. We are also planning to publish this data set to Kaggle.
+
+```{r}
+write.csv(original_content, "../original_content.csv", row.names = TRUE)
+```
+

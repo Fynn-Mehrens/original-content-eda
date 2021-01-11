@@ -9,15 +9,15 @@ output:
 
 ## Introduction
 
-As the market for original content from various streaming services has grown throughout the years, the question why these companies are following this route arises. We want to statistically check whether the route of more and more original content instead of licensed content is promising or not.
+As the demand for content from various streaming services has grown over the years, companies have started to invest more resources into original content. We want to statistically check whether this strategy of original content instead of licensed content is promising or not.
 
-To do this analysis, we are using scraped data from various Wikipedia pages. For this purpose we have been using an external web scraper that scrapes all the **\<table\>** elements from the web page and converts them into a CSV format.
+To do this analysis, we are using scraped data from various Wikipedia pages. For this purpose, we have been using an external web scraper that scrapes all the **\<table\>** elements from the web page and converts them into a CSV format.
 
 The **web scraping tool** can be found here:
 
 * [Wiki Table to CSV online converter](https://wikitable2csv.ggor.de/)
 
-For the **Netflix** sub data set these web pages have been scraped:
+For the **Netflix** sub dataset these web pages have been scraped:
 
 * [List of Netflix Original Programming](https://en.wikipedia.org/wiki/List_of_Netflix_original_programming)
 * [List of ended Netflix Original Programming](https://en.wikipedia.org/wiki/List_of_ended_Netflix_original_programming)
@@ -30,31 +30,30 @@ For the **Netflix** sub data set these web pages have been scraped:
 * [List of Netflix Original Stand-up Comedy](https://en.wikipedia.org/wiki/List_of_Netflix_original_stand-up_comedy_specials)
 * [List of Netflix exclusive International Distribution Programming](https://en.wikipedia.org/wiki/List_of_Netflix_exclusive_international_distribution_programming)
 
-For the **Amazon Prime Video** sub data set these web pages have been scraped:
+For the **Amazon Prime Video** sub dataset these web pages have been scraped:
 
 * [List of Amazon Original Programming](https://en.wikipedia.org/wiki/List_of_Amazon_original_programming)
 
-For the **Hulu** sub data set these web pages have been scraped:
+For the **Hulu** sub dataset these web pages have been scraped:
 
 * [List of Hulu Original Programming](https://en.wikipedia.org/wiki/List_of_Hulu_original_programming)
 
-For the **Disney+** sub data set these web pages have been scraped:
+For the **Disney+** sub dataset these web pages have been scraped:
 
 * [List of Disney+ Original Programming](https://en.wikipedia.org/wiki/List_of_Disney%2B_original_programming)
 * [List of Disney+ Original Films](https://en.wikipedia.org/wiki/List_of_Disney%2B_original_films)
 
-For the **Apple TV+** sub data set these web pages have been scraped:
+For the **Apple TV+** sub dataset these web pages have been scraped:
 
 * [List of Apple TV+ Original Programming](https://en.wikipedia.org/wiki/List_of_Apple_TV%2B_original_programming)
 
 ## Disclaimer
 
-If you run into any problems (can be recognized by missing Premiere values on the first page of the data frame called "netflix"), please make sure to contact us, because there are various options for unix-based operating systems and we did not want to include them all for the case that they might conflict with each other.
-
+If you run into any problems (can be recognized by missing Premiere values on the first page of the data frame called "netflix"), please make sure to contact us because there are various options for Unix-based operating systems, and we did not want to include them all for the case that they might conflict with each other.
 
 ## Installing required libraries
 
-The first code chunk makes sure, that all the required libraries are installed. The "**forcats**" library is included with the "**tidyverse**" but does not open all its functionality to the developer, so it needed to be required specifically as well. To ensure correct parsing of the dates during the original content transmutation the locale is set to an english one.
+The first code chunk makes sure that all the required libraries are installed. The "**forcats**" library is included with the "**tidyverse**" but does not open all its functionality to the developer, so it needed to be explicitly required as well. To ensure correct parsing of the dates during the original content transmutation, the locale is set to an English one.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -70,11 +69,11 @@ Sys.setlocale("LC_TIME", "en_GB.UTF-8") #Linux & Unix
 
 ## Dataset Import
 
-The upcoming chapter deals with the import of the scraped and downloaded CSVs into tibbles. Due to the huge amount and inconsistencies of the CSV files the importing process was very tedious and every single csv file needed to be inspected and merged manually. This is performed for all of the streaming services.
+The upcoming chapter deals with the import of the scraped and downloaded CSVs into tibbles. Due to the enormous amount and inconsistencies of the CSV files, the importing process was very tedious and every single CSV file needed to be inspected and merged manually. This is performed for all of the streaming services.
 
 ### Custom functions for Import Phase
 
-To exclude specific rows that do not match one of the specified statuses formats or origins, the only_keep() function was written to ease the access of parsing the factors after matching parts of the previous entry to unify the content of the column.
+To exclude specific rows that do not match one of the specified statuses formats or origins, the only_keep() function was written to ease parsing the factors after matching parts of the previous entry to unify the column's content.
 
 ```{r}
 only_keep <- function(row, regex, factor) {
@@ -110,7 +109,7 @@ ages <- c("0+", "6+", "7+", "12+", "13+", "16+", "18+", "all", "unknown")
 
 ## Import Netflix
 
-To import all the required data, all 115 csv files need to be imported and in some cases values have to be added, e.g. because the entry was found in a table for specific genres, but the genre was not further specified in the actual cells of the rows.
+To import all the required data, all 115 CSV files need to be imported, and in some cases, values have to be added, e.g., because the entry was found in a table for specific genres, but the genre was not further specified in the actual cells of the rows.
 
 ```{r netflix_displayed_import, message=FALSE, warning=FALSE}
 netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv") %>%
@@ -127,7 +126,7 @@ netflix_originals_1 <- read_csv("../datasets/netflix/shows/table-1.csv") %>%
             Region = NA)
 ```
 
-After importing the data into 115 individual data frames, the tables now need to me merged horizontally using the **rbind()** function. This function requires the tables to have NA values for the columns that were not originally specified in the CSV files, thus the large amount of NA transmutes.
+After importing the data into 115 individual data frames, the tables now need to be merged horizontally using the **rbind()** function. This function requires the tables to have NA values for the columns that were not initially specified in the CSV files; thus, the large number of NA transmutes.
 
 ```{r netflix_hidden_import, echo=FALSE, message=FALSE, warning=FALSE}
 netflix_originals_2 <- read_csv("../datasets/netflix/shows/table-2.csv")
@@ -1750,7 +1749,7 @@ netflix_originals <- bind_originals(netflix_originals, 115)
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-After the data frames named netflix_originals_1 to netflix_originals_115 have been horizontally merged, we make sure that the individual data frames are not accessible as global variables, so we make sure, that they are deleted from the R session. This also helps to improve the performance of further actions, since it reduces the RAM usage of the system by a lot.
+After the data frames named netflix_originals_1 to netflix_originals_115 have been horizontally merged, we make sure that the individual data frames are not accessible as global variables, so we make sure that they are deleted from the R session. This also improves the performance of further actions since it reduces the system's RAM usage by a lot.
 
 ## Import Amazon Prime Video, Hulu, Disney+ and Apple TV+
 
@@ -3334,9 +3333,9 @@ apple_originals <- bind_originals(apple_originals, 21)
 rm(list = ls(pattern = "_originals_[0-9]+"))
 ```
 
-## Import large Movies and Shows data set
+## Import large Movies and Shows dataset
 
-Since the goal is to point out the unique trademarks of original content, there is need for importing large data sets for movies and shows, that are available on streaming services, but not necessarily original content.
+Since the goal is to point out the unique trademarks of original content, there is a need to import large datasets for movies and shows that are available on streaming services, but not necessarily original content.
 
 For this purpose we are using datasets provided by [Ruchi Bhatia](https://www.kaggle.com/ruchi798) which can be found on the following pages:
 
@@ -3345,7 +3344,7 @@ For this purpose we are using datasets provided by [Ruchi Bhatia](https://www.ka
 
 ### Importing Movies
 
-The movies data set originally has 17 columns, of which 14 are interesting to us. The columns we are eliminating hold the index and an individual identifier, which is nothing more than a one-based index instead of a zero-based index, like the first column. The third column we don't make use of is "Type", since the same information is stored within our column "Format".
+The movies dataset originally has 17 columns, of which 14 are interesting to us. The columns we are eliminating hold the index and an individual identifier, which is nothing more than a one-based index instead of a zero-based index, like the first column. The third column we don't make use of is "Type", since the same information is stored within our column "Format".
 
 ```{r message=FALSE, warning=FALSE}
 movies <- read_csv("../datasets/movies.csv")
@@ -3371,7 +3370,7 @@ movies <- read_csv("../datasets/movies.csv")
 
 ### Importing Shows
 
-The show data set comes, in comparison to the movies data set, with a lot less columns, only eleven to be precise. We are not making use of the same three columns that we did not make use of with the movies data set.
+The show dataset comes, in comparison to the movies dataset, with fewer columns, only eleven to be precise. We are not making use of the same three columns that we did not make use of with the movies dataset.
 
 ```{r message=FALSE, warning=FALSE}
 shows <- read_csv("../datasets/shows.csv")
@@ -3392,13 +3391,13 @@ shows <- read_csv("../datasets/shows.csv")
 
 ## Dataset Transmutation
 
-Since the data is now imported into six individual tables and the combination, as well as the conversion process to correct and usable data types is the last hurdle keeping us from exploring the data, the data frames are now going to be combined into one large data frame with columns that are easier to deal with because of the correct conversions (e.g. numeric values to int or dbl, the premiere column is split up into three individual columns: day, month and year etc.)
+Since the data is now imported into six individual tables and the combination, as well as the conversion process to correct and usable data types, is the last hurdle keeping us from exploring the data, the data frames are now going to be combined into one large data frame with columns that are easier to deal with because of the correct conversions (e.g. numeric values to int or dbl, the premiere column is split up into three individual columns: day, month and year, etc.)
 
 ### Custom transmutation functions
 
-For the transformation process, we were in need of writing functions that are capable of handling the input we are given in the exact manner we want it to be handled, since we could not find any base R function or any package that would be capable of doing the same thing.
+For the transformation process, we needed to write functions capable of handling the input we are given in the exact manner we want it to be handled since we could not find any base R function or any package capable of doing the same thing.
 
-The **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
+The **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates, and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column, the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
 
 ```{r genres_to_uppercase_unique}
 anycharacter <- "([a-zA-Z]|-+)"
@@ -3457,7 +3456,7 @@ genres_to_uppercase_unique <- function(genres) {
 }
 ```
 
-The **filter_originals()** function has been introduced with the thought in mind that there are certain rows that contain ambiguous data that we would not want to keep, which is why we are matching against the RegExs that can be found in the scope of the **filter()** within the body of the function.
+The **filter_originals()** function has been introduced with the thought in mind that certain rows contain ambiguous data that we would not want to keep, which is why we are matching against the RegExs that can be found in the scope of the **filter()** within the body of the function.
 
 ```{r filter_originals}
 filter_originals <- function(originals) {
@@ -3471,7 +3470,7 @@ filter_originals <- function(originals) {
 }
 ```
 
-When converting the data into the correct data type and columns that are easy to deal with, we started off by testing our **transmute()** function usage against the results of the **netflix_originals** data frame and adapted for each time where we found an unwanted result with any of the other streaming services. This lead to the **transmute_originals()** function that can now be seen.
+When converting the data into the correct data type and columns that are easy to deal with, we started by testing our **transmute()** function usage against the results of the **netflix_originals** data frame and adapted for each time where we found an unwanted result with any of the other streaming services. This lead to the **transmute_originals()** function that can now be seen.
 
 ```{r transmute_originals}
 transmute_originals <- function(originals) {
@@ -3517,7 +3516,7 @@ transmute_originals <- function(originals) {
 
 ## Performing transmutations
 
-The filtering and transmutation process is now applied to all of the individual original content data frames, which leads to the results that are shown below.
+The filtering and transmutation process is now applied to all of the individual original content data frames, leading to the results shown below.
 
 ```{r}
 netflix_originals %<>% filter_originals()
@@ -3532,7 +3531,7 @@ apple_originals %<>% filter_originals()
 (apple <- transmute_originals(apple_originals))
 ```
 
-To ensure that the data frames that hold the original content can not be confused with the data frames that originally hold the non-transmuted content, they are removed from the pool of global variables.
+To ensure that the data frames that hold the original content can not be confused with the data frames that initially hold the non-transmuted content, they are removed from the pool of global variables.
 
 ```{r}
 rm("netflix_originals")
@@ -3544,7 +3543,7 @@ rm("apple_originals")
 
 ## Combine Services
 
-The goal now is to combine the results from the transmutation into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from five of the largest streaming services. The result is a data frame with 3979 rows.
+The goal now is to combine the transmutation results into one large data frame that can then be explored to gain a general grasp of what the data looks like for originals from five of the largest streaming services. The result is a data frame with 4095 rows.
 
 ```{r}
 original_content <- rbind(netflix, amazon)
@@ -3555,7 +3554,7 @@ original_content %<>% rbind(disney)
 
 ## Join with Movies
 
-The combination of the **original_content** data frame with the movies data set is not as easy, since it is not a horizontal join similar to the ones that were executed during the import process. Some of the columns are duplicates of the values that are already captured from the scraped data, some duplicate columns are more, some are less accurate than the original content ones. This means that after **full joining** via the **Title** we needed to combine the following columns into new ones:
+The combination of the **original_content** data frame with the movies dataset is not as easy since it is not a horizontal join similar to those that were executed during the import process. Some of the columns are duplicates of the values that are already captured from the scraped data, and some duplicate columns are more, some are less accurate than the original content ones. This means that after **full joining** via the **Title** we needed to combine the following columns into new ones:
 
 * Genre
 * Language
@@ -3587,7 +3586,7 @@ natural_joined <- natural_joined[, !(names(natural_joined) %in% c("Genre.y", "La
 
 ## Join with Shows
 
-Joining the now larger data frame with the imported shows puts up some more issues since the previously merged movies data frame contained a lot of columns that are also known to the shows data frame, but can never hold intersecting data, since an entry can never be a film and a series at the same time. Therefore the following columns are merged accordingly:
+Joining the now larger data frame with the imported shows puts up some more issues since the previously merged movies data frame contained many columns that are also known to the shows data frame but can never hold intersecting data since an entry can never be a film and a series at the same time. Therefore, the following columns are merged accordingly:
 
 * Year
 * Age
@@ -3601,7 +3600,7 @@ Joining the now larger data frame with the imported shows puts up some more issu
 * Format
 * Status
 
-After that the join columns are renamed and removed accordingly again.
+After that, the join columns are renamed and removed accordingly again.
 
 ```{r}
 content <- full_join(shows, natural_joined, by = "Title")
@@ -3633,7 +3632,7 @@ Now that the data frames are all combined, the data type of the following column
 * Year
 * Seasons
 
-The columns for Month, Day and Year are also converted into integers or the Year is extracted from the Premiere using the **lubridate** package.
+The columns for Month, Day, and Year are also converted into integers, or the Year is extracted from the Premiere using the **lubridate** package.
 
 ```{r}
 content %<>% mutate(Month = as.integer(ifelse(is.na(Premiere), NA, as.numeric(format(Premiere, "%m")))))
@@ -3651,7 +3650,7 @@ content %<>% mutate(Seasons = ifelse(is.na(Seasons), ifelse(is.na(Episodes), Sea
 
 ## Add missing Apple TV+ values
 
-Because Apple TV+ only holds original content, there is no need to worry about us including it, although it is not mentioned in the movies or shows data set. One important piece of information we are lacking with this approach is the age restriction of the productions. Therefore we scraped the age restrictions from the [IMDb page](https://www.imdb.com/search/title/?companies=co0546168) and combined them with the data we have.
+Because Apple TV+ only holds original content, there is no need to worry about us including it, although it is not mentioned in the movies or shows dataset. One crucial piece of information we are lacking with this approach is the age restriction of the productions. Therefore we scraped the age restrictions from the [IMDb page](https://www.imdb.com/search/title/?companies=co0546168) and combined them with the data we have.
 
 ```{r}
 apple_ages <- read_csv("../datasets/apple_ages.csv")
@@ -3663,7 +3662,7 @@ content <- content[, !(names(content) %in% c("Age.y"))]
 content %<>% rename(Age = `Age.x`)
 ```
 
-After that we remove the data frame from the pool of global variables again. We also convert the **7+** and **13+** entries to conform with the FSK age restrictions we were using beforehand to make it easier to compare them with the other streaming services.
+After that, we remove the data frame from the pool of global variables again. We also convert the **7+** and **13+** entries to conform with the FSK age restrictions we were using beforehand to make it easier to compare them with the other streaming services.
 
 ```{r}
 rm("apple_ages")
@@ -3673,7 +3672,7 @@ content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "13+", parse_factor("1
 (content %<>% mutate(Age = parse_factor(ages[ifelse(Age == "all", parse_factor("0+", levels = ages), Age)], levels = ages)))
 ```
 
-After looking at the outcome of the merging process, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them as well.
+After looking at the outcome of the merging process, we also realized that there are no entries for the availability on other platforms for the Apple TV+ productions, so we made sure to add them.
 
 ```{r}
 content %<>% mutate(Netflix = ifelse(is.na(Netflix), FALSE, Netflix))
@@ -3685,7 +3684,7 @@ content %<>% mutate(`Disney+` = ifelse(is.na(`Disney+`), FALSE, `Disney+`))
 
 ## Dataset Documentation
 
-Now that the data set is fully combined, we should add documentation to the columns, to describe what they are representing.
+Now that the dataset is thoroughly combined, we should add documentation to the columns to describe what they are representing.
 
 * Title
   * Data type: chr
@@ -3731,7 +3730,7 @@ Now that the data set is fully combined, we should add documentation to the colu
   * Description: List of the names of directors of the series or movie (separated by " / ")
 * Language
   * Data type: chr
-  * Description: List of the languages the series or movie was originally released in (separated by " / ")
+  * Description: List of the languages the series or movie was initially released in (separated by " / ")
 * Episodes
   * Data type: int
   * Description: Number of episodes
@@ -3746,10 +3745,10 @@ Now that the data set is fully combined, we should add documentation to the colu
   * Description: The largest runtime that can be found (min and max runtime are equal for movies or productions with only one episode)
 * Service
   * Data type: fctr
-  * Description: The streaming service that originally produced the content (value is NA if the production is no original content), can be of following types: Netflix, Amazon Prime Video, Hulu, Disney+, Apple TV+
+  * Description: The streaming service that initially produced the content (value is NA if the production is no original content) can be of the following types: Netflix, Amazon Prime Video, Hulu, Disney+, Apple TV+
 * Origin
   * Data type: fctr
-  * Description: The origin of the production, can be of following types: Original, Distribution, Continuation, NA (no valid info found)
+  * Description: The origin of the production can be of the following types: Original, Distribution, Continuation, NA (no valid info found)
 * Network
   * Data type: fctr
   * Description: The network that (helped) produce the series or movie, usually mentioned if it is a co-production or distribution
@@ -3764,15 +3763,15 @@ Now that the data set is fully combined, we should add documentation to the colu
 
 ### Data exploration functions
 
-For the data exploration portion of the analysis, we are using custom color schemes for the FSK colors and colors from the logos to represent the streaming services in the plots accordingly.
+For the data exploration portion of the analysis, we are using custom color schemes for the FSK colors and colors from the logos to represent the plots' streaming services accordingly.
 
 ```{r}
 age_histogram_colors <- c(
-      rgb(131/255, 138/255, 141/255, 1),
-      rgb(255/255, 230/255, 0/255, 1),
-      rgb(13/255, 177/255, 75/255, 1),
-      rgb(0/255, 164/255, 224/255, 1),
-      rgb(237/255, 28/255, 36/255, 1))
+  rgb(0/255, 245/255, 212/255, 1),
+  rgb(0/255, 187/255, 249/255, 1),
+  rgb(254/255, 228/255, 64/255, 1),
+  rgb(241/255, 92/255, 181/255, 1),
+  rgb(155/255, 93/255, 229/255, 1))
 
 original_colors <- c(
   rgb(229/255, 9/255, 20/255, 1),
@@ -3786,7 +3785,7 @@ origin_change_area_colors <- c(
   rgb(0/255, 191/255, 196/255, 1))
 ```
 
-To ease the creation of some plots that we just alter in very small fashion, we created some functions that create these plots for us and take the altering variables as parameters.
+To ease creating some plots that we alter minimally, we created some functions that create these plots and take the altering variables as parameters.
 
 ```{r}
 age_histogram_original <- function(year, service) {
@@ -3827,7 +3826,7 @@ origin_change_area <- function(change, colors = origin_change_area_colors) {
 
 ### Production of original content throughout the years
 
-To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
+To see how original content production has evolved over the years, we wanted to look at how many productions have been produced each year. We want to check the assumption that there is more original content produced by the streaming services over time since they want to avoid paying fees for the licenses to provide all the movies and series.
 
 ```{r}
 # Adding a column to sort by, will be used as a categorical variable later on
@@ -3841,11 +3840,11 @@ ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Servi
 ```
 
 <br/>
-What we can see for the development of releases throughout the years is that besides Netflix's production in 2005 the original content started its rise in 2010 and the production rate increased exponentially for the first 7-8 years. From there on the content production still experienced a linear increase.
+We can see from the development of releases throughout the years that besides Netflix's production in 2005, the original content started its rise in 2010, and the production rate increased exponentially for the first 7-8 years. From there on, content production still experienced a linear increase.
 
 ## Linear regression model for the amount of original content until 2050
 
-We were also interested in finding out whether we could predict the number of productions based on the year even though the year logically can not be the cause of the number of productions. We are also aware that the amount of observations is way to low to create a good regression model, but we wanted to include this nevertheless.
+We were also interested in finding out whether we could predict the number of productions based on the year even though the year logically can not be the cause of the number of productions. We are also aware that the amount of observations is way too low to create a good regression model, but we wanted to include this nevertheless.
 
 ```{r}
 options(scipen = 999)
@@ -3870,7 +3869,7 @@ summary(linear_regression)
 
 ### Change in Netflix content origin over the years
 
-For Netflix we can see that the ratio between distribution and original content has risen to almost 75% for the year of 2020 which tells us that Netflix tries to avoid the licensing costs of content that they did not produce themselves.
+For Netflix, we can see that the ratio between distribution and original content has risen to almost 75% for 2020, which tells us that Netflix tries to avoid the licensing costs of content that they did not produce themselves.
 
 ```{r}
 origin_change_area(origin_change(2007, "Netflix"))
@@ -3878,7 +3877,7 @@ origin_change_area(origin_change(2007, "Netflix"))
 
 ### Change in Amazon Prime Video content origin over the years
 
-For Amazon Prime Video we can see that the ratio between distribution and original content has risen to almost 37.5% for the year of 2020. From that we can deduct that Amazon does not produce as much original content as Netflix or Apple TV+ (which will be shown later), but there is a steady rise from 2018 onwards, so there is a chance that Amazon Prime Video is going to follow a similar path.
+For Amazon Prime Video, we can see that the ratio between distribution and original content has risen to almost 37.5% for the year 2020. From that, we can deduct that Amazon does not produce as much original content as Netflix or Apple TV+ (which will be shown later), but there is a steady rise from 2018 onwards, so there is a chance that Amazon Prime Video is going to follow a similar path.
 
 ```{r}
 origin_change_area(origin_change(2006, "Prime Video"))
@@ -3886,7 +3885,7 @@ origin_change_area(origin_change(2006, "Prime Video"))
 
 ### Change in Hulu content origin over the years
 
-Hulu, just like Amazon Prime is very late to start with mass production of original content as it is sitting at around 25% for the year 2020.
+Like Amazon Prime, Hulu was very late to start with the mass production of original content as it is sitting at around 25% for 2020.
 
 ```{r}
 origin_change_area(origin_change(2007, "Hulu"))
@@ -3894,7 +3893,7 @@ origin_change_area(origin_change(2007, "Hulu"))
 
 ### Change in Disney+ content origin over the years
 
-In contrast to the three streaming services shown beforehand Disney entered the market for content streaming very recently, in the October of 2020. They were very aware that the production of original content is one of the major changes in the series and movies industry as of now, which is why they released with over 25% original content  which they brought up to a little over 60% in 2020 already.
+In contrast to the three streaming services shown beforehand, Disney entered the market for content streaming very recently, in November of 2019. They were very aware that the production of original content is one of the significant changes in the series and movies industry as of now, which is why they released over 25% original content, which they brought up to a little over 60% in 2020 already.
 
 ```{r}
 origin_change_area(origin_change(2019, "Disney+"))
@@ -3902,7 +3901,7 @@ origin_change_area(origin_change(2019, "Disney+"))
 
 ### Change in Apple TV+ content origin over the years
 
-With Apple TV+ we can see a company that fully embraces the production of original content. From their start in 2019 they have not released any single production that was not produced by them.
+With Apple TV+, we can see a company that fully embraces the production of original content. From their start in 2019, they have not released any single production produced by them.
 
 ```{r}
 origin_change_area(origin_change(2019, "Apple TV+"), colors = rev(origin_change_area_colors))
@@ -3910,7 +3909,7 @@ origin_change_area(origin_change(2019, "Apple TV+"), colors = rev(origin_change_
 
 ### Production of original content grouped by months
 
-In society there is a common agreement, that most of the interesting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
+There is a common agreement in society that most of the exciting movies and series get released during the autumn and winter months, so we made sure to check whether this claim holds up to be true for original content as well.
 
 ```{r}
 prem_month <- filter(mutate(original_content,
@@ -3925,11 +3924,11 @@ ggplot(data = prem_month, mapping = aes(x = reorder(Premiere_Month, lubridate::m
   scale_fill_manual(values = original_colors)
 ```
 <br/>
-We can see that there is indeed a spike for the releases during the autumn period with larger drops right afterwards as well as in the middle of summer. The November spike is artificially increased by the Disney+ releases since they released with a lot of content in November of 2019.
+We can see that there is indeed a spike for the releases during the autumn period with larger drops right afterward and in the middle of summer. The Disney+ releases artificially increase the November spike since they released with much content in November of 2019.
 
 ## Is the original content market flooded by movies or series?
 
-From our feeling the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
+From our feeling, the amount of series compared to movies has also increased steadily, so we figured out that it is interesting to take a look at how the ratio evolved throughout the years for the various streaming services.
 
 ```{r}
 series_and_movies <- as_tibble(filter(prem_year %>%
@@ -3955,7 +3954,7 @@ percentage_of_series <- function(dataframe) {
 percentage_of_series(series_and_movies)
 ```
 
-We first started off by creating two separate graphs that display us the amount of movies or series grouped by the streaming services, but as you can see, it does not really help the situation since there is a general tendency that the streaming services produce more original content either way.
+We first started by creating two separate graphs that display the number of movies or series grouped by the streaming services, but as you can see, it does not help the situation since there is a general tendency that the streaming services produce more original content either way.
 
 ```{r}
 ggplot() +
@@ -3969,7 +3968,7 @@ ggplot() +
   scale_colour_manual(values = original_colors)
 ```
 
-This has lead to the approach that is displayed in the last of the three graphs. We set out that 50% is the baseline for the case that there are no movies and series produced. From there on we can determine what the ratio of series produced to the number of produced movies is. For Netflix for example, it is realistic to say that there is trend that can be recognized from the data that has been gathered so far.
+This has lead to the approach that is displayed in the last of the three graphs. We set out that 50% is the baseline for the case that there are no movies and series produced. From there on, we can determine the ratio of series produced to the number of produced movies. For Netflix, for example, it is realistic to say that there is a trend that can be recognized from the data that has been gathered so far.
 
 ```{r}
 ggplot() +
@@ -3979,11 +3978,11 @@ ggplot() +
   scale_color_manual(values = original_colors)
 ```
 
-You can see that the streaming services all range from 45 to 75 percent series to movies ratio. This tells us that there is a huge tendency for more series than film productions. On the other hand, the streaming services that were purely producing series now also included movies into their program, so it is hard to tell where the trend is currently going.
+You can see that the streaming services all range from 45 to 75 percent series to movies ratio. This tells us that there is a considerable tendency for more series than film productions. On the other hand, the streaming services that were purely producing series now also included movies into their program, so it is hard to tell where the trend is currently going.
 
 ## Finding the most produced genres
 
-Finding the most popular genres from our data set is not as easy, since the genre column holds multiple values, but tibbles do not support actual multi-value cells. This is why we need to split the strings by their separators. The result is then put into a table with the frequencies. After converting that result into a tibble, the top x genres (20 in our case) can then be filtered and displayed in a bar chart with flipped axis.
+Finding the most popular genres from our dataset is not easy since the genre column holds multiple values, but tibbles do not support actual multi-value cells. This is why we need to split the strings by their separators. The result is then put into a table with the frequencies. After converting that result into a tibble, the top x genres (20 in our case) can then be filtered and displayed in a bar chart with a flipped axis.
 
 ```{r}
 genre_string <- paste(original_content$Genre, collapse = "/")
@@ -4009,12 +4008,13 @@ ggplot(data = genre_count) +
   geom_bar(mapping = aes(x = reorder(Genre, desc(Entries)), y = Entries, fill = Entries), stat = "identity", show.legend = FALSE) +
   theme(title = element_text(size = 14), axis.title.x = element_text(size = 12), axis.text.y = element_text(size = 11)) +
   labs(title = "Top 20 Genres - Original Content", x = "", y = "No. of original content productions") +
-  coord_flip()
+  coord_flip() +
+  scale_fill_gradient(low="lightblue", high="turquoise")
 ```
 
 ## Age Ratings
 
-When looking at the distribution of age ratings it is very well recognizable that there is a lot of content marked with a 0+ age restriction which is probably done to be able to address as many people as possible. You can also see on overall increase in the 18+ category, which seems to be the second largest overall. It is also interesting to note that there are no series with an age rating of 12+.
+When looking at the distribution of age ratings, it can be very well recognized that there is a lot of content marked with a 0+ age restriction that is probably done to address as many people as possible. You can also see an overall increase in the 18+ category, which seems to be the second-largest overall. It is also interesting to note that there is no series with an age rating of 12+.
 
 ```{r}
 content %>% 
@@ -4030,7 +4030,7 @@ age_histogram("Film")
 
 ### Age rating for Netflix original content
 
-Netflix does not seem to follow any particular trend on their own, they rather follow the norm.
+Netflix does not seem to follow any particular trend on its own. They rather follow the norm.
 
 ```{r}
 age_histogram_original(2007, "Netflix")
@@ -4038,7 +4038,7 @@ age_histogram_original(2007, "Netflix")
 
 ### Age rating for all original Amazon Prime Video content
 
-Besides an unusually large amount of 0+ productions, Amazon Prime Video also seems to follow the norm with variations in every year, but that can obviously be expected. What we can derive from this is that the age restrictions on the original content are rather bound to the image the company or streaming service had beforehand or wants to strive towards.
+Besides an unusually large amount of 0+ productions, Amazon Prime Video also seems to follow the norm with variations every year, but that can be expected. From this we can derive that the age restrictions on the original content are rather bound to the image the company or streaming service had beforehand or wants to strive towards.
 
 ```{r}
 age_histogram_original(2006, "Amazon Prime Video")
@@ -4046,7 +4046,7 @@ age_histogram_original(2006, "Amazon Prime Video")
 
 ### Age rating for all original Hulu content
 
-For Hulu, we can see an amount of 18+ rated productions that is very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
+For Hulu, we can see 18+ productions rates that are very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
 
 ```{r}
 age_histogram_original(2007, "Hulu")
@@ -4054,7 +4054,7 @@ age_histogram_original(2007, "Hulu")
 
 ### Age rating for all original Disney+ content
 
-In contrast to the streaming services that could be seen beforehand, Disney+ focuses on producing child oriented content. Even in relation to Apple TV+ (next plot), they are not even "dipping their toes" into the teenage content.
+In contrast to the streaming services that could be seen beforehand, Disney+ focuses on producing child-oriented content. Even in relation to Apple TV+ (next plot), they are not even "dipping their toes" into the teenage content.
 
 ```{r}
 age_histogram_original(2019, "Disney+")
@@ -4062,7 +4062,7 @@ age_histogram_original(2019, "Disney+")
 
 ### Age rating for all original Apple TV+ content
 
-Apple TV+, just like Disney+ is focused on being able to publish their content for as many people as possible and tries to avoid any age restrictions in the upper end of the scale.
+Apple TV+, just like Disney+, is focused on being able to publish their content for as many people as possible and tries to avoid any age restrictions in the upper end of the scale.
 
 ```{r}
 age_histogram_original(2019, "Apple TV+")
@@ -4071,33 +4071,6 @@ age_histogram_original(2019, "Apple TV+")
 ### Multilinear regression model
 
 Insert description here
-
-```{r message=FALSE}
-options(scipen = 999)
-
-relevant_years <- c(2017:2020)
-revenue <- read.csv("../datasets/yearly_revenue.csv")
-users <- read.csv("../datasets/yearly_users.csv")
-
-regression_df <- data_frame()
-
-for (year in relevant_years) {
-  regression_df %<>% rbind(data_frame(Year = year, Productions = nrow(filter(content, Year == year))))
-}
-
-(regression_df %<>% mutate(Revenue = revenue$Revenue, Users = users$Users))
-
-regression_model <- lm(regression_df$Productions ~ regression_df$Users + regression_df$Revenue, data = regression_df)
-
-summary(regression_model)
-
-cor(regression_df$Productions, regression_df$Users)
-cor(regression_df$Productions, regression_df$Revenue)
-
-cor(regression_df$Users, regression_df$Revenue)
-
-plot(regression_model)
-```
 
 ```{r fig.height=8, fig.width=15}
 regression <- lm((content$IMDb * 10) ~ content$`Rotten Tomatoes`)
@@ -4108,15 +4081,10 @@ summary(regression)
 par(mfrow = c(2,2))
 plot(regression)
 ```
-```{r}
-age_regression <- lm(Seasons ~ IMDb, data = filter(content, Format == "Series", Service == "Netflix"))
-summary(age_regression)
-plot(age_regression)
-```
 
 ### Exporting the data frame to CSV
 
-In order to make it reusable for other people, we also wanted to export our final data frame for following usage. We are also planning to publish this data set to Kaggle.
+To make it reusable for other people, we also wanted to export our final data frame for the following usage. After some further tweaks, we are also planning to publish this dataset to Kaggle.
 
 ```{r}
 write.csv(original_content, "../original_content.csv", row.names = TRUE)
