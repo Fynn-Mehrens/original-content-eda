@@ -3763,7 +3763,7 @@ Now that the data set is thoroughly combined, we should add documentation to the
 
 ### Data exploration functions
 
-For the data exploration portion of the analysis, we are using custom color schemes for the FSK colors and colors from the logos to represent the streaming services in the plots accordingly.
+For the data exploration portion of the analysis, we are using custom color schemes for the FSK colors and colors from the logos to represent the plots' streaming services accordingly.
 
 ```{r}
 age_histogram_colors <- c(
@@ -3785,7 +3785,7 @@ origin_change_area_colors <- c(
   rgb(0/255, 191/255, 196/255, 1))
 ```
 
-To ease the creation of some plots that we just alter in very small fashion, we created some functions that create these plots for us and take the altering variables as parameters.
+To ease creating some plots that we alter minimally, we created some functions that create these plots and take the altering variables as parameters.
 
 ```{r}
 age_histogram_original <- function(year, service) {
