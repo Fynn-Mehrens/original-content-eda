@@ -4068,33 +4068,6 @@ age_histogram_original(2019, "Apple TV+")
 
 Insert description here
 
-```{r message=FALSE}
-options(scipen = 999)
-
-relevant_years <- c(2017:2020)
-revenue <- read.csv("../datasets/yearly_revenue.csv")
-users <- read.csv("../datasets/yearly_users.csv")
-
-regression_df <- data_frame()
-
-for (year in relevant_years) {
-  regression_df %<>% rbind(data_frame(Year = year, Productions = nrow(filter(content, Year == year))))
-}
-
-(regression_df %<>% mutate(Revenue = revenue$Revenue, Users = users$Users))
-
-regression_model <- lm(regression_df$Productions ~ regression_df$Users + regression_df$Revenue, data = regression_df)
-
-summary(regression_model)
-
-cor(regression_df$Productions, regression_df$Users)
-cor(regression_df$Productions, regression_df$Revenue)
-
-cor(regression_df$Users, regression_df$Revenue)
-
-plot(regression_model)
-```
-
 ```{r fig.height=8, fig.width=15}
 regression <- lm((content$IMDb * 10) ~ content$`Rotten Tomatoes`)
 summary(regression)
@@ -4103,11 +4076,6 @@ summary(regression)
 ```{r fig.height=8, fig.width=15}
 par(mfrow = c(2,2))
 plot(regression)
-```
-```{r}
-age_regression <- lm(Seasons ~ IMDb, data = filter(content, Format == "Series", Service == "Netflix"))
-summary(age_regression)
-plot(age_regression)
 ```
 
 ### Exporting the data frame to CSV
