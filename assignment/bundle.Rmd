@@ -4026,7 +4026,7 @@ age_histogram("Film")
 
 ### Age rating for Netflix original content
 
-Netflix does not seem to follow any particular trend on their own. They rather follow the norm.
+Netflix does not seem to follow any particular trend on its own. They rather follow the norm.
 
 ```{r}
 age_histogram_original(2007, "Netflix")
@@ -4034,7 +4034,7 @@ age_histogram_original(2007, "Netflix")
 
 ### Age rating for all original Amazon Prime Video content
 
-Besides an unusually large amount of 0+ productions, Amazon Prime Video also seems to follow the norm with variations in every year, but that can obviously be expected. What we can derive from this is that the age restrictions on the original content are rather bound to the image the company or streaming service had beforehand or wants to strive towards.
+Besides an unusually large amount of 0+ productions, Amazon Prime Video also seems to follow the norm with variations every year, but that can be expected. From this we can derive that the age restrictions on the original content are rather bound to the image the company or streaming service had beforehand or wants to strive towards.
 
 ```{r}
 age_histogram_original(2006, "Amazon Prime Video")
@@ -4042,7 +4042,7 @@ age_histogram_original(2006, "Amazon Prime Video")
 
 ### Age rating for all original Hulu content
 
-For Hulu, we can see an amount of 18+ rated productions that is very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
+For Hulu, we can see 18+ rated productions that are very high in relation to how large the percentile of 18+ productions of the other streaming services is. Especially for 2019, the percentage of 18+ productions is sitting at almost 50 percent.
 
 ```{r}
 age_histogram_original(2007, "Hulu")
@@ -4050,7 +4050,7 @@ age_histogram_original(2007, "Hulu")
 
 ### Age rating for all original Disney+ content
 
-In contrast to the streaming services that could be seen beforehand, Disney+ focuses on producing child oriented content. Even in relation to Apple TV+ (next plot), they are not even "dipping their toes" into the teenage content.
+In contrast to the streaming services that could be seen beforehand, Disney+ focuses on producing child-oriented content. Even in relation to Apple TV+ (next plot), they are not even "dipping their toes" into the teenage content.
 
 ```{r}
 age_histogram_original(2019, "Disney+")
