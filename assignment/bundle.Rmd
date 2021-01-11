@@ -2,7 +2,9 @@
 title: "The Future of Original Content Programming"
 author: "David Aimé Greven, Fynn Mehrens"
 date: "11-1-2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ## Introduction
@@ -3396,7 +3398,7 @@ Since the data is now imported into six individual tables and the combination, a
 
 For the transformation process, we were in need of writing functions that are capable of handling the input we are given in the exact manner we want it to be handled, since we could not find any base R function or any package that would be capable of doing the same thing.
 
-the **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
+The **genre_to_uppercase_unique()** function splits all the genres, no matter in which format they are given by " / " and removes all duplicates and ensures the correct casing of the first letter to avoid ambiguous outputs during the exploration process. To apply this in a single call to all cells for a column the **genres_to_uppercase_unique()** function has been introduced. It combines all the results into a vector of the same length that the column previously had.
 
 ```{r genres_to_uppercase_unique}
 anycharacter <- "([a-zA-Z]|-+)"
@@ -3762,6 +3764,8 @@ Now that the data set is fully combined, we should add documentation to the colu
 
 ### Data exploration functions
 
+For the data exploration portion of the analysis, we are using custom color schemes for the FSK colors and colors from the logos to represent the streaming services in the plots accordingly.
+
 ```{r}
 age_histogram_colors <- c(
       rgb(131/255, 138/255, 141/255, 1),
@@ -3777,6 +3781,14 @@ original_colors <- c(
   rgb(148/255, 31/255, 138/255, 1),
   rgb(0, 0, 0, 1))
 
+origin_change_area_colors <- c(
+  rgb(248/255, 118/255, 109/255, 1),
+  rgb(0/255, 191/255, 196/255, 1))
+```
+
+To ease the creation of some plots that we just alter in very small fashion, we created some functions that create these plots for us and take the altering variables as parameters.
+
+```{r}
 age_histogram_original <- function(year, service) {
   content %>% 
   filter(between(Year, year, 2020), Service == service, Origin == "Original") %>% 
@@ -3803,10 +3815,11 @@ origin_change <- function(year, service) {
            summarise(n = n()) %>%
            mutate(Percentage = n / sum(n)))
 }
+```
 
-origin_change_area_colors <- c(rgb(248/255, 118/255, 109/255, 1),
-                               rgb(0/255, 191/255, 196/255, 1))
+TODO: David?
 
+```{r}
 origin_change_area <- function(change, colors = origin_change_area_colors) {
   change %>% 
     ggplot(aes(x = Year, y = Percentage, fill = factor(Origin))) +
@@ -3820,8 +3833,6 @@ origin_change_area <- function(change, colors = origin_change_area_colors) {
 
 To see how the production of original content has evolved over the years, we wanted to take a look at how many productions have been produced in each year. The assumption we want to check against is that there is more original content produced by the streaming services over time, since they want to avoid paying fees for the licenses to provide all the movies and series.
 
-To make the following plots easier to read, we picked colors from the streaming services' logos, so that the readers can identify the streaming services more naturally.
-
 ```{r}
 # Adding a column to sort by, will be used as a categorical variable later on
 prem_year <- filter(mutate(original_content, Premiere_Year = lubridate::year(Premiere)), Premiere_Year <= 2020, !is.na(Premiere_Year))
@@ -3832,7 +3843,13 @@ ggplot(data = prem_year, mapping = aes(x = Premiere_Year, fill = as.factor(Servi
   labs(fill = "Premiere Year", title = "Release Years", x = "Release Year", y = "Number of movies and series") +
   scale_fill_manual(values = original_colors)
 ```
-Linear regression model for the amount of original content until 2050
+
+<br/>
+What we can see for the development of releases throughout the years is that besides Netflix's production in 2005 the original content started its rise in 2010 and the production rate increased exponentially for the first 7-8 years. From there on the content production still experienced a linear increase.
+
+## Linear regression model for the amount of original content until 2050
+
+We were also interested in finding out whether we could predict the number of productions based on the year even though the year logically can not be the cause of the number of productions. We are also aware that the amount of observations is way to low to create a good regression model, but we wanted to include this nevertheless.
 
 ```{r}
 options(scipen = 999)
@@ -3846,9 +3863,7 @@ productions <- function(years, dataframe) {
   return(productions)
 }
 
-productions(years, prem_year)
-
-linear_regression <- lm(years ~ productions(years, prem_year), data = filter(prem_year, is.na(match(Premiere_Year, years))))
+linear_regression <- lm(productions(years, prem_year) ~ years, data = filter(prem_year, is.na(match(Premiere_Year, years))))
 summary(linear_regression)
 plot(linear_regression)
 ```
